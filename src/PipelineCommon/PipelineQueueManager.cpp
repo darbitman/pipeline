@@ -10,6 +10,7 @@
 #include "SharedQueue.hpp"
 #include "VerticalSeamCarverData.hpp"
 
+using std::static_pointer_cast;
 using std::dynamic_pointer_cast;
 using std::make_shared;
 using std::shared_ptr;
@@ -41,14 +42,17 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
             // only create a queue if one doesn't exist already for a stage
             if (queueStageNumberToQueueMap_.count(queueStageNumbers[i]) == 0)
             {
-                shared_ptr<SharedContainer<BasePipelineData*>> pNewQueue;
+                shared_ptr<SharedContainer<BasePipelineData*>> pNewSharedContainer;
 
                 switch (queueTypes[i])
                 {
                     case PipelineQueueTypes::QUEUE_TYPE_FIFO:
                     {
-                        pNewQueue = dynamic_pointer_cast<SharedContainer<BasePipelineData*>>(
-                            make_shared<SharedQueue<VerticalSeamCarverData*>>(true));
+                        shared_ptr<SharedQueue<BasePipelineData*>> pNewQueue =
+                            make_shared<SharedQueue<BasePipelineData*>>(true);
+
+                        pNewSharedContainer =
+                            static_pointer_cast<SharedContainer<BasePipelineData*>>(pNewQueue);
                     }
                     break;
                     case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
@@ -64,11 +68,12 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
 
                         // create an adapter to use the same interface as other queues to interface
                         // with the priority queue
-                        pNewQueue = dynamic_pointer_cast<SharedContainer<BasePipelineData*>>(
-                            make_shared<SharedConstSizePQAdapter<
-                                VerticalSeamCarverData*,
-                                VerticalSeamCarverData::FrameNumberLessComparator>>(
-                                pPriorityQueue));
+                        pNewSharedContainer =
+                            dynamic_pointer_cast<SharedContainer<BasePipelineData*>>(
+                                make_shared<SharedConstSizePQAdapter<
+                                    VerticalSeamCarverData*,
+                                    VerticalSeamCarverData::FrameNumberLessComparator>>(
+                                    pPriorityQueue));
                     }
                     break;
                     default:
@@ -76,9 +81,9 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
                         break;
                 }
 
-                if (pNewQueue != nullptr)
+                if (pNewSharedContainer != nullptr)
                 {
-                    queueStageNumberToQueueMap_[queueStageNumbers[i]] = pNewQueue;
+                    queueStageNumberToQueueMap_[queueStageNumbers[i]] = pNewSharedContainer;
                 }
             }
         }

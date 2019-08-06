@@ -94,3 +94,30 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/src/Common
 )
+
+
+
+add_executable(
+    PipelineQueueManagerTest
+    PipelineQueueManagerTest.cpp
+)
+
+target_link_libraries(
+    PipelineQueueManagerTest
+    PRIVATE
+    gtest_main
+    "-Xlinker --start-group"
+    PipelineCommon
+    SeamCarverCommon
+    ${OpenCV_LIBS}
+    "-Xlinker --end-group"
+)
+
+target_include_directories(
+    PipelineQueueManagerTest
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/Common
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
+    ${OpenCV_INCLUDE_DIRS}
+)

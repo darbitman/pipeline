@@ -6,8 +6,9 @@ using cv::Mat;
 using std::make_shared;
 using std::numeric_limits;
 using std::shared_ptr;
-using namespace sc;
 
+namespace sc
+{
 VerticalSeamCarverData::VerticalSeamCarverData(double marginEnergy)
     : bNeedToInitializeLocalData(true),
       numRows_(0),
@@ -147,3 +148,4 @@ void VerticalSeamCarverData::setFrameNumber(uint32_t newFrameNumber)
 void VerticalSeamCarverData::incrementFrameNumber() { ++frameNumber_; }
 
 uint32_t VerticalSeamCarverData::getFrameNumber() const { return frameNumber_; }
+}  // namespace sc

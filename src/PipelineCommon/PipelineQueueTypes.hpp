@@ -5,12 +5,11 @@
 
 namespace sc
 {
-class PipelineQueueTypes
+namespace PipelineQueueTypes
 {
-  public:
-    static const int32_t QUEUE_TYPE_FIFO = 0;
-    static const int32_t QUEUE_TYPE_MIN_PQ = 1;
-};
-};  // namespace sc
+static const int32_t QUEUE_TYPE_FIFO = 0;
+static const int32_t QUEUE_TYPE_MIN_PQ = 1;
+}  // namespace PipelineQueueTypes
+}  // namespace sc
 
 #endif
