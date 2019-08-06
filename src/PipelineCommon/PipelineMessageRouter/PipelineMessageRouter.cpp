@@ -39,11 +39,39 @@ void PipelineMessageRouter::receiverThread()
 
     while (bRunReceiverThread_)
     {
-        if (pSenderReceiver_ != nullptr) {
+        if (pSenderReceiver_ != nullptr)
+        {
             auto pReceivedMessage = pSenderReceiver_->receive(thisStage_);
 
-            if (pReceivedMessage != nullptr) {
-                pReceivedMessage->
+            if (pReceivedMessage != nullptr)
+            {
+                auto receivedMessageType = pReceivedMessage->getMessageType();
+
+                if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                {
+                    // TODO process data
+                }
+                else if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
+                {
+                    // TODO process shutdown message
+                    // if message destination is router, then shut router down and forward message
+                    // to ALL stages
+                    // if message destination is not router, then forward the message to destination
+                }
+                else if (receivedMessageType ==
+                         EPipelineMessageType::MESSAGE_TYPE_REGISTER_WITH_ROUTER)
+                {
+                    // TODO register new stage with router
+                }
+                else if (receivedMessageType ==
+                         EPipelineMessageType::MESSAGE_TYPE_UNREGISTER_WITH_ROUTER)
+                {
+                    // TODO unregister stage with router
+                }
+                else
+                {
+                    // TODO handle other message
+                }
             }
         }
         // check if valid
