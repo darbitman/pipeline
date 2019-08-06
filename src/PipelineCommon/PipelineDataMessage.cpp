@@ -5,8 +5,10 @@
 
 namespace sc
 {
-PipelineDataMessage::PipelineDataMessage(BasePipelineData* pMessage)
-    : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA), pMessage_(pMessage)
+PipelineDataMessage::PipelineDataMessage(PipelineStage destination, BasePipelineData* pMessage)
+    : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA),
+      destination_(destination),
+      pMessage_(pMessage)
 {
 }
 

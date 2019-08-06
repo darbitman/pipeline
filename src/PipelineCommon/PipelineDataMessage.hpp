@@ -1,16 +1,17 @@
 #ifndef PIPELINEDATAMESSAGE_HPP
 #define PIPELINEDATAMESSAGE_HPP
 
+#include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
 #include "PipelineMessageType.hpp"
-#include "BasePipelineData.hpp"
+#include "StageNumbers.hpp"
 
 namespace sc
 {
 class PipelineDataMessage : public BasePipelineMessage
 {
   public:
-    explicit PipelineDataMessage(BasePipelineData* pMessage);
+    explicit PipelineDataMessage(PipelineStage destination, BasePipelineData* pMessage);
 
     ~PipelineDataMessage();
 
@@ -20,6 +21,10 @@ class PipelineDataMessage : public BasePipelineMessage
 
     virtual void setMessage(void* pMessage) override;
 
+    virtual void setDestination(PipelineStage destination) override;
+
+    virtual PipelineStage getDestination() const override;
+
     // deleted to prevent misuse
     PipelineDataMessage(const PipelineDataMessage&) = delete;
     PipelineDataMessage(const PipelineDataMessage&&) = delete;
@@ -28,6 +33,8 @@ class PipelineDataMessage : public BasePipelineMessage
 
   private:
     EPipelineMessageType messageType_;
+
+    PipelineStage destination_;
 
     void* pMessage_;
 };
