@@ -19,9 +19,9 @@ struct VerticalSeamCarverData : public BasePipelineData
 public:
     struct FrameNumberLessComparator
     {
-        bool operator()(const VerticalSeamCarverData* p1, const VerticalSeamCarverData* p2)
+        bool operator()(const BasePipelineData* p1, const BasePipelineData* p2)
         {
-            return (p1->getFrameNumber() < p2->getFrameNumber());
+            return (((VerticalSeamCarverData*)p1)->getFrameNumber() < ((VerticalSeamCarverData*)p2)->getFrameNumber());
         }
     };
 

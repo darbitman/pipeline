@@ -10,10 +10,10 @@
 #include "SharedQueue.hpp"
 #include "VerticalSeamCarverData.hpp"
 
-using std::static_pointer_cast;
 using std::dynamic_pointer_cast;
 using std::make_shared;
 using std::shared_ptr;
+using std::static_pointer_cast;
 using std::vector;
 
 namespace sc
@@ -59,19 +59,19 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
                     {
                         // create a priority queue and use a comparator object that
                         // compares the frame number in VerticalSeamCarverData
-                        shared_ptr<ConstSizePriorityQueue<
-                            VerticalSeamCarverData*,
-                            VerticalSeamCarverData::FrameNumberLessComparator>>
-                            pPriorityQueue = make_shared<ConstSizePriorityQueue<
-                                VerticalSeamCarverData*,
-                                VerticalSeamCarverData::FrameNumberLessComparator>>(1000);
+                        // shared_ptr<ConstSizePriorityQueue<
+                        //     VerticalSeamCarverData*,
+                        //     VerticalSeamCarverData::FrameNumberLessComparator>>
+                        auto pPriorityQueue = make_shared<ConstSizePriorityQueue<
+                            BasePipelineData*,
+                            VerticalSeamCarverData::FrameNumberLessComparator>>(1000);
 
                         // create an adapter to use the same interface as other queues to interface
                         // with the priority queue
                         pNewSharedContainer =
-                            dynamic_pointer_cast<SharedContainer<BasePipelineData*>>(
+                            static_pointer_cast<SharedContainer<BasePipelineData*>>(
                                 make_shared<SharedConstSizePQAdapter<
-                                    VerticalSeamCarverData*,
+                                    BasePipelineData*,
                                     VerticalSeamCarverData::FrameNumberLessComparator>>(
                                     pPriorityQueue));
                     }

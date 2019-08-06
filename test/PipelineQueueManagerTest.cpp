@@ -53,33 +53,33 @@ TEST_F(SeamCarverQueueManagerTest, DoesManagerIntializeQueues)
     EXPECT_EQ(q2->empty(), true);
 }
 
-// TEST_F(SeamCarverQueueManagerTest, CheckLastQueue)
-// {
-//     auto q2 = manager.getQueue(1);
+TEST_F(SeamCarverQueueManagerTest, VerifyMinOrientedPQ)
+{
+    auto q2 = manager.getQueue(1);
 
-//     // system implementation of a min oriented PQ
-//     priority_queue<uint32_t, vector<uint32_t>, greater<uint32_t>> randomFrameNumbers;
+    // system implementation of a min oriented PQ
+    priority_queue<uint32_t, vector<uint32_t>, greater<uint32_t>> randomFrameNumbers;
 
-//     // generate random numbers
-//     // fill in a general PQ and the queue returned by the queue manager with random numbers
-//     for (int32_t i = 0; i < 10; ++i)
-//     {
-//         VerticalSeamCarverData* data = new VerticalSeamCarverData();
+    // generate random numbers
+    // fill in a general PQ and the queue returned by the queue manager with random numbers
+    for (int32_t i = 0; i < 10; ++i)
+    {
+        VerticalSeamCarverData* data = new VerticalSeamCarverData();
 
-//         uint32_t randomNumber = (uint32_t)(rand() % 50);
+        uint32_t randomNumber = (uint32_t)(rand() % 50);
 
-//         data->setFrameNumber(randomNumber);
+        data->setFrameNumber(randomNumber);
 
-//         randomFrameNumbers.push(randomNumber);
-//         q2->push(data);
-//     }
+        randomFrameNumbers.push(randomNumber);
+        q2->push(data);
+    }
 
-//     // both PQs must return the same number
-//     while (!q2->empty())
-//     {
-//         EXPECT_EQ(((VerticalSeamCarverData*)q2->front())->getFrameNumber(), randomFrameNumbers.top());
-//         q2->pop();
-//         randomFrameNumbers.pop();
-//     }
-// }
+    // both PQs must return the same number
+    while (!q2->empty())
+    {
+        EXPECT_EQ(((VerticalSeamCarverData*)q2->front())->getFrameNumber(), randomFrameNumbers.top());
+        q2->pop();
+        randomFrameNumbers.pop();
+    }
+}
 }  // namespace sc
