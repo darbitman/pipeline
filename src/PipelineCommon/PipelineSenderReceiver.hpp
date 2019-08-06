@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "BasePipelineData.hpp"
+#include "BasePipelineMessage.hpp"
 #include "PipelineQueueManager.hpp"
 
 namespace sc
@@ -14,9 +14,9 @@ class PipelineSenderReceiver
   public:
     PipelineSenderReceiver(std::shared_ptr<PipelineQueueManager> pQueueManager);
 
-    bool sendTo(int32_t stageNumberToSendTo, BasePipelineData* dataToSend);
+    bool sendTo(int32_t stageNumberToSendTo, std::shared_ptr<BasePipelineMessage> dataToSend);
 
-    BasePipelineData* receive(int32_t currentStageNumber);
+    std::shared_ptr<BasePipelineMessage> receive(int32_t currentStageNumber);
 
     virtual ~PipelineSenderReceiver();
 

@@ -6,20 +6,17 @@ using std::shared_ptr;
 
 namespace sc
 {
-PipelineSenderReceiver::PipelineSenderReceiver(
-    shared_ptr<PipelineQueueManager> pQueueManager)
-{
-}
+PipelineSenderReceiver::PipelineSenderReceiver(shared_ptr<PipelineQueueManager> pQueueManager) {}
 
 PipelineSenderReceiver::~PipelineSenderReceiver() {}
 
 bool PipelineSenderReceiver::sendTo(int32_t stageNumberToSendTo,
-                                    BasePipelineData* dataToSend)
+                                    shared_ptr<BasePipelineMessage> dataToSend)
 {
     // TODO IMPLEMENT
 }
 
-BasePipelineData* PipelineSenderReceiver::receive(int32_t currentStageNumber)
+shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(int32_t currentStageNumber)
 {
     // TODO IMPLEMENT
 }

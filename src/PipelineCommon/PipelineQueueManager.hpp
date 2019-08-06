@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataMessage.hpp"
 #include "PipelineQueueTypes.hpp"
 #include "SharedContainer.hpp"
 
@@ -24,7 +24,7 @@ class PipelineQueueManager
 
     virtual bool isInitialized() const;
 
-    virtual std::shared_ptr<sc::SharedContainer<BasePipelineData*>> getQueue(
+    virtual std::shared_ptr<SharedContainer<std::shared_ptr<PipelineDataMessage>>> getQueue(
         int32_t queueStageNumber) const;
 
     virtual size_t getNumberOfQueues() const;
@@ -39,7 +39,7 @@ class PipelineQueueManager
     bool bInitialized_;
 
     std::unordered_map<int32_t,
-                       std::shared_ptr<sc::SharedContainer<BasePipelineData*>>>
+                       std::shared_ptr<sc::SharedContainer<std::shared_ptr<PipelineDataMessage>>>>
         queueStageNumberToQueueMap_;
 };
 }  // namespace sc

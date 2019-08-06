@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataMessage.hpp"
 #include "PipelineQueueTypes.hpp"
 #include "SharedConstSizePQAdapter.hpp"
 #include "SharedQueue.hpp"
@@ -42,38 +42,19 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
             // only create a queue if one doesn't exist already for a stage
             if (queueStageNumberToQueueMap_.count(queueStageNumbers[i]) == 0)
             {
-                shared_ptr<SharedContainer<BasePipelineData*>> pNewSharedContainer;
+                shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> pNewSharedContainer;
 
                 switch (queueTypes[i])
                 {
                     case PipelineQueueTypes::QUEUE_TYPE_FIFO:
                     {
-                        shared_ptr<SharedQueue<BasePipelineData*>> pNewQueue =
-                            make_shared<SharedQueue<BasePipelineData*>>(true);
-
                         pNewSharedContainer =
-                            static_pointer_cast<SharedContainer<BasePipelineData*>>(pNewQueue);
+                            make_shared<SharedQueue<shared_ptr<PipelineDataMessage>>>(true);
                     }
                     break;
                     case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
                     {
-                        // create a priority queue and use a comparator object that
-                        // compares the frame number in VerticalSeamCarverData
-                        // shared_ptr<ConstSizePriorityQueue<
-                        //     VerticalSeamCarverData*,
-                        //     VerticalSeamCarverData::FrameNumberLessComparator>>
-                        auto pPriorityQueue = make_shared<ConstSizePriorityQueue<
-                            BasePipelineData*,
-                            VerticalSeamCarverData::FrameNumberLessComparator>>(1000);
-
-                        // create an adapter to use the same interface as other queues to interface
-                        // with the priority queue
-                        pNewSharedContainer =
-                            static_pointer_cast<SharedContainer<BasePipelineData*>>(
-                                make_shared<SharedConstSizePQAdapter<
-                                    BasePipelineData*,
-                                    VerticalSeamCarverData::FrameNumberLessComparator>>(
-                                    pPriorityQueue));
+                        // TODO implement
                     }
                     break;
                     default:
@@ -94,17 +75,17 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
 
 bool PipelineQueueManager::isInitialized() const { return bInitialized_; }
 
-shared_ptr<SharedContainer<BasePipelineData*>> PipelineQueueManager::getQueue(
+shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> PipelineQueueManager::getQueue(
     int32_t queueStageNumber) const
 {
+    shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> pQueue(nullptr);
+
     if (queueStageNumberToQueueMap_.count(queueStageNumber) > 0)
     {
-        return queueStageNumberToQueueMap_.at(queueStageNumber);
+        pQueue = queueStageNumberToQueueMap_.at(queueStageNumber);
     }
-    else
-    {
-        return shared_ptr<SharedContainer<BasePipelineData*>>(nullptr);
-    }
+
+    return pQueue;
 }
 
 size_t PipelineQueueManager::getNumberOfQueues() const
