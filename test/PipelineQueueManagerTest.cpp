@@ -3,6 +3,7 @@
 #include <queue>
 #include <vector>
 
+#include "BasePipelineMessage.hpp"
 #include "PipelineQueueManager.hpp"
 #include "PipelineQueueTypes.hpp"
 #include "VerticalSeamCarverData.hpp"
@@ -15,7 +16,7 @@ using std::vector;
 
 namespace sc
 {
-class SeamCarverQueueManagerTest : public ::testing::Test
+class PipelineQueueManagerTest : public ::testing::Test
 {
   protected:
     virtual void SetUp() override
@@ -37,7 +38,7 @@ class SeamCarverQueueManagerTest : public ::testing::Test
     vector<int32_t> queue_types;
 };
 
-TEST_F(SeamCarverQueueManagerTest, DoesManagerIntializeQueues)
+TEST_F(PipelineQueueManagerTest, DoesManagerIntializeQueues)
 {
     ASSERT_EQ(manager.isInitialized(), true);
 
@@ -53,7 +54,7 @@ TEST_F(SeamCarverQueueManagerTest, DoesManagerIntializeQueues)
     EXPECT_EQ(q2->empty(), true);
 }
 
-TEST_F(SeamCarverQueueManagerTest, VerifyMinOrientedPQ)
+TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
 {
     auto q2 = manager.getQueue(1);
 
@@ -64,20 +65,21 @@ TEST_F(SeamCarverQueueManagerTest, VerifyMinOrientedPQ)
     // fill in a general PQ and the queue returned by the queue manager with random numbers
     for (int32_t i = 0; i < 10; ++i)
     {
-        VerticalSeamCarverData* data = new VerticalSeamCarverData();
+        auto stage = PipelineStage::STAGE_0;
+
+        auto pNewMessage = make_shared<PipelineDataMessage>(stage, nullptr);
 
         uint32_t randomNumber = (uint32_t)(rand() % 50);
-
-        data->setFrameNumber(randomNumber);
+        pNewMessage->setMessageNumber(randomNumber);
 
         randomFrameNumbers.push(randomNumber);
-        q2->push(data);
+        q2->push(pNewMessage);
     }
 
     // both PQs must return the same number
     while (!q2->empty())
     {
-        EXPECT_EQ(((VerticalSeamCarverData*)q2->front())->getFrameNumber(), randomFrameNumbers.top());
+        EXPECT_EQ(q2->front()->getMessageNumber(), randomFrameNumbers.top());
         q2->pop();
         randomFrameNumbers.pop();
     }

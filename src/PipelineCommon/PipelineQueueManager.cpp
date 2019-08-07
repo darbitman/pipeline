@@ -54,7 +54,13 @@ void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
                     break;
                     case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
                     {
-                        // TODO implement
+                        auto pNewPQ = make_shared<ConstSizePriorityQueue<
+                            shared_ptr<PipelineDataMessage>,
+                            PipelineDataMessage::MessageNumberLessComparator>>(1000);
+
+                        pNewSharedContainer = make_shared<SharedConstSizePQAdapter<
+                            shared_ptr<PipelineDataMessage>,
+                            PipelineDataMessage::MessageNumberLessComparator>>(pNewPQ, true);
                     }
                     break;
                     default:

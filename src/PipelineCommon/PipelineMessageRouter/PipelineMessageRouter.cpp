@@ -47,6 +47,8 @@ void PipelineMessageRouter::receiverThread()
             {
                 auto receivedMessageType = pReceivedMessage->getMessageType();
 
+                auto messageDestination = pReceivedMessage->getDestination();
+
                 if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
                 {
                     // TODO process data
@@ -74,11 +76,6 @@ void PipelineMessageRouter::receiverThread()
                 }
             }
         }
-        // check if valid
-        // check for message (and forward)
-        // OR check for a stage register message (and register)
-        // OR check for stage unregister message (and unregister)
-        // OR check for shutdown message (and shutdown thread)
     }
 }
 }  // namespace sc

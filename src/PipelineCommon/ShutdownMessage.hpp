@@ -19,9 +19,9 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual void setMessage(void* pMessage) override;
 
-    virtual void setDestination(PipelineStage destination) override;
+    virtual void setDestination(int32_t destination) override;
 
-    virtual PipelineStage getDestination() const override;
+    virtual int32_t getDestination() const override;
 
     // deleted to prevent misuse
     ShutdownMessage(const ShutdownMessage&) = delete;

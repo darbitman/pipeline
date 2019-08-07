@@ -10,13 +10,13 @@ set(LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_CXX_STANDARD 17)
+
 # Generate CMakeLists.txt that will pull the repo
 configure_file(
     CMakeLists.googletest.txt
     ${PROJECT_SOURCE_DIR}/googletest-download/CMakeLists.txt
 )
-
-
 
 # Use the generated CMakeLists.txt file to generate the build files to download googletest
 execute_process(
@@ -47,4 +47,4 @@ find_package(OpenCV)
 
 add_subdirectory(src)
 
-#add_subdirectory(test)
+add_subdirectory(test)

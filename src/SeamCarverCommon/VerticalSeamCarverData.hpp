@@ -16,12 +16,13 @@ class PixelEnergyCalculator2D;
 
 struct VerticalSeamCarverData : public BasePipelineData
 {
-public:
+  public:
     struct FrameNumberLessComparator
     {
         bool operator()(const BasePipelineData* p1, const BasePipelineData* p2)
         {
-            return (((VerticalSeamCarverData*)p1)->getFrameNumber() < ((VerticalSeamCarverData*)p2)->getFrameNumber());
+            return (((VerticalSeamCarverData*)p1)->getFrameNumber() <
+                    ((VerticalSeamCarverData*)p2)->getFrameNumber());
         }
     };
 
@@ -128,7 +129,7 @@ public:
     // default energy at the borders of the image
     const double marginEnergy_;
 
-private:
+  private:
     uint32_t frameNumber_;
 
     // stores the image and output result
