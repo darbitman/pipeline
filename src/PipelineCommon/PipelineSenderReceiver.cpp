@@ -6,18 +6,36 @@ using std::shared_ptr;
 
 namespace sc
 {
-PipelineSenderReceiver::PipelineSenderReceiver(shared_ptr<PipelineQueueManager> pQueueManager) {}
+PipelineSenderReceiver::PipelineSenderReceiver(shared_ptr<PipelineQueueManager> pQueueManager)
+    : pQueueManager_(pQueueManager)
+{
+}
 
 PipelineSenderReceiver::~PipelineSenderReceiver() {}
 
-bool PipelineSenderReceiver::sendTo(int32_t stageNumberToSendTo,
-                                    shared_ptr<BasePipelineMessage> dataToSend)
+bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
 {
-    // TODO IMPLEMENT
+    auto pQueue = pQueueManager_->getQueue(PipelineStage::MESSAGE_ROUTER);
+
+    if (pQueue != nullptr)
+    {
+        pQueue->push(dataToSend);
+    }
 }
 
-shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(int32_t currentStageNumber)
+shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(int32_t currentStageId)
 {
-    // TODO IMPLEMENT
+    auto pQueue = pQueueManager_->getQueue(currentStageId);
+
+    if (pQueue != nullptr)
+    {
+        auto pReceivedMessage = pQueue->front();
+        pQueue->pop();
+        return pReceivedMessage;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 }  // namespace sc

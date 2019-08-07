@@ -1,5 +1,7 @@
 file(GLOB PipelineCommon_SRC CONFIGURE_DEPENDS "*.cpp")
 
+add_subdirectory(PipelineMessageRouter)
+
 add_library(
     PipelineCommon
     STATIC

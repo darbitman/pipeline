@@ -21,30 +21,23 @@ class PipelineQueueManagerTest : public ::testing::Test
   protected:
     virtual void SetUp() override
     {
-        queue_ids.push_back(0);
-        queue_ids.push_back(1);
-
-        queue_types.push_back(PipelineQueueTypes::QUEUE_TYPE_FIFO);
-        queue_types.push_back(PipelineQueueTypes::QUEUE_TYPE_MIN_PQ);
-
-        manager.initialize(queue_ids, queue_types);
+        fifo_queue_id_ = manager.createNewQueue(PipelineQueueTypes::QUEUE_TYPE_FIFO);
+        pq_queue_id_ = manager.createNewQueue(PipelineQueueTypes::QUEUE_TYPE_MIN_PQ);
     }
 
+    int32_t fifo_queue_id_;
+
+    int32_t pq_queue_id_;
+
     PipelineQueueManager manager;
-
-  private:
-    vector<int32_t> queue_ids;
-
-    vector<int32_t> queue_types;
 };
 
 TEST_F(PipelineQueueManagerTest, DoesManagerIntializeQueues)
 {
-    ASSERT_EQ(manager.isInitialized(), true);
 
-    auto q1 = manager.getQueue(0);
-    auto q2 = manager.getQueue(1);
-    auto q3 = manager.getQueue(2);
+    auto q1 = manager.getQueue(fifo_queue_id_);
+    auto q2 = manager.getQueue(pq_queue_id_);
+    auto q3 = manager.getQueue(19);
 
     ASSERT_NE(q1, nullptr);
     ASSERT_NE(q2, nullptr);
@@ -56,7 +49,7 @@ TEST_F(PipelineQueueManagerTest, DoesManagerIntializeQueues)
 
 TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
 {
-    auto q2 = manager.getQueue(1);
+    auto q2 = manager.getQueue(pq_queue_id_);
 
     // system implementation of a min oriented PQ
     priority_queue<uint32_t, vector<uint32_t>, greater<uint32_t>> randomFrameNumbers;

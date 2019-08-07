@@ -19,13 +19,10 @@ class PipelineQueueManager
 
     ~PipelineQueueManager();
 
-    virtual void initialize(const std::vector<int32_t>& queueStageNumbers,
-                            const std::vector<int32_t>& queueTypes);
+    virtual int32_t createNewQueue(int32_t newQueueType);
 
-    virtual bool isInitialized() const;
-
-    virtual std::shared_ptr<SharedContainer<std::shared_ptr<PipelineDataMessage>>> getQueue(
-        int32_t queueStageNumber) const;
+    virtual std::shared_ptr<SharedContainer<std::shared_ptr<BasePipelineMessage>>> getQueue(
+        int32_t queueId) const;
 
     virtual size_t getNumberOfQueues() const;
 
@@ -36,11 +33,11 @@ class PipelineQueueManager
     PipelineQueueManager& operator=(const PipelineQueueManager&&) = delete;
 
   private:
-    bool bInitialized_;
+    int32_t currentQueueId_;
 
     std::unordered_map<int32_t,
-                       std::shared_ptr<sc::SharedContainer<std::shared_ptr<PipelineDataMessage>>>>
-        queueStageNumberToQueueMap_;
+                       std::shared_ptr<sc::SharedContainer<std::shared_ptr<BasePipelineMessage>>>>
+        queueIdToQueueMap_;
 };
 }  // namespace sc
 

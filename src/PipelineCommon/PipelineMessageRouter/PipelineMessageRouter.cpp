@@ -11,13 +11,15 @@ using std::thread;
 namespace sc
 {
 PipelineMessageRouter::PipelineMessageRouter(shared_ptr<PipelineSenderReceiver> pSenderReceiver,
-                                             int32_t thisStage)
+                                             std::shared_ptr<PipelineQueueManager> pQueueManager)
     : bInitialized_(false),
-      thisStage_(thisStage),
+      thisStageId_(PipelineStage::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true),
-      pSenderReceiver_(pSenderReceiver)
+      pSenderReceiver_(pSenderReceiver),
+      pQueueManager_(pQueueManager)
 {
+    registerNewStage(thisStageId_, PipelineQueueTypes::QUEUE_TYPE_FIFO);
 }
 
 PipelineMessageRouter::~PipelineMessageRouter() {}
@@ -32,6 +34,16 @@ void PipelineMessageRouter::initialize()
     }
 }
 
+bool PipelineMessageRouter::isInitialized() const { return bInitialized_; }
+
+void PipelineMessageRouter::registerNewStage(int32_t stageId, int32_t queueType)
+{
+    if (stageIdToQueueIdMap_.count(stageId) != 0)
+    {
+        stageIdToQueueIdMap_[stageId] = pQueueManager_->createNewQueue(queueType);
+    }
+}
+
 void PipelineMessageRouter::receiverThread()
 {
     bRunReceiverThread_ = true;
@@ -41,7 +53,7 @@ void PipelineMessageRouter::receiverThread()
     {
         if (pSenderReceiver_ != nullptr)
         {
-            auto pReceivedMessage = pSenderReceiver_->receive(thisStage_);
+            auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
 
             if (pReceivedMessage != nullptr)
             {
@@ -49,33 +61,42 @@ void PipelineMessageRouter::receiverThread()
 
                 auto messageDestination = pReceivedMessage->getDestination();
 
-                if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                if (messageDestination != thisStageId_)
                 {
-                    // TODO process data
-                }
-                else if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
-                {
-                    // TODO process shutdown message
-                    // if message destination is router, then shut router down and forward message
-                    // to ALL stages
-                    // if message destination is not router, then forward the message to destination
-                }
-                else if (receivedMessageType ==
-                         EPipelineMessageType::MESSAGE_TYPE_REGISTER_WITH_ROUTER)
-                {
-                    // TODO register new stage with router
-                }
-                else if (receivedMessageType ==
-                         EPipelineMessageType::MESSAGE_TYPE_UNREGISTER_WITH_ROUTER)
-                {
-                    // TODO unregister stage with router
+                    forwardMessage(pReceivedMessage);
                 }
                 else
                 {
-                    // TODO handle other message
+                    if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                    {
+                        // TODO process data
+                    }
+                    else if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
+                    {
+                        bRunReceiverThread_ = false;
+                        // TODO process shutdown message
+                        // if message destination is router, then shut router down and forward
+                        // message to ALL stages
+                    }
+                    else
+                    {
+                        // TODO handle other message
+                    }
                 }
             }
         }
+    }
+
+    bReceiverThreadShutdown_ = true;
+}
+
+void PipelineMessageRouter::forwardMessage(shared_ptr<BasePipelineMessage> pMessage)
+{
+    auto pQueue = pQueueManager_->getQueue(pMessage->getDestination());
+
+    if (pQueue != nullptr)
+    {
+        pQueue->push(pMessage);
     }
 }
 }  // namespace sc

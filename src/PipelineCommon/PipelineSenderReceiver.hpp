@@ -14,9 +14,9 @@ class PipelineSenderReceiver
   public:
     PipelineSenderReceiver(std::shared_ptr<PipelineQueueManager> pQueueManager);
 
-    bool sendTo(int32_t stageNumberToSendTo, std::shared_ptr<BasePipelineMessage> dataToSend);
+    bool send(std::shared_ptr<BasePipelineMessage> dataToSend);
 
-    std::shared_ptr<BasePipelineMessage> receive(int32_t currentStageNumber);
+    std::shared_ptr<BasePipelineMessage> receive(int32_t currentStageId);
 
     virtual ~PipelineSenderReceiver();
 
@@ -25,6 +25,9 @@ class PipelineSenderReceiver
     PipelineSenderReceiver(PipelineSenderReceiver&&) = delete;
     PipelineSenderReceiver& operator=(const PipelineSenderReceiver&) = delete;
     PipelineSenderReceiver& operator=(PipelineSenderReceiver&&) = delete;
+
+  private:
+    std::shared_ptr<PipelineQueueManager> pQueueManager_;
 };
 }  // namespace sc
 

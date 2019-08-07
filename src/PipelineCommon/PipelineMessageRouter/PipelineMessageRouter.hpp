@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <memory>
+#include <unordered_map>
 
 #include "PipelineSenderReceiver.hpp"
 #include "StageNumbers.hpp"
@@ -13,11 +14,15 @@ class PipelineMessageRouter
 {
   public:
     PipelineMessageRouter(std::shared_ptr<PipelineSenderReceiver> pSenderReceiver,
-                          int32_t thisStage);
+                          std::shared_ptr<PipelineQueueManager> pQueueManager);
 
     virtual ~PipelineMessageRouter();
 
     virtual void initialize();
+
+    virtual bool isInitialized() const;
+
+    void registerNewStage(int32_t stageId, int32_t queueType);
 
     // deleted to prevent misuse
     PipelineMessageRouter(const PipelineMessageRouter&) = delete;
@@ -28,7 +33,7 @@ class PipelineMessageRouter
   private:
     bool bInitialized_;
 
-    int32_t thisStage_;
+    int32_t thisStageId_;
 
     std::atomic<bool> bRunReceiverThread_;
 
@@ -36,8 +41,14 @@ class PipelineMessageRouter
 
     std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
 
+    std::shared_ptr<PipelineQueueManager> pQueueManager_;
+
+    std::unordered_map<int32_t, int32_t> stageIdToQueueIdMap_;
+
     void receiverThread();
-}
+
+    void forwardMessage(std::shared_ptr<BasePipelineMessage> pMessage);
+};
 }  // namespace sc
 
 #endif

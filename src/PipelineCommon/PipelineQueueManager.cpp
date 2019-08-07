@@ -18,84 +18,57 @@ using std::vector;
 
 namespace sc
 {
-PipelineQueueManager::PipelineQueueManager() : bInitialized_(false) {}
+PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
 
 PipelineQueueManager::~PipelineQueueManager() {}
 
-void PipelineQueueManager::initialize(const vector<int32_t>& queueStageNumbers,
-                                      const vector<int32_t>& queueTypes)
+int32_t PipelineQueueManager::createNewQueue(int32_t newQueueType)
 {
-    if (!bInitialized_)
+    // find an unused queue id
+    while (queueIdToQueueMap_.count(currentQueueId_) != 0)
     {
-        // make sure for every queue stage there's a type to describe the kind
-        // of queue to create
-        if (queueStageNumbers.size() != queueTypes.size())
-        {
-            return;
-        }
-
-        // iterator through all the queue stage numbers and create a queue of
-        // queueType associate the stage number with the created queue
-        size_t numStages = queueStageNumbers.size();
-        for (size_t i = 0; i < numStages; ++i)
-        {
-            // only create a queue if one doesn't exist already for a stage
-            if (queueStageNumberToQueueMap_.count(queueStageNumbers[i]) == 0)
-            {
-                shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> pNewSharedContainer;
-
-                switch (queueTypes[i])
-                {
-                    case PipelineQueueTypes::QUEUE_TYPE_FIFO:
-                    {
-                        pNewSharedContainer =
-                            make_shared<SharedQueue<shared_ptr<PipelineDataMessage>>>(true);
-                    }
-                    break;
-                    case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
-                    {
-                        auto pNewPQ = make_shared<ConstSizePriorityQueue<
-                            shared_ptr<PipelineDataMessage>,
-                            PipelineDataMessage::MessageNumberLessComparator>>(1000);
-
-                        pNewSharedContainer = make_shared<SharedConstSizePQAdapter<
-                            shared_ptr<PipelineDataMessage>,
-                            PipelineDataMessage::MessageNumberLessComparator>>(pNewPQ, true);
-                    }
-                    break;
-                    default:
-                        // do nothing
-                        break;
-                }
-
-                if (pNewSharedContainer != nullptr)
-                {
-                    queueStageNumberToQueueMap_[queueStageNumbers[i]] = pNewSharedContainer;
-                }
-            }
-        }
+        currentQueueId_++;
     }
 
-    bInitialized_ = true;
-}
-
-bool PipelineQueueManager::isInitialized() const { return bInitialized_; }
-
-shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> PipelineQueueManager::getQueue(
-    int32_t queueStageNumber) const
-{
-    shared_ptr<SharedContainer<shared_ptr<PipelineDataMessage>>> pQueue(nullptr);
-
-    if (queueStageNumberToQueueMap_.count(queueStageNumber) > 0)
+    switch (newQueueType)
     {
-        pQueue = queueStageNumberToQueueMap_.at(queueStageNumber);
+        case PipelineQueueTypes::QUEUE_TYPE_FIFO:
+        {
+            queueIdToQueueMap_[currentQueueId_] =
+                make_shared<SharedQueue<shared_ptr<BasePipelineMessage>>>(true);
+        }
+        break;
+        case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
+        {
+            auto pNewPQ = make_shared<ConstSizePriorityQueue<
+                shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
+                1000);
+
+            queueIdToQueueMap_[currentQueueId_] = make_shared<SharedConstSizePQAdapter<
+                shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
+                pNewPQ, true);
+        }
+        break;
+        default:
+            return -1;
+            break;
     }
 
-    return pQueue;
+    return currentQueueId_;
 }
 
-size_t PipelineQueueManager::getNumberOfQueues() const
+shared_ptr<SharedContainer<shared_ptr<BasePipelineMessage>>> PipelineQueueManager::getQueue(
+    int32_t queueId) const
 {
-    return queueStageNumberToQueueMap_.size();
+    if (queueIdToQueueMap_.count(queueId) != 0)
+    {
+        return queueIdToQueueMap_.at(queueId);
+    }
+    else
+    {
+        return nullptr;
+    }
 }
+
+size_t PipelineQueueManager::getNumberOfQueues() const { return queueIdToQueueMap_.size(); }
 }  // namespace sc
