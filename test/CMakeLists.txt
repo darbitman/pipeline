@@ -80,7 +80,7 @@ target_compile_definitions(
 
 add_executable(
     ConstSizePriorityQueueTest
-    ConstSizePriorityQueueTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ConstSizePriorityQueueTest.cpp
 )
 
 target_link_libraries(
@@ -99,7 +99,7 @@ target_include_directories(
 
 add_executable(
     PipelineQueueManagerTest
-    PipelineQueueManagerTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PipelineQueueManagerTest.cpp
 )
 
 target_link_libraries(
@@ -120,4 +120,28 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
     ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
     ${OpenCV_INCLUDE_DIRS}
+)
+
+
+
+add_executable(
+    PipelineSenderReceiverTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/PipelineSenderReceiverTest.cpp
+)
+
+target_link_libraries(
+    PipelineSenderReceiverTest
+    PRIVATE
+    gtest_main
+    "-Xlinker --start-group"
+    PipelineCommon
+    "-Xlinker --end-group"
+)
+
+target_include_directories(
+    PipelineSenderReceiverTest
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/Common
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
 )

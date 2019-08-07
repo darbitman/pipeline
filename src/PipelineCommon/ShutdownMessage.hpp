@@ -9,7 +9,7 @@ namespace sc
 class ShutdownMessage : public BasePipelineMessage
 {
   public:
-    ShutdownMessage();
+    explicit ShutdownMessage(int32_t destination);
 
     virtual ~ShutdownMessage();
 
@@ -23,6 +23,10 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual int32_t getDestination() const override;
 
+    virtual void setMessageNumber(int32_t newMessageNumber) override;
+
+    virtual int32_t getMessageNumber() const override;
+
     // deleted to prevent misuse
     ShutdownMessage(const ShutdownMessage&) = delete;
     ShutdownMessage(const ShutdownMessage&&) = delete;
@@ -31,6 +35,10 @@ class ShutdownMessage : public BasePipelineMessage
 
   private:
     EPipelineMessageType messageType_;
+
+    int32_t destination_;
+
+    int32_t messageNumber_;
 };
 }  // namespace sc
 

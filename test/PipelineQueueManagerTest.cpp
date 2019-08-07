@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include <memory>
 #include <queue>
 #include <vector>
 
@@ -34,7 +35,6 @@ class PipelineQueueManagerTest : public ::testing::Test
 
 TEST_F(PipelineQueueManagerTest, DoesManagerIntializeQueues)
 {
-
     auto q1 = manager.getQueue(fifo_queue_id_);
     auto q2 = manager.getQueue(pq_queue_id_);
     auto q3 = manager.getQueue(19);
