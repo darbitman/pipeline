@@ -7,6 +7,7 @@
 #include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "SeamCarverStageFactoryRegistration.hpp"
+#include "VerticalSeamCarverData.hpp"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -36,6 +37,8 @@ bool ComputeEnergyStage::isRunning() const { return BasePipelineStage::isRunning
 
 void ComputeEnergyStage::processData(shared_ptr<BasePipelineData> pData)
 {
+    auto seamCarverData = (VerticalSeamCarverData*)(pData.get());
+
     // // set local data members for the computation
     // numRows_ = data->numRows_;
     // numColumns_ = data->numColumns_;

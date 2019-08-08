@@ -62,7 +62,7 @@ void BasePipelineStage::runThread()
                 if (pReceivedMessage->getMessageType() ==
                     EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
                 {
-                    // TODO process data (set new destination)
+                    processData(pReceivedMessage->getPipelineData());
                     pSenderReceiver_->send(pReceivedMessage);
                 }
                 else if (pReceivedMessage->getMessageType() ==
