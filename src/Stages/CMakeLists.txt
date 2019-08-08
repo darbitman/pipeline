@@ -1,4 +1,4 @@
-file(GLOB Stages_SRC CONFIGURE_DEPENDS "*.cpp")
+file(GLOB Stages_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
 add_library(
     SeamCarverStages

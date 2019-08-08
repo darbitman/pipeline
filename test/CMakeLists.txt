@@ -1,5 +1,5 @@
 #[[
-file(GLOB Test_SRC CONFIGURE_DEPENDS "*.cpp")
+file(GLOB Test_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
 add_executable(
     unit_tests
@@ -118,6 +118,7 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/src/Common
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
     ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
     ${OpenCV_INCLUDE_DIRS}
 )
@@ -141,6 +142,7 @@ target_link_libraries(
 target_include_directories(
     PipelineSenderReceiverTest
     PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages    
     ${PROJECT_SOURCE_DIR}/src/Common
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
     ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon

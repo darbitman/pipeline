@@ -1,4 +1,6 @@
-file(GLOB PipelineCommon_SRC CONFIGURE_DEPENDS "*.cpp")
+file(GLOB PipelineCommon_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
+
+add_subdirectory(PipelineMessages)
 
 add_library(
     PipelineCommon
@@ -11,6 +13,7 @@ target_include_directories(
     PUBLIC
     ${PROJECT_SOURCE_DIR}/src/Common
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
     ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
     ${OpenCV_INCLUDE_DIRS}
 )

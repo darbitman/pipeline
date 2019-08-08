@@ -1,4 +1,4 @@
-file(GLOB SeamCarverCommon_SRC CONFIGURE_DEPENDS "*.cpp")
+file(GLOB SeamCarverCommon_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
 add_library(
     SeamCarverCommon
