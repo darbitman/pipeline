@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <memory>
 
-#include "PipelineCommon.hpp"
 #include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
@@ -15,21 +15,23 @@ class PipelineDataMessage : public BasePipelineMessage
   public:
     struct MessageNumberLessComparator
     {
-        bool operator()(std::shared_ptr<const BasePipelineMessage> pM1, std::shared_ptr<const BasePipelineMessage> pM2)
+        bool operator()(std::shared_ptr<const BasePipelineMessage> pM1,
+                        std::shared_ptr<const BasePipelineMessage> pM2)
         {
             return (pM1->getMessageNumber() < pM2->getMessageNumber());
         }
     };
 
-    PipelineDataMessage(EPipelineStageId destination, BasePipelineData* pMessage);
+    PipelineDataMessage(EPipelineStageId destination,
+                        std::shared_ptr<BasePipelineData> pPipelineData);
 
     ~PipelineDataMessage();
 
     virtual EPipelineMessageType getMessageType() const override;
 
-    virtual void* getMessage() const override;
+    virtual std::shared_ptr<BasePipelineData> getPipelineData() const override;
 
-    virtual void setMessage(void* pMessage) override;
+    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
 
     virtual void setDestination(EPipelineStageId destination) override;
 
@@ -52,7 +54,7 @@ class PipelineDataMessage : public BasePipelineMessage
 
     int32_t messageNumber_;
 
-    void* pMessage_;
+    std::shared_ptr<BasePipelineData> pPipelineData_;
 };
 }  // namespace sc
 

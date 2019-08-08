@@ -1,32 +1,33 @@
 #include "PipelineDataMessage.hpp"
 
+#include <memory>
+
 #include "BasePipelineData.hpp"
 #include "PipelineCommon.hpp"
 
+using std::shared_ptr;
+
 namespace sc
 {
-PipelineDataMessage::PipelineDataMessage(EPipelineStageId destination, BasePipelineData* pMessage)
+PipelineDataMessage::PipelineDataMessage(EPipelineStageId destination,
+                                         shared_ptr<BasePipelineData> pPipelineData)
     : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA),
       destination_(destination),
       messageNumber_(0),
-      pMessage_(pMessage)
+      pPipelineData_(pPipelineData)
 {
 }
 
-PipelineDataMessage::~PipelineDataMessage()
-{
-    if (pMessage_ != nullptr)
-    {
-        delete ((BasePipelineData*)pMessage_);
-        pMessage_ = nullptr;
-    }
-}
+PipelineDataMessage::~PipelineDataMessage() {}
 
 EPipelineMessageType PipelineDataMessage::getMessageType() const { return messageType_; }
 
-void* PipelineDataMessage::getMessage() const { return pMessage_; }
+shared_ptr<BasePipelineData> PipelineDataMessage::getPipelineData() const { return pPipelineData_; }
 
-void PipelineDataMessage::setMessage(void* pMessage) { pMessage_ = pMessage; }
+void PipelineDataMessage::setPipelineData(shared_ptr<BasePipelineData> pPipelineData)
+{
+    pPipelineData_ = pPipelineData;
+}
 
 void PipelineDataMessage::setDestination(EPipelineStageId destination)
 {

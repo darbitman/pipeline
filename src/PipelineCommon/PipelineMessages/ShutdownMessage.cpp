@@ -1,6 +1,10 @@
 #include "ShutdownMessage.hpp"
 
+#include <memory>
+
 #include "PipelineCommon.hpp"
+
+using std::shared_ptr;
 
 namespace sc
 {
@@ -15,9 +19,9 @@ ShutdownMessage::~ShutdownMessage() {}
 
 EPipelineMessageType ShutdownMessage::getMessageType() const { return messageType_; }
 
-void* ShutdownMessage::getMessage() const { return nullptr; }
+shared_ptr<BasePipelineData> ShutdownMessage::getPipelineData() const { return nullptr; }
 
-void ShutdownMessage::setMessage(void* pMessage) { return; }
+void ShutdownMessage::setPipelineData(shared_ptr<BasePipelineData> pPipelineData) { return; }
 
 void ShutdownMessage::setDestination(EPipelineStageId destination) { destination_ = destination; }
 

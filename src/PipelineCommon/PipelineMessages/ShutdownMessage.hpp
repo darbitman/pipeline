@@ -1,6 +1,9 @@
 #ifndef SHUTDOWNMESSAGE_HPP
 #define SHUTDOWNMESSAGE_HPP
 
+#include <memory>
+
+#include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
 #include "PipelineCommon.hpp"
 
@@ -15,9 +18,9 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual EPipelineMessageType getMessageType() const override;
 
-    virtual void* getMessage() const override;
+    virtual std::shared_ptr<BasePipelineData> getPipelineData() const override;
 
-    virtual void setMessage(void* pMessage) override;
+    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
 
     virtual void setDestination(EPipelineStageId destination) override;
 

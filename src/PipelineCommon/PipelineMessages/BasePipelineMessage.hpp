@@ -2,7 +2,9 @@
 #define BASEPIPELINEMESSAGE_HPP
 
 #include <cstdint>
+#include <memory>
 
+#include "BasePipelineData.hpp"
 #include "PipelineCommon.hpp"
 
 namespace sc
@@ -14,9 +16,9 @@ class BasePipelineMessage
 
     virtual EPipelineMessageType getMessageType() const = 0;
 
-    virtual void* getMessage() const = 0;
+    virtual std::shared_ptr<BasePipelineData> getPipelineData() const = 0;
 
-    virtual void setMessage(void* pMessage) = 0;
+    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) = 0;
 
     virtual void setDestination(EPipelineStageId destination) = 0;
 
