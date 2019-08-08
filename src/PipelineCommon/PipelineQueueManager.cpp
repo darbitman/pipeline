@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "PipelineCommon.hpp"
 #include "PipelineDataMessage.hpp"
-#include "PipelineQueueTypes.hpp"
 #include "SharedConstSizePQAdapter.hpp"
 #include "SharedQueue.hpp"
 #include "VerticalSeamCarverData.hpp"
@@ -22,7 +22,7 @@ PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
 
 PipelineQueueManager::~PipelineQueueManager() {}
 
-int32_t PipelineQueueManager::createNewQueue(int32_t newQueueType)
+int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
 {
     // find an unused queue id
     while (queueIdToQueueMap_.count(currentQueueId_) != 0)
@@ -32,13 +32,13 @@ int32_t PipelineQueueManager::createNewQueue(int32_t newQueueType)
 
     switch (newQueueType)
     {
-        case PipelineQueueTypes::QUEUE_TYPE_FIFO:
+        case EPipelineQueueType::QUEUE_TYPE_FIFO:
         {
             queueIdToQueueMap_[currentQueueId_] =
                 make_shared<SharedQueue<shared_ptr<BasePipelineMessage>>>(true);
         }
         break;
-        case PipelineQueueTypes::QUEUE_TYPE_MIN_PQ:
+        case EPipelineQueueType::QUEUE_TYPE_MIN_PQ:
         {
             auto pNewPQ = make_shared<ConstSizePriorityQueue<
                 shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(

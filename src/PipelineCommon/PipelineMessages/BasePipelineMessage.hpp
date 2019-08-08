@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "PipelineMessageType.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
@@ -18,9 +18,9 @@ class BasePipelineMessage
 
     virtual void setMessage(void* pMessage) = 0;
 
-    virtual void setDestination(int32_t destination) = 0;
+    virtual void setDestination(EPipelineStageId destination) = 0;
 
-    virtual int32_t getDestination() const = 0;
+    virtual EPipelineStageId getDestination() const = 0;
 
     virtual void setMessageNumber(int32_t newMessageNumber) = 0;
 

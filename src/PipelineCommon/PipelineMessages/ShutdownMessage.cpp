@@ -1,10 +1,10 @@
 #include "ShutdownMessage.hpp"
 
-#include "PipelineMessageType.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
-ShutdownMessage::ShutdownMessage(int32_t destination)
+ShutdownMessage::ShutdownMessage(EPipelineStageId destination)
     : messageType_(EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN),
       destination_(destination),
       messageNumber_(0)
@@ -19,9 +19,9 @@ void* ShutdownMessage::getMessage() const { return nullptr; }
 
 void ShutdownMessage::setMessage(void* pMessage) { return; }
 
-void ShutdownMessage::setDestination(int32_t destination) { destination_ = destination; }
+void ShutdownMessage::setDestination(EPipelineStageId destination) { destination_ = destination; }
 
-int32_t ShutdownMessage::getDestination() const { return destination_; }
+EPipelineStageId ShutdownMessage::getDestination() const { return destination_; }
 
 void ShutdownMessage::setMessageNumber(int32_t newMessageNumber)
 {

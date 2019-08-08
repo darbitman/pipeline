@@ -2,8 +2,8 @@
 
 #include <memory>
 
+#include "PipelineCommon.hpp"
 #include "PipelineDataMessage.hpp"
-#include "PipelineQueueTypes.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "ShutdownMessage.hpp"
 
@@ -19,8 +19,8 @@ class PipelineSenderReceiverTest : public ::testing::Test
     {
         senderReceiver.initialize();
 
-        senderReceiver.registerNewStage(PipelineStage::STAGE_0,
-                                        PipelineQueueTypes::QUEUE_TYPE_FIFO);
+        senderReceiver.registerNewStage(EPipelineStageId::STAGE_0,
+                                        EPipelineQueueType::QUEUE_TYPE_FIFO);
     }
 
     static PipelineSenderReceiver senderReceiver;
@@ -30,13 +30,13 @@ PipelineSenderReceiver PipelineSenderReceiverTest::senderReceiver;
 
 TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
-    auto destination = PipelineStage::STAGE_0;
+    auto destination = EPipelineStageId::STAGE_0;
     shared_ptr<BasePipelineMessage> pMessage =
         make_shared<PipelineDataMessage>(destination, nullptr);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 
-    auto pReceivedMessage = senderReceiver.receive(PipelineStage::STAGE_0);
+    auto pReceivedMessage = senderReceiver.receive(EPipelineStageId::STAGE_0);
 
     EXPECT_EQ(pMessage, pReceivedMessage);
 }
@@ -45,7 +45,7 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
 {
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
-    auto destination = PipelineStage::MESSAGE_ROUTER;
+    auto destination = EPipelineStageId::MESSAGE_ROUTER;
     shared_ptr<BasePipelineMessage> pMessage =
         make_shared<ShutdownMessage>(destination);
 

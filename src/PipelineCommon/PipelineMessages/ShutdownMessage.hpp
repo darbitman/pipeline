@@ -2,14 +2,14 @@
 #define SHUTDOWNMESSAGE_HPP
 
 #include "BasePipelineMessage.hpp"
-#include "PipelineMessageType.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
 class ShutdownMessage : public BasePipelineMessage
 {
   public:
-    explicit ShutdownMessage(int32_t destination);
+    explicit ShutdownMessage(EPipelineStageId destination);
 
     virtual ~ShutdownMessage();
 
@@ -19,9 +19,9 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual void setMessage(void* pMessage) override;
 
-    virtual void setDestination(int32_t destination) override;
+    virtual void setDestination(EPipelineStageId destination) override;
 
-    virtual int32_t getDestination() const override;
+    virtual EPipelineStageId getDestination() const override;
 
     virtual void setMessageNumber(int32_t newMessageNumber) override;
 
@@ -36,7 +36,7 @@ class ShutdownMessage : public BasePipelineMessage
   private:
     EPipelineMessageType messageType_;
 
-    int32_t destination_;
+    EPipelineStageId destination_;
 
     int32_t messageNumber_;
 };

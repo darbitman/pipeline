@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "PipelineCommon.hpp"
 #include "BasePipelineMessage.hpp"
 #include "PipelineQueueManager.hpp"
 
@@ -19,9 +20,11 @@ class PipelineSenderReceiver
 
     virtual void initialize();
 
-    virtual void registerNewStage(int32_t stageId, int32_t queueType);
+    virtual void registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType);
 
-    virtual void unregisterStage(int32_t stageId);
+    virtual void unregisterStage(EPipelineStageId stageId);
+
+    virtual bool isStageRegistered(EPipelineStageId stageId);
 
     virtual bool isInitialized() const;
 
@@ -29,7 +32,7 @@ class PipelineSenderReceiver
 
     virtual bool send(std::shared_ptr<BasePipelineMessage> dataToSend);
 
-    virtual std::shared_ptr<BasePipelineMessage> receive(int32_t receivingStageId);
+    virtual std::shared_ptr<BasePipelineMessage> receive(EPipelineStageId receivingStageId);
 
     // deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
@@ -40,7 +43,7 @@ class PipelineSenderReceiver
   private:
     bool bInitialized_;
 
-    int32_t thisStageId_;
+    EPipelineStageId thisStageId_;
 
     std::atomic<bool> bRunReceiverThread_;
 
@@ -48,7 +51,7 @@ class PipelineSenderReceiver
 
     std::shared_ptr<PipelineQueueManager> pQueueManager_;
 
-    std::unordered_map<int32_t, int32_t> stageIdToQueueIdMap_;
+    std::unordered_map<EPipelineStageId, int32_t> stageIdToQueueIdMap_;
 
     void receiverThread();
 

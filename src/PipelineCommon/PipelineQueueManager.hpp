@@ -6,8 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "PipelineCommon.hpp"
 #include "PipelineDataMessage.hpp"
-#include "PipelineQueueTypes.hpp"
 #include "SharedContainer.hpp"
 
 namespace sc
@@ -19,7 +19,7 @@ class PipelineQueueManager
 
     ~PipelineQueueManager();
 
-    virtual int32_t createNewQueue(int32_t newQueueType);
+    virtual int32_t createNewQueue(EPipelineQueueType newQueueType);
 
     virtual std::shared_ptr<SharedContainer<std::shared_ptr<BasePipelineMessage>>> getQueue(
         int32_t queueId) const;

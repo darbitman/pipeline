@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "BasePipelineMessage.hpp"
+#include "PipelineCommon.hpp"
 #include "PipelineQueueManager.hpp"
-#include "PipelineQueueTypes.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::greater;
@@ -22,8 +22,8 @@ class PipelineQueueManagerTest : public ::testing::Test
   protected:
     virtual void SetUp() override
     {
-        fifo_queue_id_ = manager.createNewQueue(PipelineQueueTypes::QUEUE_TYPE_FIFO);
-        pq_queue_id_ = manager.createNewQueue(PipelineQueueTypes::QUEUE_TYPE_MIN_PQ);
+        fifo_queue_id_ = manager.createNewQueue(EPipelineQueueType::QUEUE_TYPE_FIFO);
+        pq_queue_id_ = manager.createNewQueue(EPipelineQueueType::QUEUE_TYPE_MIN_PQ);
     }
 
     int32_t fifo_queue_id_;
@@ -58,7 +58,7 @@ TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
     // fill in a general PQ and the queue returned by the queue manager with random numbers
     for (int32_t i = 0; i < 10; ++i)
     {
-        auto stage = PipelineStage::STAGE_0;
+        auto stage = EPipelineStageId::STAGE_0;
 
         auto pNewMessage = make_shared<PipelineDataMessage>(stage, nullptr);
 

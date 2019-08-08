@@ -1,11 +1,11 @@
 #include "PipelineDataMessage.hpp"
 
 #include "BasePipelineData.hpp"
-#include "PipelineMessageType.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
-PipelineDataMessage::PipelineDataMessage(int32_t destination, BasePipelineData* pMessage)
+PipelineDataMessage::PipelineDataMessage(EPipelineStageId destination, BasePipelineData* pMessage)
     : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA),
       destination_(destination),
       messageNumber_(0),
@@ -28,9 +28,12 @@ void* PipelineDataMessage::getMessage() const { return pMessage_; }
 
 void PipelineDataMessage::setMessage(void* pMessage) { pMessage_ = pMessage; }
 
-void PipelineDataMessage::setDestination(int32_t destination) { destination_ = destination; }
+void PipelineDataMessage::setDestination(EPipelineStageId destination)
+{
+    destination_ = destination;
+}
 
-int32_t PipelineDataMessage::getDestination() const { return destination_; }
+EPipelineStageId PipelineDataMessage::getDestination() const { return destination_; }
 
 void PipelineDataMessage::setMessageNumber(int32_t newMessageNumber)
 {

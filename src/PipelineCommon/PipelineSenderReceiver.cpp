@@ -13,7 +13,7 @@ namespace sc
 {
 PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
-      thisStageId_(PipelineStage::MESSAGE_ROUTER),
+      thisStageId_(EPipelineStageId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true)
 {
@@ -28,13 +28,13 @@ void PipelineSenderReceiver::initialize()
     {
         bInitialized_ = true;
 
-        registerNewStage(thisStageId_, PipelineQueueTypes::QUEUE_TYPE_FIFO);
+        registerNewStage(thisStageId_, EPipelineQueueType::QUEUE_TYPE_FIFO);
 
         thread(&PipelineSenderReceiver::receiverThread, this).detach();
     }
 }
 
-void PipelineSenderReceiver::registerNewStage(int32_t stageId, int32_t queueType)
+void PipelineSenderReceiver::registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType)
 {
     if (stageIdToQueueIdMap_.count(stageId) == 0)
     {
@@ -42,9 +42,14 @@ void PipelineSenderReceiver::registerNewStage(int32_t stageId, int32_t queueType
     }
 }
 
-void PipelineSenderReceiver::unregisterStage(int32_t stageId)
+void PipelineSenderReceiver::unregisterStage(EPipelineStageId stageId)
 {
     // TODO
+}
+
+bool PipelineSenderReceiver::isStageRegistered(EPipelineStageId stageId)
+{
+    return (stageIdToQueueIdMap_.count(stageId) > 0);
 }
 
 bool PipelineSenderReceiver::isInitialized() const { return bInitialized_; }
@@ -73,7 +78,7 @@ bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
     }
 }
 
-shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(int32_t receivingStageId)
+shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId receivingStageId)
 {
     if (stageIdToQueueIdMap_.count(receivingStageId) != 0)
     {

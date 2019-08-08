@@ -4,10 +4,9 @@
 #include <cstdint>
 #include <memory>
 
+#include "PipelineCommon.hpp"
 #include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
-#include "PipelineMessageType.hpp"
-#include "StageNumbers.hpp"
 
 namespace sc
 {
@@ -22,7 +21,7 @@ class PipelineDataMessage : public BasePipelineMessage
         }
     };
 
-    explicit PipelineDataMessage(int32_t destination, BasePipelineData* pMessage);
+    PipelineDataMessage(EPipelineStageId destination, BasePipelineData* pMessage);
 
     ~PipelineDataMessage();
 
@@ -32,9 +31,9 @@ class PipelineDataMessage : public BasePipelineMessage
 
     virtual void setMessage(void* pMessage) override;
 
-    virtual void setDestination(int32_t destination) override;
+    virtual void setDestination(EPipelineStageId destination) override;
 
-    virtual int32_t getDestination() const override;
+    virtual EPipelineStageId getDestination() const override;
 
     virtual void setMessageNumber(int32_t newMessageNumber) override;
 
@@ -49,7 +48,7 @@ class PipelineDataMessage : public BasePipelineMessage
   private:
     EPipelineMessageType messageType_;
 
-    int32_t destination_;
+    EPipelineStageId destination_;
 
     int32_t messageNumber_;
 
