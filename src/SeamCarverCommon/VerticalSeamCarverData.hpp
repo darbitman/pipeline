@@ -11,81 +11,102 @@
 
 namespace sc
 {
-// forward declare class;
-class PixelEnergyCalculator2D;
-
-struct VerticalSeamCarverData : public BasePipelineData
+class VerticalSeamCarverData : public BasePipelineData
 {
   public:
-    struct FrameNumberLessComparator
-    {
-        bool operator()(const BasePipelineData* p1, const BasePipelineData* p2)
-        {
-            return (((VerticalSeamCarverData*)p1)->getFrameNumber() <
-                    ((VerticalSeamCarverData*)p2)->getFrameNumber());
-        }
-    };
-
     explicit VerticalSeamCarverData(double marginEnergy = 390150.0);
 
-    ~VerticalSeamCarverData();
+    virtual ~VerticalSeamCarverData();
 
     /**
      * @brief initialize internal data stores
      */
-    void initialize();
+    virtual void initialize();
+
+    virtual void setNeedToInitializeFlag();
+
+    virtual void resetNeedToInitializeFlag();
+
+    virtual bool getNeedToInitializeFlag();
 
     /**
      * @brief save the image to internal data store
      * @param image the image to store internally for processing
      */
-    void saveImage(std::shared_ptr<cv::Mat> image);
+    virtual void saveImage(std::shared_ptr<cv::Mat> image);
 
     /**
      * @brief returns the saved image
-     * @bool bClearLocalData a flag that indicates whether or not to clear the underlying saved
-     * image
+     * @bool bReleaseOwnership indicates whether or not to release ownership of the image
      * @return std::shared_ptr<cv::Mat>
      */
-    std::shared_ptr<cv::Mat> getSavedImage(bool bClearLocalData = true);
+    virtual std::shared_ptr<cv::Mat> getSavedImage(bool bReleaseOwnership = true);
 
     /*
      * @brief reset internal data structures to their clean state
      */
-    void resetData();
+    virtual void resetData();
 
     /**
-     * @brief separates individual color channels and stores the result into bgr
+     * @brief separates individual color channels from the saved image
      */
-    void separateChannels();
+    virtual void separateChannels();
 
     /*
      * @brief check if internal vector dimensions are the same as of the image
      * @return bool returns true if internal data structures are of the same dimensions as the
      * internal image
      */
-    bool areImageDimensionsVerified() const;
+    virtual bool areImageDimensionsVerified() const;
 
     /**
      * @brief set a new frame number for this frame
      * @param newFrameNumber the value to set the frame number for this frame
      */
-    void setFrameNumber(uint32_t newFrameNumber);
+    virtual void setFrameNumber(uint32_t newFrameNumber);
 
     /**
      * @brief increments the frame number by 1
      */
-    void incrementFrameNumber();
+    virtual void incrementFrameNumber();
 
     /**
      * @brief returns the frame number of this frame
      * @return uint32_t
      */
-    uint32_t getFrameNumber() const;
+    virtual uint32_t getFrameNumber() const;
 
-    // flag if internal data structures need their memory and values initialized
-    bool bNeedToInitializeLocalData;
+    virtual size_t getNumberOfRows() const;
 
+    virtual size_t getNumberOfColumns() const;
+
+    virtual size_t getBottomRowIndex() const;
+
+    virtual size_t getRightColumnIndex() const;
+
+    virtual size_t getNumberOfColorChannels() const;
+
+    virtual void setSeamLength(size_t seamLength);
+
+    virtual size_t getSeamLength() const;
+
+    virtual void setNumberOfSeamsToRemove(size_t numberOfSeamsToRemove);
+
+    virtual size_t getNumberOfSeamsToRemove() const;
+
+    virtual double getEdgePixelEnergy() const;
+
+    virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
+
+    virtual std::vector<std::vector<double>>& getPixelEnergy2DVector() const;
+
+    virtual std::vector<ConstSizePriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
+
+    virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector() const;
+
+    virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector() const;
+
+    /**********************************************************************************/
     // vector to store pixels that have been previously markedPixels for removal
     // will ignore these markedPixels pixels when searching for a new seam
     std::vector<std::vector<bool>> markedPixels;
@@ -110,13 +131,6 @@ struct VerticalSeamCarverData : public BasePipelineData
     // vector to hold image color channels separately
     std::vector<cv::Mat> bgr;
 
-    // image dimensions
-    size_t numRows_;
-    size_t numColumns_;
-    size_t bottomRow_;
-    size_t rightColumn_;
-    size_t numColorChannels_;
-
     // number of pixels per seam
     size_t seamLength_;
 
@@ -130,6 +144,16 @@ struct VerticalSeamCarverData : public BasePipelineData
     const double marginEnergy_;
 
   private:
+    // flag if internal data structures need their memory and values initialized
+    bool bNeedToInitializeLocalData;
+
+    // image dimensions
+    size_t numRows_;
+    size_t numColumns_;
+    size_t bottomRow_;
+    size_t rightColumn_;
+    size_t numColorChannels_;
+
     uint32_t frameNumber_;
 
     // stores the image and output result

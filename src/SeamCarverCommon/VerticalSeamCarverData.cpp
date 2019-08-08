@@ -61,13 +61,13 @@ void VerticalSeamCarverData::saveImage(shared_ptr<Mat> image)
     savedImage_ = make_shared<Mat>(image->clone());
 }
 
-shared_ptr<Mat> VerticalSeamCarverData::getSavedImage(bool bClearLocalData)
+shared_ptr<Mat> VerticalSeamCarverData::getSavedImage(bool bReleaseOwnership)
 {
     shared_ptr<Mat> frameToReturn(nullptr);
 
     // if clearing the underlying data, then need to make sure image doesn't get deallocated or
     // copied over
-    if (bClearLocalData)
+    if (bReleaseOwnership)
     {
         // swap the pointers between the result image and the nullptr-initialized frameToReturn
         savedImage_.swap(frameToReturn);
