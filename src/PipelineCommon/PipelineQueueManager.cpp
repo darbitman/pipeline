@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 #include "PipelineCommon.hpp"
@@ -12,8 +13,10 @@
 
 using std::dynamic_pointer_cast;
 using std::make_shared;
+using std::mutex;
 using std::shared_ptr;
 using std::static_pointer_cast;
+using std::unique_lock;
 using std::vector;
 
 namespace sc
@@ -24,6 +27,7 @@ PipelineQueueManager::~PipelineQueueManager() {}
 
 int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     // find an unused queue id
     while (queueIdToQueueMap_.count(currentQueueId_) != 0)
     {
@@ -60,6 +64,7 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
 shared_ptr<SharedContainer<shared_ptr<BasePipelineMessage>>> PipelineQueueManager::getQueue(
     int32_t queueId) const
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     if (queueIdToQueueMap_.count(queueId) != 0)
     {
         return queueIdToQueueMap_.at(queueId);
@@ -70,5 +75,9 @@ shared_ptr<SharedContainer<shared_ptr<BasePipelineMessage>>> PipelineQueueManage
     }
 }
 
-size_t PipelineQueueManager::getNumberOfQueues() const { return queueIdToQueueMap_.size(); }
+size_t PipelineQueueManager::getNumberOfQueues() const
+{
+    unique_lock<mutex> mapLock(mapMutex_);
+    return queueIdToQueueMap_.size();
+}
 }  // namespace sc

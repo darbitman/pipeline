@@ -1,13 +1,16 @@
 #include "PipelineSenderReceiver.hpp"
 
 #include <memory>
+#include <mutex>
 #include <thread>
 
 #include "PipelineQueueManager.hpp"
 
 using std::make_shared;
+using std::mutex;
 using std::shared_ptr;
 using std::thread;
+using std::unique_lock;
 
 namespace sc
 {
@@ -34,11 +37,16 @@ void PipelineSenderReceiver::initialize()
     }
 }
 
-void PipelineSenderReceiver::registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType)
+void PipelineSenderReceiver::registerNewStage(EPipelineStageId stageId,
+                                              EPipelineQueueType queueType)
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
     {
-        stageIdToQueueIdMap_[stageId] = pQueueManager_->createNewQueue(queueType);
+        if (pQueueManager_ != nullptr)
+        {
+            stageIdToQueueIdMap_[stageId] = pQueueManager_->createNewQueue(queueType);
+        }
     }
 }
 
@@ -49,6 +57,7 @@ void PipelineSenderReceiver::unregisterStage(EPipelineStageId stageId)
 
 bool PipelineSenderReceiver::isStageRegistered(EPipelineStageId stageId)
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     return (stageIdToQueueIdMap_.count(stageId) > 0);
 }
 
@@ -58,9 +67,12 @@ bool PipelineSenderReceiver::isShutdown() const { return bReceiverThreadShutdown
 
 bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(thisStageId_) != 0)
     {
         auto queueId = stageIdToQueueIdMap_.at(thisStageId_);
+        mapLock.unlock();
+
         auto pQueue = pQueueManager_->getQueue(queueId);
         if (pQueue != nullptr)
         {
@@ -80,9 +92,12 @@ bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
 
 shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId receivingStageId)
 {
+    unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(receivingStageId) != 0)
     {
         auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
+        mapLock.unlock();
+
         auto pQueue = pQueueManager_->getQueue(queueId);
 
         if (pQueue != nullptr)
@@ -148,9 +163,13 @@ void PipelineSenderReceiver::receiverThread()
 void PipelineSenderReceiver::forwardMessage(shared_ptr<BasePipelineMessage> pMessage)
 {
     auto destinationId = pMessage->getDestination();
+
+    unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(destinationId) != 0)
     {
         auto queueId = stageIdToQueueIdMap_.at(destinationId);
+        mapLock.unlock();
+
         auto pQueue = pQueueManager_->getQueue(queueId);
 
         if (pQueue != nullptr)

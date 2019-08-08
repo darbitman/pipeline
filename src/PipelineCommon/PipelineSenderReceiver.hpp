@@ -4,9 +4,10 @@
 #include <atomic>
 #include <cstdint>
 #include <memory>
+#include <mutex>
 
-#include "PipelineCommon.hpp"
 #include "BasePipelineMessage.hpp"
+#include "PipelineCommon.hpp"
 #include "PipelineQueueManager.hpp"
 
 namespace sc
@@ -52,6 +53,8 @@ class PipelineSenderReceiver
     std::shared_ptr<PipelineQueueManager> pQueueManager_;
 
     std::unordered_map<EPipelineStageId, int32_t> stageIdToQueueIdMap_;
+
+    std::mutex mapMutex_;
 
     void receiverThread();
 

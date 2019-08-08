@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -38,6 +39,8 @@ class PipelineQueueManager
     std::unordered_map<int32_t,
                        std::shared_ptr<sc::SharedContainer<std::shared_ptr<BasePipelineMessage>>>>
         queueIdToQueueMap_;
+
+    mutable std::mutex mapMutex_;
 };
 }  // namespace sc
 
