@@ -6,17 +6,16 @@
 #include <mutex>
 
 #include "IPipelineStage.hpp"
+#include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
-#include "StageNumbers.hpp"
 
 namespace sc
 {
 class BasePipelineStage : public IPipelineStage
 {
   public:
-    explicit BasePipelineStage(
-        int32_t thisStageNumber,
-        std::shared_ptr<PipelineSenderReceiver> pSenderRcvr);
+    explicit BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+                               std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
 
     virtual ~BasePipelineStage();
 
@@ -41,10 +40,12 @@ class BasePipelineStage : public IPipelineStage
      * @brief method that does the actual data processing
      * derived class MUST provide an implementation
      */
-    virtual void processData(BasePipelineData* data);
+    virtual void processData(std::shared_ptr<BasePipelineData> pData);
 
   private:
-    const int32_t thisStageNumber_;
+    const EPipelineStageId thisStageId_;
+
+    const EPipelineQueueType queueType_;
 
     /// Flag to start and stop the thread, and to keep track if it's running
     std::atomic<bool> bThreadIsRunning_;
@@ -58,8 +59,6 @@ class BasePipelineStage : public IPipelineStage
     void runThread();
 
     void doStopStage();
-
-    int32_t getPipelineStageNumber() const;
 };
 }  // namespace sc
 

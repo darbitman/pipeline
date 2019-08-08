@@ -1,16 +1,17 @@
-file(GLOB Stages_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
+file(GLOB SeamCarverStages_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
 add_library(
     SeamCarverStages
     STATIC
-    ${Stages_SRC}
+    ${SeamCarverStages_SRC}
 )
 
 target_include_directories(
     SeamCarverStages
     PUBLIC
-    ${PROJECT_SOURCE_DIR}/include/common
-    ${PROJECT_SOURCE_DIR}/include/pipelinemanagement
-    ${PROJECT_SOURCE_DIR}/include/stages
-    ${OpenCV_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src/Common
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
+    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
+    ${PROJECT_SOURCE_DIR}/src/Stages
 )

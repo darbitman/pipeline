@@ -3,8 +3,7 @@ SET(
     Common
     PipelineCommon
     SeamCarverCommon
-    #pipelinemanagement
-    #stages
+    Stages
 )
 
 foreach(Subdir ${Subdirs})

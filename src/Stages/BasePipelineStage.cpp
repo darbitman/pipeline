@@ -3,30 +3,32 @@
 #include <thread>
 
 #include "BasePipelineData.hpp"
+#include "ShutdownMessage.hpp"
 
+using std::make_shared;
 using std::shared_ptr;
 using std::thread;
 using std::unique_lock;
 
 namespace sc
 {
-BasePipelineStage::BasePipelineStage(
-    int32_t thisStageNumber, shared_ptr<PipelineSenderReceiver> pSenderRcvr)
-    : thisStageNumber_(thisStageNumber),
+BasePipelineStage::BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+                                     shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+    : thisStageId_(thisStageId),
+      queueType_(queueType),
       bThreadIsRunning_(false),
-      bIsInitialized_(false)
+      bIsInitialized_(false),
+      pSenderReceiver_(pSenderReceiver)
 {
 }
 
-BasePipelineStage::~BasePipelineStage()
-{
-    // TODO IMPLEMENT
-}
+BasePipelineStage::~BasePipelineStage() {}
 
 void BasePipelineStage::initialize()
 {
     if (bIsInitialized_ == false && pSenderReceiver_ != nullptr)
     {
+        pSenderReceiver_->registerNewStage(thisStageId_, queueType_);
         bIsInitialized_ = true;
     }
 }
@@ -50,23 +52,24 @@ void BasePipelineStage::runThread()
 {
     while (bThreadIsRunning_)
     {
-        BasePipelineData* pData =
-            pSenderReceiver_->receive(getPipelineStageNumber());
+        auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
 
-        if (pData != nullptr)
+        if (pReceivedMessage != nullptr)
         {
-            // check if message is a shutdown message
-            if (pData->GetShutdownFlag())
+            // check if message is destined to this stage
+            if (pReceivedMessage->getDestination() == thisStageId_)
             {
-                delete pData;
-                break;
-            }
-            else
-            {
-                processData(pData);
-
-                // forward result to the next stage
-                pSenderReceiver_->sendTo(getPipelineStageNumber() + 1, pData);
+                if (pReceivedMessage->getMessageType() ==
+                    EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                {
+                    // TODO process data (set new destination)
+                    pSenderReceiver_->send(pReceivedMessage);
+                }
+                else if (pReceivedMessage->getMessageType() ==
+                         EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
+                {
+                    bThreadIsRunning_ = false;
+                }
             }
         }
     }
@@ -76,21 +79,13 @@ void BasePipelineStage::runThread()
 
 void BasePipelineStage::doStopStage()
 {
-    // send a shutdown message to itself
-    VerticalSeamCarverData* pData = new VerticalSeamCarverData();
-    pData->SetShutdownFlag();
-
-    // TODO IMPLEMENT
-    // pSenderReceiver_->sendTo(pData);
+    // create a ShutdownMessage and send to itself
+    shared_ptr<BasePipelineMessage> pShutdownMessage = make_shared<ShutdownMessage>(thisStageId_);
+    pSenderReceiver_->send(pShutdownMessage);
 }
 
-void BasePipelineStage::processData(BasePipelineData* pData)
+void BasePipelineStage::processData(shared_ptr<BasePipelineData> pData)
 {
     // DEFINE IN DERIVED CLASS
-}
-
-int32_t BasePipelineStage::getPipelineStageNumber() const
-{
-    return thisStageNumber_;
 }
 }  // namespace sc
