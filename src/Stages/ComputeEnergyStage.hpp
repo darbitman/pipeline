@@ -34,7 +34,6 @@ class ComputeEnergyStage : public BasePipelineStage
   protected:
     /**
      * @brief method that does the actual data processing
-     * calls calculateCumulativePathEnergy
      */
     virtual void processData(std::shared_ptr<BasePipelineData> pData) override;
 
