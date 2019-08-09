@@ -8,8 +8,6 @@
 
 namespace sc
 {
-class VerticalSeamCarverData;
-
 class ComputeEnergyStage : public BasePipelineStage
 {
   public:

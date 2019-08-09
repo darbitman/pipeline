@@ -9,10 +9,10 @@
 #include "SeamCarverStageFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
+using std::dynamic_pointer_cast;
 using std::make_shared;
 using std::shared_ptr;
 using std::thread;
-using std::unique_lock;
 using std::vector;
 
 namespace sc
@@ -37,7 +37,7 @@ bool ComputeEnergyStage::isRunning() const { return BasePipelineStage::isRunning
 
 void ComputeEnergyStage::processData(shared_ptr<BasePipelineData> pData)
 {
-    auto seamCarverData = (VerticalSeamCarverData*)(pData.get());
+    auto pSeamCarverData = (VerticalSeamCarverData*)(pData.get());
 
     // // set local data members for the computation
     // numRows_ = data->numRows_;
@@ -393,13 +393,14 @@ void ComputeEnergyStage::processData(shared_ptr<BasePipelineData> pData)
 //         }
 //     }
 // }
-}  // namespace sc
 
 namespace
 {
-sc::SeamCarverStageFactoryRegistration registerstage(
-    sc::EPipelineStageId::STAGE_0, [](std::shared_ptr<sc::PipelineSenderReceiver> pSenderReceiver) {
-        return std::dynamic_pointer_cast<sc::IPipelineStage>(
-            make_shared<sc::ComputeEnergyStage>(pSenderReceiver));
+SeamCarverStageFactoryRegistration registerstage(
+    EPipelineStageId::STAGE_0, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+        return dynamic_pointer_cast<IPipelineStage>(
+            make_shared<ComputeEnergyStage>(pSenderReceiver));
     });
 }  // namespace
+
+}  // namespace sc

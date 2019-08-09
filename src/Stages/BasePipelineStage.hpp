@@ -53,7 +53,6 @@ class BasePipelineStage : public IPipelineStage
     // Indicates if this stage is initialized
     bool bIsInitialized_;
 
-    /// initialized in the initialize() call
     std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
 
     void runThread();
