@@ -147,3 +147,30 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
     ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
 )
+
+
+
+add_executable(
+    ComputeEnergyStageTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/ComputeEnergyStageTest.cpp
+)
+
+target_link_libraries(
+    ComputeEnergyStageTest
+    PRIVATE
+    gtest_main
+    "-Xlinker --start-group"
+    PipelineCommon
+    SeamCarverCommon
+    SeamCarverStages
+    "-Xlinker --end-group"
+)
+
+target_include_directories(
+    ComputeEnergyStageTest
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages    
+    ${PROJECT_SOURCE_DIR}/src/Common
+    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
+    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
+)
