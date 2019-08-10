@@ -66,7 +66,9 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
+    "-Wl,--whole-archive"
     SeamCarver
+    "-Wl,--no-whole-archive"
     "-Xlinker --end-group"
 )
 
@@ -80,9 +82,9 @@ target_link_libraries(
     SeamCarverProcessorFactoryTest
     PRIVATE
     "-Xlinker --start-group"
-    "-Wl,--whole-archive"
     gtest_main
     PipelineCommon
+    "-Wl,--whole-archive"
     SeamCarver
     "-Wl,--no-whole-archive"
     ${OpenCV_LIBS}
@@ -103,6 +105,8 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
+    "-Wl,--whole-archive"
     SeamCarver
+    "-Wl,--no-whole-archive"
     "-Xlinker --end-group"
 )
