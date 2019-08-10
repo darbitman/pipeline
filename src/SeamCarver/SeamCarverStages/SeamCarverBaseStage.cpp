@@ -35,7 +35,10 @@ void SeamCarverBaseStage::processData(shared_ptr<BasePipelineData> pData)
 {
     auto pSeamCarverData = (VerticalSeamCarverData*)(pData.get());
 
-    pSeamCarverDataProcessor_->runSeamCarverProcessor(pSeamCarverData);
+    if (pSeamCarverDataProcessor_ != nullptr)
+    {
+        pSeamCarverDataProcessor_->runSeamCarverProcessor(pSeamCarverData);
+    }
 }
 
 }  // namespace sc
