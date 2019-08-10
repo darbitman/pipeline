@@ -3,13 +3,14 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "IPipelineInterface.hpp"
 #include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "SharedContainer.hpp"
 
 namespace sc
 {
-class BaseSeamCarverInterface
+class BaseSeamCarverInterface : public IPipelineInterface
 {
   public:
     BaseSeamCarverInterface(EPipelineQueueType queueType,
@@ -17,9 +18,9 @@ class BaseSeamCarverInterface
 
     ~BaseSeamCarverInterface();
 
-    virtual void addNewDataToPipeline(std::shared_ptr<cv::Mat> pNewFrame, size_t numSeamsToRemove);
+    virtual void addNewDataToPipeline(std::shared_ptr<BasePipelineData> pPipelineData) override;
 
-    virtual std::shared_ptr<cv::Mat> getOutputFrameFromPipeline();
+    virtual std::shared_ptr<BasePipelineData> getOutputFrameFromPipeline();
 
     virtual bool doesNewResultExist() const;
 
@@ -35,8 +36,7 @@ class BaseSeamCarverInterface
     uint32_t frameNumber_;
 
     std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
-
-    std::shared_ptr<SharedContainer<std::shared_ptr<BasePipelineData>>> pFreestoreQueue_;
 };
+
 }  // namespace sc
 #endif

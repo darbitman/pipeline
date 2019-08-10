@@ -37,7 +37,7 @@ class SeamCarverBaseStage : public BasePipelineStage
 
   protected:
     /**
-     * @brief method that does the actual data processing
+     * @brief method that calls the SeamCarverDataProcessor
      */
     virtual void processData(std::shared_ptr<BasePipelineData> pData);
 

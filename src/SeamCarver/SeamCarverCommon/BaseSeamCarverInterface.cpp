@@ -24,76 +24,16 @@ BaseSeamCarverInterface::BaseSeamCarverInterface(EPipelineQueueType queueType,
       frameNumber_(0),
       pSenderReceiver_(pSenderReceiver)
 {
-    // create a non blocking freestore queue since this is the only client of that queue
-    pFreestoreQueue_ = make_shared<SharedQueue<shared_ptr<BasePipelineData>>>(false);
 }
 
 BaseSeamCarverInterface::~BaseSeamCarverInterface() {}
 
-void BaseSeamCarverInterface::addNewDataToPipeline(shared_ptr<Mat> pNewFrame,
-                                                   size_t numSeamsToRemove)
+void BaseSeamCarverInterface::addNewDataToPipeline(shared_ptr<BasePipelineData> pPipelineData)
 {
     // TODO
-    // check if pFreestoreQueue_ has available data objects that can be reused
-    shared_ptr<VerticalSeamCarverData> pPipelineData;
-
-    if (pFreestoreQueue_->empty())
-    {
-        pPipelineData = make_shared<VerticalSeamCarverData>();
-    }
-    else
-    {
-        pPipelineData = dynamic_pointer_cast<VerticalSeamCarverData>(pFreestoreQueue_->front());
-        pFreestoreQueue_->pop();
-    }
-
-    while (true)
-    {
-        // copy image to internal data store
-        pPipelineData->saveImage(pNewFrame);
-
-        // // initialize internal data
-        // if (pPipelineData->bNeedToInitializeLocalData)
-        // {
-        //     pPipelineData->initialize();
-        //     break;
-        // }
-        // else
-        // {
-        //     // check if image is of the same dimension as those used for internal pPipelineData
-        //     if (pPipelineData->areImageDimensionsVerified())
-        //     {
-        //         break;
-        //     }
-        //     // if image dimensions are different than those of internal pPipelineData,
-        //     reinitialize pPipelineData else
-        //     {
-        //         pPipelineData->bNeedToInitializeLocalData = true;
-        //     }
-        // }
-
-        // set number of seams to remove for this frame
-        // pPipelineData->numSeamsToRemove_ = numSeamsToRemove;
-
-        // reset internal data to 'clean' state
-        pPipelineData->resetData();
-
-        // separate individual color channels
-        pPipelineData->separateChannels();
-
-        // create new PipelineDataMessage to hold the data
-        auto pDataMessage = make_shared<PipelineDataMessage>(
-            thisStageId_, EPipelineStageId::STAGE_0, pPipelineData);
-
-        pDataMessage->setMessageNumber(frameNumber_++);
-
-        pSenderReceiver_->send(pDataMessage);
-
-        ++totalDatObjectsInPipeline_;
-    }
 }
 
-std::shared_ptr<cv::Mat> BaseSeamCarverInterface::getOutputFrameFromPipeline()
+shared_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFrameFromPipeline()
 {
     // TODO
     return nullptr;
