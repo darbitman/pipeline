@@ -20,6 +20,10 @@ class BasePipelineMessage
 
     virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) = 0;
 
+    virtual void setSource(EPipelineStageId source) = 0;
+
+    virtual EPipelineStageId getSource() const = 0;
+
     virtual void setDestination(EPipelineStageId destination) = 0;
 
     virtual EPipelineStageId getDestination() const = 0;

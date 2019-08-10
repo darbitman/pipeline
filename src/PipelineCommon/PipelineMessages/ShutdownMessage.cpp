@@ -23,6 +23,10 @@ shared_ptr<BasePipelineData> ShutdownMessage::getPipelineData() const { return n
 
 void ShutdownMessage::setPipelineData(shared_ptr<BasePipelineData> pPipelineData) { return; }
 
+void ShutdownMessage::setSource(EPipelineStageId source) { source_ = source; }
+
+EPipelineStageId ShutdownMessage::getSource() const { return source_; }
+
 void ShutdownMessage::setDestination(EPipelineStageId destination) { destination_ = destination; }
 
 EPipelineStageId ShutdownMessage::getDestination() const { return destination_; }

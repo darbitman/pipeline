@@ -22,7 +22,7 @@ class PipelineDataMessage : public BasePipelineMessage
         }
     };
 
-    PipelineDataMessage(EPipelineStageId destination,
+    PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
                         std::shared_ptr<BasePipelineData> pPipelineData);
 
     ~PipelineDataMessage();
@@ -32,6 +32,10 @@ class PipelineDataMessage : public BasePipelineMessage
     virtual std::shared_ptr<BasePipelineData> getPipelineData() const override;
 
     virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
+
+    virtual void setSource(EPipelineStageId source) override;
+
+    virtual EPipelineStageId getSource() const override;
 
     virtual void setDestination(EPipelineStageId destination) override;
 
@@ -50,12 +54,15 @@ class PipelineDataMessage : public BasePipelineMessage
   private:
     EPipelineMessageType messageType_;
 
+    EPipelineStageId source_;
+
     EPipelineStageId destination_;
 
     int32_t messageNumber_;
 
     std::shared_ptr<BasePipelineData> pPipelineData_;
 };
+
 }  // namespace sc
 
 #endif

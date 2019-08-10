@@ -58,9 +58,10 @@ TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
     // fill in a general PQ and the queue returned by the queue manager with random numbers
     for (int32_t i = 0; i < 10; ++i)
     {
-        auto stage = EPipelineStageId::STAGE_0;
+        auto source = EPipelineStageId::INTERFACE_STAGE;
+        auto destination = EPipelineStageId::STAGE_0;
 
-        auto pNewMessage = make_shared<PipelineDataMessage>(stage, nullptr);
+        auto pNewMessage = make_shared<PipelineDataMessage>(source, destination, nullptr);
 
         uint32_t randomNumber = (uint32_t)(rand() % 50);
         pNewMessage->setMessageNumber(randomNumber);

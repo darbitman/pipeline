@@ -30,9 +30,10 @@ PipelineSenderReceiver PipelineSenderReceiverTest::senderReceiver;
 
 TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
+    auto source = EPipelineStageId::INTERFACE_STAGE;
     auto destination = EPipelineStageId::STAGE_0;
     shared_ptr<BasePipelineMessage> pMessage =
-        make_shared<PipelineDataMessage>(destination, nullptr);
+        make_shared<PipelineDataMessage>(source, destination, nullptr);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 
@@ -46,8 +47,7 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
     auto destination = EPipelineStageId::MESSAGE_ROUTER;
-    shared_ptr<BasePipelineMessage> pMessage =
-        make_shared<ShutdownMessage>(destination);
+    shared_ptr<BasePipelineMessage> pMessage = make_shared<ShutdownMessage>(destination);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 

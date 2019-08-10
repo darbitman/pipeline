@@ -22,6 +22,10 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
 
+    virtual void setSource(EPipelineStageId source) override;
+
+    virtual EPipelineStageId getSource() const override;
+
     virtual void setDestination(EPipelineStageId destination) override;
 
     virtual EPipelineStageId getDestination() const override;
@@ -38,6 +42,8 @@ class ShutdownMessage : public BasePipelineMessage
 
   private:
     EPipelineMessageType messageType_;
+
+    EPipelineStageId source_;
 
     EPipelineStageId destination_;
 
