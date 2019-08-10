@@ -154,7 +154,7 @@ void CumulativePathEnergyStage::processData(shared_ptr<BasePipelineData> pData)
 namespace
 {
 SeamCarverStageFactoryRegistration registerstage(
-    EPipelineStageId::STAGE_1, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+    EPipelineStageId::STAGE_1, [](shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
         return dynamic_pointer_cast<IPipelineStage>(
             make_shared<CumulativePathEnergyStage>(pSenderReceiver));
     });
