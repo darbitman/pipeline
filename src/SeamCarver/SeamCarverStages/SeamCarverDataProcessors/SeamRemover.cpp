@@ -17,7 +17,7 @@ SeamRemover::SeamRemover() {}
 
 SeamRemover::~SeamRemover() {}
 
-void SeamRemover::runSeamCarverProcessor(VerticalSeamCarverData* pData)
+void SeamRemover::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
 }

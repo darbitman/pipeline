@@ -14,7 +14,7 @@ class ComputeEnergy : public ISeamCarverDataProcessor
 
     virtual ~ComputeEnergy();
 
-    virtual void runSeamCarverProcessor(VerticalSeamCarverData* pData) override;
+    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
 
     // deleted to prevent misuse
     ComputeEnergy(const ComputeEnergy&) = delete;

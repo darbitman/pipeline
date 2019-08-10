@@ -14,7 +14,7 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
 
     virtual ~CumulativePathEnergy();
 
-    virtual void runSeamCarverProcessor(VerticalSeamCarverData* pData) override;
+    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
 
     // deleted to prevent misuse
     CumulativePathEnergy(const CumulativePathEnergy&) = delete;

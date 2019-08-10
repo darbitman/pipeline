@@ -17,7 +17,7 @@ SeamFinder::SeamFinder() {}
 
 SeamFinder::~SeamFinder() {}
 
-void SeamFinder::runSeamCarverProcessor(VerticalSeamCarverData* pData)
+void SeamFinder::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
 }

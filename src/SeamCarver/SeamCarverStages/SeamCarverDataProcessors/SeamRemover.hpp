@@ -14,7 +14,7 @@ class SeamRemover : public ISeamCarverDataProcessor
 
     virtual ~SeamRemover();
 
-    virtual void runSeamCarverProcessor(VerticalSeamCarverData* pData) override;
+    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
 
     // deleted to prevent misuse
     SeamRemover(const SeamRemover&) = delete;

@@ -17,7 +17,7 @@ CumulativePathEnergy::CumulativePathEnergy() {}
 
 CumulativePathEnergy::~CumulativePathEnergy() {}
 
-void CumulativePathEnergy::runSeamCarverProcessor(VerticalSeamCarverData* pData)
+void CumulativePathEnergy::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
 }

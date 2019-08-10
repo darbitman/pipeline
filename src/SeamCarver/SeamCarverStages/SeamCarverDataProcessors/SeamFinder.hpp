@@ -14,7 +14,7 @@ class SeamFinder : public ISeamCarverDataProcessor
 
     virtual ~SeamFinder();
 
-    virtual void runSeamCarverProcessor(VerticalSeamCarverData* pData) override;
+    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
 
     // deleted to prevent misuse
     SeamFinder(const SeamFinder&) = delete;

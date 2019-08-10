@@ -17,7 +17,7 @@ ComputeEnergy::ComputeEnergy() {}
 
 ComputeEnergy::~ComputeEnergy() {}
 
-void ComputeEnergy::runSeamCarverProcessor(VerticalSeamCarverData* pData)
+void ComputeEnergy::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
 }

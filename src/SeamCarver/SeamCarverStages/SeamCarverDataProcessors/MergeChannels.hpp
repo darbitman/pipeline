@@ -14,7 +14,7 @@ class MergeChannels : public ISeamCarverDataProcessor
 
     virtual ~MergeChannels();
 
-    virtual void runSeamCarverProcessor(VerticalSeamCarverData* pData) override;
+    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
 
     // deleted to prevent misuse
     MergeChannels(const MergeChannels&) = delete;

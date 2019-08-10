@@ -17,7 +17,7 @@ MergeChannels::MergeChannels() {}
 
 MergeChannels::~MergeChannels() {}
 
-void MergeChannels::runSeamCarverProcessor(VerticalSeamCarverData* pData)
+void MergeChannels::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
 }

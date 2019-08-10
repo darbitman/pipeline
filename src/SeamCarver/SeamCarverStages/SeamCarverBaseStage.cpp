@@ -6,6 +6,7 @@
 #include "PipelineSenderReceiver.hpp"
 #include "VerticalSeamCarverData.hpp"
 
+using std::dynamic_pointer_cast;
 using std::shared_ptr;
 
 namespace sc
@@ -33,11 +34,10 @@ bool SeamCarverBaseStage::isRunning() const { return BasePipelineStage::isRunnin
 
 void SeamCarverBaseStage::processData(shared_ptr<BasePipelineData> pData)
 {
-    auto pSeamCarverData = (VerticalSeamCarverData*)(pData.get());
-
     if (pSeamCarverDataProcessor_ != nullptr)
     {
-        pSeamCarverDataProcessor_->runSeamCarverProcessor(pSeamCarverData);
+        pSeamCarverDataProcessor_->runSeamCarverProcessor(
+            dynamic_pointer_cast<VerticalSeamCarverData>(pData));
     }
 }
 
