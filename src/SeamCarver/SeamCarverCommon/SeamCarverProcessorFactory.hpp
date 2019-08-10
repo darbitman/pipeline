@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 #include "ISeamCarverDataProcessor.hpp"
 #include "PipelineCommon.hpp"
@@ -16,9 +17,13 @@ class SeamCarverProcessorFactory
 
     static SeamCarverProcessorFactory& getFactoryInstance();
 
-    void registerNewStage(EPipelineStageId stageId, createProcessorFunction function);
+    virtual void registerNewStage(EPipelineStageId stageId, createProcessorFunction function);
+
+    virtual bool isStageRegistered(EPipelineStageId stageId) const;
 
     std::shared_ptr<ISeamCarverDataProcessor> createStage(EPipelineStageId stageId);
+
+    std::shared_ptr<std::vector<EPipelineStageId>> getVectorOfRegisteredStages() const;
 
     // deleted to prevent misuse
     SeamCarverProcessorFactory(const SeamCarverProcessorFactory&) = delete;
@@ -31,7 +36,8 @@ class SeamCarverProcessorFactory
 
     ~SeamCarverProcessorFactory() = default;
 
-    std::unordered_map<EPipelineStageId, createProcessorFunction> stageIdToCreateProcessorFunctionMap_;
+    std::unordered_map<EPipelineStageId, createProcessorFunction>
+        stageIdToCreateProcessorFunctionMap_;
 };
 }  // namespace sc
 
