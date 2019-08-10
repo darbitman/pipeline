@@ -40,8 +40,7 @@ shared_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
 
     if (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0)
     {
-        auto stageCreateFunction = stageIdToCreateProcessorFunctionMap_[stageId];
-        p_new_stage = stageCreateFunction();
+        p_new_stage = stageIdToCreateProcessorFunctionMap_.at(stageId)();
     }
 
     return p_new_stage;
