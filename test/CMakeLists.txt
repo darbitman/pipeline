@@ -69,6 +69,7 @@ target_link_libraries(
     "-Wl,--whole-archive"
     SeamCarver
     "-Wl,--no-whole-archive"
+    ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )
 
@@ -108,5 +109,6 @@ target_link_libraries(
     "-Wl,--whole-archive"
     SeamCarver
     "-Wl,--no-whole-archive"
+    ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )

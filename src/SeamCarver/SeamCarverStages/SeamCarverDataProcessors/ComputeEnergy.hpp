@@ -23,8 +23,6 @@ class ComputeEnergy : public ISeamCarverDataProcessor
     ComputeEnergy& operator=(ComputeEnergy&&) = delete;
 };
 
-
-
 }  // namespace sc
 
 #endif
