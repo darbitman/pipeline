@@ -18,10 +18,30 @@ TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
     EXPECT_EQ(pStage, nullptr);
 }
 
-TEST(SeamCarverProcessorFactoryTest, CreateValidStage)
+TEST(SeamCarverProcessorFactoryTest, CreateValidStages)
 {
     auto pStage =
         SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_0);
+
+    EXPECT_NE(pStage, nullptr);
+
+    pStage =
+        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_1);
+
+    EXPECT_NE(pStage, nullptr);
+
+    pStage =
+        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_2);
+
+    EXPECT_NE(pStage, nullptr);
+
+    pStage =
+        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_3);
+
+    EXPECT_NE(pStage, nullptr);
+
+    pStage =
+        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_4);
 
     EXPECT_NE(pStage, nullptr);
 }
