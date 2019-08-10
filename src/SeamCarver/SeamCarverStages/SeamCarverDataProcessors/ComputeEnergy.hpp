@@ -4,7 +4,7 @@
 #include "ISeamCarverDataProcessor.hpp"
 #include "SeamCarverProcessorFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
-using namespace std;
+
 namespace sc
 {
 class ComputeEnergy : public ISeamCarverDataProcessor
