@@ -1,7 +1,12 @@
 #ifndef SEAMCARVERBASESTAGE_HPP
 #define SEAMCARVERBASESTAGE_HPP
 
+#include <memory>
+
 #include "BasePipelineStage.hpp"
+#include "ISeamCarverDataProcessor.hpp"
+#include "PipelineCommon.hpp"
+#include "PipelineSenderReceiver.hpp"
 
 namespace sc
 {
@@ -9,7 +14,8 @@ class SeamCarverBaseStage : public BasePipelineStage
 {
   public:
     SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
-                        std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
+                        std::shared_ptr<PipelineSenderReceiver> pSenderReceiver,
+                        std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor);
 
     virtual ~SeamCarverBaseStage();
 
@@ -36,7 +42,7 @@ class SeamCarverBaseStage : public BasePipelineStage
     virtual void processData(std::shared_ptr<BasePipelineData> pData);
 
   private:
-    
+    std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
 };
 }  // namespace sc
 
