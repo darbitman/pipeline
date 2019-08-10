@@ -117,6 +117,27 @@ shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId
     }
 }
 
+bool PipelineSenderReceiver::canReceive(EPipelineStageId receivingStageId) const
+{
+    unique_lock<mutex> mapLock(mapMutex_);
+    if (stageIdToQueueIdMap_.count(receivingStageId) == 0)
+    {
+        return false;
+    }
+    auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
+    mapLock.unlock();
+
+    auto pQueue = pQueueManager_->getQueue(queueId);
+    if (pQueue == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+        return !pQueue->empty();
+    }
+}
+
 void PipelineSenderReceiver::receiverThread()
 {
     bRunReceiverThread_ = true;

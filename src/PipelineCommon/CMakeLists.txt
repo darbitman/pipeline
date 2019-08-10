@@ -14,6 +14,4 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/src/Common
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon
     ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
-    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
-    ${OpenCV_INCLUDE_DIRS}
 )

@@ -9,7 +9,6 @@
 #include "PipelineDataMessage.hpp"
 #include "SharedConstSizePQAdapter.hpp"
 #include "SharedQueue.hpp"
-#include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
 using std::make_shared;

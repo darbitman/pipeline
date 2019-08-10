@@ -35,6 +35,8 @@ class PipelineSenderReceiver
 
     virtual std::shared_ptr<BasePipelineMessage> receive(EPipelineStageId receivingStageId);
 
+    virtual bool canReceive(EPipelineStageId receivingStageId) const;
+
     // deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
     PipelineSenderReceiver(PipelineSenderReceiver&&) = delete;
@@ -54,7 +56,7 @@ class PipelineSenderReceiver
 
     std::unordered_map<EPipelineStageId, int32_t> stageIdToQueueIdMap_;
 
-    std::mutex mapMutex_;
+    mutable std::mutex mapMutex_;
 
     void receiverThread();
 

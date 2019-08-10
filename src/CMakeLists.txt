@@ -2,8 +2,7 @@ SET(
     Subdirs
     Common
     PipelineCommon
-    SeamCarverCommon
-    Stages
+    SeamCarver
 )
 
 foreach(Subdir ${Subdirs})

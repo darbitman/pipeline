@@ -1,82 +1,3 @@
-#[[
-file(GLOB Test_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
-
-add_executable(
-    unit_tests
-    ${Test_SRC}
-)
-
-target_link_libraries(
-    unit_tests
-    PRIVATE
-    gtest_main
-    SeamCarverStages
-    PipelineManagement
-    SeamCarverCommon
-    ${OpenCV_LIBS}
-)
-
-target_include_directories(
-    unit_tests
-    PUBLIC
-    ${PROJECT_SOURCE_DIR}/include/common
-    ${PROJECT_SOURCE_DIR}/include/pipelinemanagement
-    ${PROJECT_SOURCE_DIR}/include/stages
-    ${OpenCV_INCLUDE_DIRS}
-)
-
-target_compile_definitions(
-    unit_tests
-    PRIVATE
-        -DIMG_PATH="${CMAKE_CURRENT_SOURCE_DIR}/eagle.jpg"
-)
-
-
-
-add_executable(
-    SeamCarverPipelineInterfaceTest
-    test_seamcarverpipelineinterface.cpp
-)
-
-target_link_libraries(
-    SeamCarverPipelineInterfaceTest
-    PRIVATE
-    gtest_main
-    SeamCarverStages
-    PipelineManagement
-    SeamCarverCommon
-    ${OpenCV_LIBS}
-)
-
-target_compile_definitions(
-    SeamCarverPipelineInterfaceTest
-    PRIVATE
-        -DIMG_PATH="${CMAKE_CURRENT_SOURCE_DIR}/eagle.jpg"
-)
-
-
-
-add_executable(
-    CumulativePathEnergyCalculatorStageTest
-    test_cumulativepathenergycalculatorstage.cpp
-)
-
-target_link_libraries(
-    CumulativePathEnergyCalculatorStageTest
-    PRIVATE
-    gtest_main
-    SeamCarverStages
-    PipelineManagement
-    SeamCarverCommon
-    ${OpenCV_LIBS}
-)
-
-target_compile_definitions(
-    CumulativePathEnergyCalculatorStageTest
-    PRIVATE
-        -DIMG_PATH="${CMAKE_CURRENT_SOURCE_DIR}/eagle.jpg"
-)
-]]
 
 add_executable(
     ConstSizePriorityQueueTest
@@ -97,6 +18,7 @@ target_include_directories(
 
 
 
+
 add_executable(
     PipelineQueueManagerTest
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineQueueManagerTest.cpp
@@ -108,20 +30,11 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
-    SeamCarverCommon
+    SeamCarver
     ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )
 
-target_include_directories(
-    PipelineQueueManagerTest
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/src/Common
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
-    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
-    ${OpenCV_INCLUDE_DIRS}
-)
 
 
 
@@ -139,14 +52,6 @@ target_link_libraries(
     "-Xlinker --end-group"
 )
 
-target_include_directories(
-    PipelineSenderReceiverTest
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages    
-    ${PROJECT_SOURCE_DIR}/src/Common
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
-    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
-)
 
 
 
@@ -161,16 +66,43 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
-    SeamCarverCommon
-    SeamCarverStages
+    SeamCarver
     "-Xlinker --end-group"
 )
 
-target_include_directories(
-    ComputeEnergyStageTest
+
+add_executable(
+    SeamCarverProcessorFactoryTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/SeamCarverProcessorFactoryTest.cpp
+)
+
+target_link_libraries(
+    SeamCarverProcessorFactoryTest
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages    
-    ${PROJECT_SOURCE_DIR}/src/Common
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
-    ${PROJECT_SOURCE_DIR}/src/SeamCarverCommon
+    "-Xlinker --start-group"
+    "-Wl,--whole-archive"
+    gtest_main
+    PipelineCommon
+    SeamCarver
+    "-Wl,--no-whole-archive"
+    ${OpenCV_LIBS}
+    "-Xlinker --end-group"
+)
+
+
+
+
+add_executable(
+    SeamCarverStageFactoryTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/SeamCarverStageFactoryTest.cpp
+)
+
+target_link_libraries(
+    SeamCarverStageFactoryTest
+    PRIVATE
+    gtest_main
+    "-Xlinker --start-group"
+    PipelineCommon
+    SeamCarver
+    "-Xlinker --end-group"
 )

@@ -23,11 +23,11 @@ class VerticalSeamCarverData : public BasePipelineData
      */
     virtual void initialize();
 
-    virtual void setNeedToInitializeFlag();
+    // virtual void setNeedToInitializeFlag();
 
-    virtual void resetNeedToInitializeFlag();
+    // virtual void resetNeedToInitializeFlag();
 
-    virtual bool getNeedToInitializeFlag();
+    // virtual bool getNeedToInitializeFlag();
 
     /**
      * @brief save the image to internal data store
@@ -76,35 +76,35 @@ class VerticalSeamCarverData : public BasePipelineData
      */
     virtual uint32_t getFrameNumber() const;
 
-    virtual size_t getNumberOfRows() const;
+    // virtual size_t getNumberOfRows() const;
 
-    virtual size_t getNumberOfColumns() const;
+    // virtual size_t getNumberOfColumns() const;
 
-    virtual size_t getBottomRowIndex() const;
+    // virtual size_t getBottomRowIndex() const;
 
-    virtual size_t getRightColumnIndex() const;
+    // virtual size_t getRightColumnIndex() const;
 
-    virtual size_t getNumberOfColorChannels() const;
+    // virtual size_t getNumberOfColorChannels() const;
 
-    virtual void setSeamLength(size_t seamLength);
+    // virtual void setSeamLength(size_t seamLength);
 
-    virtual size_t getSeamLength() const;
+    // virtual size_t getSeamLength() const;
 
-    virtual void setNumberOfSeamsToRemove(size_t numberOfSeamsToRemove);
+    // virtual void setNumberOfSeamsToRemove(size_t numberOfSeamsToRemove);
 
-    virtual size_t getNumberOfSeamsToRemove() const;
+    // virtual size_t getNumberOfSeamsToRemove() const;
 
-    virtual double getEdgePixelEnergy() const;
+    // virtual double getEdgePixelEnergy() const;
 
-    virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
+    // virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
 
-    virtual std::vector<std::vector<double>>& getPixelEnergy2DVector() const;
+    // virtual std::vector<std::vector<double>>& getPixelEnergy2DVector() const;
 
-    virtual std::vector<ConstSizePriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
+    // virtual std::vector<ConstSizePriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
 
-    virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector() const;
+    // virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector() const;
 
-    virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector() const;
+    // virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector() const;
 
     /**********************************************************************************/
     // vector to store pixels that have been previously markedPixels for removal
