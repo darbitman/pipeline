@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PipelineCommon.hpp"
 #include "SeamCarverProcessorFactory.hpp"
 
 using std::dynamic_pointer_cast;
@@ -20,30 +21,19 @@ TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
 
 TEST(SeamCarverProcessorFactoryTest, CreateValidStages)
 {
-    auto pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_0);
+    auto pRegisteredStages =
+        SeamCarverProcessorFactory::getFactoryInstance().getVectorOfRegisteredStages();
 
-    EXPECT_NE(pStage, nullptr);
+    for (size_t i = 0; i < pRegisteredStages->size(); ++i)
+    {
+        EXPECT_EQ(SeamCarverProcessorFactory::getFactoryInstance().isStageRegistered(
+                      (*pRegisteredStages)[i]),
+                  true);
 
-    pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_1);
-
-    EXPECT_NE(pStage, nullptr);
-
-    pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_2);
-
-    EXPECT_NE(pStage, nullptr);
-
-    pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_3);
-
-    EXPECT_NE(pStage, nullptr);
-
-    pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage(EPipelineStageId::STAGE_4);
-
-    EXPECT_NE(pStage, nullptr);
+        EXPECT_NE(
+            SeamCarverProcessorFactory::getFactoryInstance().createStage((*pRegisteredStages)[i]),
+            nullptr);
+    }
 }
 
 }  // namespace sc
