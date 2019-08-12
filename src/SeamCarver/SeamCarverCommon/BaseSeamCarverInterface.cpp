@@ -30,13 +30,26 @@ BaseSeamCarverInterface::~BaseSeamCarverInterface() {}
 
 void BaseSeamCarverInterface::addNewDataToPipeline(shared_ptr<BasePipelineData> pPipelineData)
 {
-    // TODO
+    if (pSenderReceiver_ != nullptr)
+    {
+        // create a new message to hold the BasePipelineData
+        auto pMessage = make_shared<PipelineDataMessage>(thisStageId_, EPipelineStageId::STAGE_0,
+                                                         pPipelineData);
+
+        pSenderReceiver_->send(pMessage);
+    }
 }
 
 shared_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFrameFromPipeline()
 {
-    // TODO
-    return nullptr;
+    if (doesNewResultExist())
+    {
+        return pSenderReceiver_->receive(thisStageId_)->getPipelineData();
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 bool BaseSeamCarverInterface::doesNewResultExist() const
