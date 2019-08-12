@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "BaseSeamCarverInterface.hpp"
 #include "IPipelineStage.hpp"
 #include "PipelineCommon.hpp"
 #include "SeamCarverProcessorFactory.hpp"
@@ -13,8 +14,9 @@ using std::vector;
 
 namespace sc
 {
-VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder()
-    : bPipelineStagesCreated_(false)
+VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
+    shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+    : pSenderReceiver_(pSenderReceiver)
 {
 }
 
@@ -23,11 +25,10 @@ VerticalSeamCarverPipelineBuilder::~VerticalSeamCarverPipelineBuilder() {}
 shared_ptr<vector<vector<shared_ptr<IPipelineStage>>>>
 VerticalSeamCarverPipelineBuilder::createPipeline()
 {
-    if (!bPipelineStagesCreated_)
+    if (pPipelineInterface_ == nullptr)
     {
         pPipelineStages_ = make_shared<vector<vector<shared_ptr<IPipelineStage>>>>();
         // TODO
-        bPipelineStagesCreated_ = true;
     }
 
     return pPipelineStages_;
@@ -35,8 +36,13 @@ VerticalSeamCarverPipelineBuilder::createPipeline()
 
 shared_ptr<IPipelineInterface> VerticalSeamCarverPipelineBuilder::createPipelineInterface()
 {
-    // TODO
-    return nullptr;
+    if (pPipelineInterface_ == nullptr)
+    {
+        pPipelineInterface_ = make_shared<BaseSeamCarverInterface>(
+            EPipelineQueueType::QUEUE_TYPE_FIFO, pSenderReceiver_);
+    }
+
+    return pPipelineInterface_;
 }
 
 }  // namespace sc
