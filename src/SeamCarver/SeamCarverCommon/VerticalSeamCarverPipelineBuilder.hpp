@@ -14,7 +14,7 @@ namespace sc
 class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
 {
   public:
-    explicit VerticalSeamCarverPipelineBuilder(std::shared_ptr<);
+    explicit VerticalSeamCarverPipelineBuilder(std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
 
     virtual ~VerticalSeamCarverPipelineBuilder();
 
@@ -27,6 +27,8 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
     std::shared_ptr<std::vector<std::vector<std::shared_ptr<IPipelineStage>>>> pPipelineStages_;
 
     std::shared_ptr<IPipelineInterface> pPipelineInterface_;
+
+    std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
 };
 }  // namespace sc
 
