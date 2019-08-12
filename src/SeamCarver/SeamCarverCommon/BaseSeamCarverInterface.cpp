@@ -40,7 +40,7 @@ void BaseSeamCarverInterface::addNewDataToPipeline(shared_ptr<BasePipelineData> 
     }
 }
 
-shared_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFrameFromPipeline()
+shared_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFromPipeline()
 {
     if (doesNewResultExist())
     {

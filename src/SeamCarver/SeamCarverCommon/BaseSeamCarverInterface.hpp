@@ -20,7 +20,7 @@ class BaseSeamCarverInterface : public IPipelineInterface
 
     virtual void addNewDataToPipeline(std::shared_ptr<BasePipelineData> pPipelineData) override;
 
-    virtual std::shared_ptr<BasePipelineData> getOutputFrameFromPipeline();
+    virtual std::shared_ptr<BasePipelineData> getOutputFromPipeline();
 
     virtual bool doesNewResultExist() const;
 

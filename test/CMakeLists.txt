@@ -1,3 +1,21 @@
+add_executable(
+    PqAdapterTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/PqAdapterTest.cpp
+)
+
+target_link_libraries(
+    PqAdapterTest
+    PRIVATE
+    gtest_main
+)
+
+target_include_directories(
+    PqAdapterTest
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/Common
+)
+
+
 
 add_executable(
     ConstSizePriorityQueueTest
