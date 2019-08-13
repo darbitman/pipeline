@@ -1,5 +1,5 @@
-#ifndef SHAREDCONSTSIZEPQADAPTER_HPP
-#define SHAREDCONSTSIZEPQADAPTER_HPP
+#ifndef SHAREDPRIORITYQUEUEADAPTER_HPP
+#define SHAREDPRIORITYQUEUEADAPTER_HPP
 
 #include <condition_variable>
 #include <memory>
@@ -12,15 +12,15 @@
 namespace sc
 {
 template <typename _Tp, typename _ComparatorType = std::less<_Tp>>
-class SharedConstSizePQAdapter : public SharedContainer<_Tp>
+class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 {
    public:
-    explicit SharedConstSizePQAdapter(
+    explicit SharedPriorityQueueAdapter(
         std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>>
             pConstSizePQ,
         bool isBlocking = true);
 
-    virtual ~SharedConstSizePQAdapter();
+    virtual ~SharedPriorityQueueAdapter();
 
     virtual const _Tp& front() override;
 
@@ -46,7 +46,7 @@ class SharedConstSizePQAdapter : public SharedContainer<_Tp>
 };
 
 template <typename _Tp, typename _ComparatorType>
-SharedConstSizePQAdapter<_Tp, _ComparatorType>::SharedConstSizePQAdapter(
+SharedPriorityQueueAdapter<_Tp, _ComparatorType>::SharedPriorityQueueAdapter(
     std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizePQ,
     bool isBlocking)
     : isBlocking(isBlocking), pConstSizeMinPQ_(pConstSizePQ)
@@ -54,12 +54,12 @@ SharedConstSizePQAdapter<_Tp, _ComparatorType>::SharedConstSizePQAdapter(
 }
 
 template <typename _Tp, typename _ComparatorType>
-SharedConstSizePQAdapter<_Tp, _ComparatorType>::~SharedConstSizePQAdapter()
+SharedPriorityQueueAdapter<_Tp, _ComparatorType>::~SharedPriorityQueueAdapter()
 {
 }
 
 template <typename _Tp, typename _ComparatorType>
-const _Tp& SharedConstSizePQAdapter<_Tp, _ComparatorType>::front()
+const _Tp& SharedPriorityQueueAdapter<_Tp, _ComparatorType>::front()
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -76,7 +76,7 @@ const _Tp& SharedConstSizePQAdapter<_Tp, _ComparatorType>::front()
 }
 
 template <typename _Tp, typename _ComparatorType>
-bool SharedConstSizePQAdapter<_Tp, _ComparatorType>::empty() const
+bool SharedPriorityQueueAdapter<_Tp, _ComparatorType>::empty() const
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -84,7 +84,7 @@ bool SharedConstSizePQAdapter<_Tp, _ComparatorType>::empty() const
 }
 
 template <typename _Tp, typename _ComparatorType>
-size_t SharedConstSizePQAdapter<_Tp, _ComparatorType>::size() const
+size_t SharedPriorityQueueAdapter<_Tp, _ComparatorType>::size() const
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -92,7 +92,7 @@ size_t SharedConstSizePQAdapter<_Tp, _ComparatorType>::size() const
 }
 
 template <typename _Tp, typename _ComparatorType>
-void SharedConstSizePQAdapter<_Tp, _ComparatorType>::push(const _Tp& value)
+void SharedPriorityQueueAdapter<_Tp, _ComparatorType>::push(const _Tp& value)
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -108,7 +108,7 @@ void SharedConstSizePQAdapter<_Tp, _ComparatorType>::push(const _Tp& value)
 }
 
 template <typename _Tp, typename _ComparatorType>
-void SharedConstSizePQAdapter<_Tp, _ComparatorType>::push(_Tp&& value)
+void SharedPriorityQueueAdapter<_Tp, _ComparatorType>::push(_Tp&& value)
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -124,7 +124,7 @@ void SharedConstSizePQAdapter<_Tp, _ComparatorType>::push(_Tp&& value)
 }
 
 template <typename _Tp, typename _ComparatorType>
-void SharedConstSizePQAdapter<_Tp, _ComparatorType>::pop()
+void SharedPriorityQueueAdapter<_Tp, _ComparatorType>::pop()
 {
     std::unique_lock<std::mutex> mlock(mtx_);
 

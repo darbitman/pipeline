@@ -7,7 +7,7 @@
 
 #include "PipelineCommon.hpp"
 #include "PipelineDataMessage.hpp"
-#include "SharedConstSizePQAdapter.hpp"
+#include "SharedPriorityQueueAdapter.hpp"
 #include "SharedQueue.hpp"
 
 using std::dynamic_pointer_cast;
@@ -47,7 +47,7 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
                 shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
                 1000);
 
-            queueIdToQueueMap_[currentQueueId_] = make_shared<SharedConstSizePQAdapter<
+            queueIdToQueueMap_[currentQueueId_] = make_shared<SharedPriorityQueueAdapter<
                 shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
                 pNewPQ, true);
         }
