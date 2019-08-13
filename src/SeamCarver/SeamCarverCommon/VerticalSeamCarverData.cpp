@@ -95,9 +95,9 @@ void VerticalSeamCarverData::resetData()
     for (size_t row = 0; row < seamLength_; ++row)
     {
         // reset priority queue since it could be filled from a previous run
-        while (!discoveredSeams[row].empty())
+        if (!discoveredSeams[row].empty())
         {
-            discoveredSeams[row].pop();
+            discoveredSeams[row].resetPriorityQueue();
         }
     }
 }
