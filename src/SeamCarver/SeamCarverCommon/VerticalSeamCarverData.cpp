@@ -94,15 +94,10 @@ void VerticalSeamCarverData::resetData()
     // ensure each row's PQ has enough capacity
     for (size_t row = 0; row < seamLength_; ++row)
     {
-        if (numSeamsToRemove_ > discoveredSeams[row].capacity())
-        {
-            discoveredSeams[row].changeCapacity(numSeamsToRemove_);
-        }
-
         // reset priority queue since it could be filled from a previous run
-        if (!discoveredSeams[row].empty())
+        while (!discoveredSeams[row].empty())
         {
-            discoveredSeams[row].resetPriorityQueue();
+            discoveredSeams[row].pop();
         }
     }
 }

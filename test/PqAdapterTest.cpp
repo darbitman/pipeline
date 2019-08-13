@@ -6,7 +6,7 @@
 #include <memory>
 #include <queue>
 
-#include "ConstSizePriorityQueue.hpp"
+#include "PriorityQueue.hpp"
 #include "SharedConstSizePQAdapter.hpp"
 
 using std::greater;
@@ -27,12 +27,12 @@ class PqAdapterTest : public ::testing::Test
   protected:
     virtual void SetUp()
     {
-        pPQueue_ = make_shared<ConstSizePriorityQueue<int32_t, less<int32_t>>>(pqCapacity_);
+        pPQueue_ = make_shared<PriorityQueue<int32_t, less<int32_t>>>(pqCapacity_);
 
         pAdapter_ = make_shared<SharedConstSizePQAdapter<int32_t, less<int32_t>>>(pPQueue_);
     }
 
-    shared_ptr<ConstSizePriorityQueue<int32_t, less<int32_t>>> pPQueue_;
+    shared_ptr<PriorityQueue<int32_t, less<int32_t>>> pPQueue_;
 
     shared_ptr<SharedConstSizePQAdapter<int32_t, less<int32_t>>> pAdapter_;
 

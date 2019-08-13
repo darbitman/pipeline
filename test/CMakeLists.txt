@@ -18,18 +18,18 @@ target_include_directories(
 
 
 add_executable(
-    ConstSizePriorityQueueTest
-    ${CMAKE_CURRENT_SOURCE_DIR}/ConstSizePriorityQueueTest.cpp
+    PriorityQueueTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/PriorityQueueTest.cpp
 )
 
 target_link_libraries(
-    ConstSizePriorityQueueTest
+    PriorityQueueTest
     PRIVATE
     gtest_main
 )
 
 target_include_directories(
-    ConstSizePriorityQueueTest
+    PriorityQueueTest
     PRIVATE
     ${PROJECT_SOURCE_DIR}/src/Common
 )

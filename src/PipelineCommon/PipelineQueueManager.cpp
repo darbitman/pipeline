@@ -43,7 +43,7 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
         break;
         case EPipelineQueueType::QUEUE_TYPE_MIN_PQ:
         {
-            auto pNewPQ = make_shared<ConstSizePriorityQueue<
+            auto pNewPQ = make_shared<PriorityQueue<
                 shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
                 1000);
 

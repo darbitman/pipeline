@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "BasePipelineData.hpp"
-#include "ConstSizePriorityQueue.hpp"
+#include "PriorityQueue.hpp"
 
 namespace sc
 {
@@ -100,7 +100,7 @@ class VerticalSeamCarverData : public BasePipelineData
 
     // virtual std::vector<std::vector<double>>& getPixelEnergy2DVector() const;
 
-    // virtual std::vector<ConstSizePriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
+    // virtual std::vector<PriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
 
     // virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector() const;
 
@@ -117,7 +117,7 @@ class VerticalSeamCarverData : public BasePipelineData
     // vector of min oriented priority queues that store the location of the pixels to remove
     // the index to the vector corresponds to the rows
     // the column index is stored in the PQ
-    std::vector<ConstSizePriorityQueue<int32_t>> discoveredSeams;
+    std::vector<PriorityQueue<int32_t>> discoveredSeams;
 
     // store cumulative energy to each pixel
     std::vector<std::vector<double>> totalEnergyTo;

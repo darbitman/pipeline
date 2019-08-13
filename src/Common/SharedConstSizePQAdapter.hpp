@@ -6,7 +6,7 @@
 #include <mutex>
 #include <queue>
 
-#include "ConstSizePriorityQueue.hpp"
+#include "PriorityQueue.hpp"
 #include "SharedContainer.hpp"
 
 namespace sc
@@ -16,7 +16,7 @@ class SharedConstSizePQAdapter : public SharedContainer<_Tp>
 {
    public:
     explicit SharedConstSizePQAdapter(
-        std::shared_ptr<ConstSizePriorityQueue<_Tp, _ComparatorType>>
+        std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>>
             pConstSizePQ,
         bool isBlocking = true);
 
@@ -41,13 +41,13 @@ class SharedConstSizePQAdapter : public SharedContainer<_Tp>
 
     mutable std::condition_variable cv_;
 
-    std::shared_ptr<ConstSizePriorityQueue<_Tp, _ComparatorType>>
+    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>>
         pConstSizeMinPQ_;
 };
 
 template <typename _Tp, typename _ComparatorType>
 SharedConstSizePQAdapter<_Tp, _ComparatorType>::SharedConstSizePQAdapter(
-    std::shared_ptr<ConstSizePriorityQueue<_Tp, _ComparatorType>> pConstSizePQ,
+    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizePQ,
     bool isBlocking)
     : isBlocking(isBlocking), pConstSizeMinPQ_(pConstSizePQ)
 {
