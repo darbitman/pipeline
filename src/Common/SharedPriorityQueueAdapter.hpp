@@ -14,11 +14,9 @@ namespace sc
 template <typename _Tp, typename _ComparatorType = std::less<_Tp>>
 class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 {
-   public:
+  public:
     explicit SharedPriorityQueueAdapter(
-        std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>>
-            pConstSizePQ,
-        bool isBlocking = true);
+        std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizePQ, bool isBlocking = true);
 
     virtual ~SharedPriorityQueueAdapter();
 
@@ -34,21 +32,19 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 
     virtual void pop() override;
 
-   private:
+  private:
     bool isBlocking;
 
     mutable std::mutex mtx_;
 
     mutable std::condition_variable cv_;
 
-    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>>
-        pConstSizeMinPQ_;
+    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizeMinPQ_;
 };
 
 template <typename _Tp, typename _ComparatorType>
 SharedPriorityQueueAdapter<_Tp, _ComparatorType>::SharedPriorityQueueAdapter(
-    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizePQ,
-    bool isBlocking)
+    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizePQ, bool isBlocking)
     : isBlocking(isBlocking), pConstSizeMinPQ_(pConstSizePQ)
 {
 }
