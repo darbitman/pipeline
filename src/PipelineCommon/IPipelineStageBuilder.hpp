@@ -14,10 +14,12 @@ class IPipelineStageBuilder
   public:
     virtual ~IPipelineStageBuilder();
 
-    virtual std::shared_ptr<std::vector<std::vector<std::shared_ptr<IPipelineStage>>>>
-    createPipeline() = 0;
+    virtual void createPipeline() = 0;
 
     virtual std::shared_ptr<IPipelineInterface> createPipelineInterface() = 0;
+
+    virtual std::vector<std::shared_ptr<IPipelineStage>>* getStages(
+        EPipelineStageId stageId) const = 0;
 };
 
 }  // namespace sc
