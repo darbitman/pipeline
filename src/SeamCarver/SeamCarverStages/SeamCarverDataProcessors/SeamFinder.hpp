@@ -2,7 +2,7 @@
 #define SEAMFINDER_HPP
 
 #include "ISeamCarverDataProcessor.hpp"
-#include "SeamCarverProcessorFactoryRegistration.hpp"
+#include "SeamCarverProcessorFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 namespace sc
@@ -21,6 +21,14 @@ class SeamFinder : public ISeamCarverDataProcessor
     SeamFinder(SeamFinder&&) = delete;
     SeamFinder& operator=(const SeamFinder&) = delete;
     SeamFinder& operator=(SeamFinder&&) = delete;
+
+  private:
+    inline static const bool bRegistered_ =
+        SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
+            EPipelineStageId::STAGE_2, []() {
+                return std::dynamic_pointer_cast<ISeamCarverDataProcessor>(
+                    std::make_shared<SeamFinder>());
+            });
 };
 
 }  // namespace sc

@@ -2,9 +2,6 @@
 
 #include <memory>
 
-#include "PipelineCommon.hpp"
-#include "SeamCarverProcessorFactory.hpp"
-#include "SeamCarverProcessorFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -20,13 +17,6 @@ MergeChannels::~MergeChannels() {}
 void MergeChannels::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
-}
-
-namespace
-{
-SeamCarverProcessorFactoryRegistration autoregister(EPipelineStageId::STAGE_4, []() {
-    return dynamic_pointer_cast<ISeamCarverDataProcessor>(make_shared<MergeChannels>());
-});
 }
 
 }  // namespace sc

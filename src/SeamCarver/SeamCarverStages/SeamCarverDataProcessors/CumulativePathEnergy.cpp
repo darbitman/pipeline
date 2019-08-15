@@ -2,9 +2,6 @@
 
 #include <memory>
 
-#include "PipelineCommon.hpp"
-#include "SeamCarverProcessorFactory.hpp"
-#include "SeamCarverProcessorFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -20,13 +17,6 @@ CumulativePathEnergy::~CumulativePathEnergy() {}
 void CumulativePathEnergy::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
-}
-
-namespace
-{
-SeamCarverProcessorFactoryRegistration autoregister(EPipelineStageId::STAGE_1, []() {
-    return dynamic_pointer_cast<ISeamCarverDataProcessor>(make_shared<CumulativePathEnergy>());
-});
 }
 
 }  // namespace sc

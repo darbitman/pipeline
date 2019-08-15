@@ -84,9 +84,7 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
-    "-Wl,--whole-archive"
     SeamCarver
-    "-Wl,--no-whole-archive"
     ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )
@@ -103,9 +101,7 @@ target_link_libraries(
     "-Xlinker --start-group"
     gtest_main
     PipelineCommon
-    "-Wl,--whole-archive"
     SeamCarver
-    "-Wl,--no-whole-archive"
     ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )
@@ -124,9 +120,23 @@ target_link_libraries(
     gtest_main
     "-Xlinker --start-group"
     PipelineCommon
-    "-Wl,--whole-archive"
     SeamCarver
-    "-Wl,--no-whole-archive"
+    ${OpenCV_LIBS}
+    "-Xlinker --end-group"
+)
+
+add_executable(
+    VerticalSeamCarverPipelineBuilderTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/VerticalSeamCarverPipelineBuilderTest.cpp
+)
+
+target_link_libraries(
+    VerticalSeamCarverPipelineBuilderTest
+    PRIVATE
+    gtest_main
+    "-Xlinker --start-group"
+    PipelineCommon
+    SeamCarver
     ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )

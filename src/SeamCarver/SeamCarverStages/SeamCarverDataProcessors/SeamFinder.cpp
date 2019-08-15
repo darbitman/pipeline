@@ -2,9 +2,6 @@
 
 #include <memory>
 
-#include "PipelineCommon.hpp"
-#include "SeamCarverProcessorFactory.hpp"
-#include "SeamCarverProcessorFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -20,13 +17,6 @@ SeamFinder::~SeamFinder() {}
 void SeamFinder::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
     // TODO
-}
-
-namespace
-{
-SeamCarverProcessorFactoryRegistration autoregister(EPipelineStageId::STAGE_2, []() {
-    return dynamic_pointer_cast<ISeamCarverDataProcessor>(make_shared<SeamFinder>());
-});
 }
 
 }  // namespace sc

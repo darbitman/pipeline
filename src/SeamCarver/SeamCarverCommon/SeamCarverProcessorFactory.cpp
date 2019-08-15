@@ -5,6 +5,7 @@
 
 #include "ISeamCarverDataProcessor.hpp"
 #include "PipelineCommon.hpp"
+#include "SeamCarverDataProcessors.hpp"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -18,14 +19,16 @@ SeamCarverProcessorFactory& SeamCarverProcessorFactory::getFactoryInstance()
     return factory;
 }
 
-void SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
+bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
                                                   createProcessorFunction function)
 {
     // check if map doesn't have the mapping already
     if (stageIdToCreateProcessorFunctionMap_.count(stageId) == 0)
     {
         stageIdToCreateProcessorFunctionMap_[stageId] = function;
+        return true;
     }
+    return false;
 }
 
 bool SeamCarverProcessorFactory::isStageRegistered(EPipelineStageId stageId) const

@@ -17,7 +17,7 @@ class SeamCarverProcessorFactory
 
     static SeamCarverProcessorFactory& getFactoryInstance();
 
-    virtual void registerNewStage(EPipelineStageId stageId, createProcessorFunction function);
+    virtual bool registerNewStage(EPipelineStageId stageId, createProcessorFunction function);
 
     virtual bool isStageRegistered(EPipelineStageId stageId) const;
 
