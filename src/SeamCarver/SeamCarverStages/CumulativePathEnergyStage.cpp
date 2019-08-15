@@ -6,7 +6,6 @@
 
 #include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
-#include "SeamCarverStageFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -150,14 +149,5 @@ void CumulativePathEnergyStage::processData(shared_ptr<BasePipelineData> pData)
 //         }
 //     }
 // }
-
-namespace
-{
-SeamCarverStageFactoryRegistration registerstage(
-    EPipelineStageId::STAGE_1, [](shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
-        return dynamic_pointer_cast<IPipelineStage>(
-            make_shared<CumulativePathEnergyStage>(pSenderReceiver));
-    });
-}
 
 }  // namespace sc

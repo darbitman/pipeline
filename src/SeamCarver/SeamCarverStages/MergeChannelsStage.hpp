@@ -6,6 +6,7 @@
 #include "BasePipelineStage.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "VerticalSeamCarverData.hpp"
+#include "SeamCarverStageFactory.hpp"
 
 namespace sc
 {
@@ -40,6 +41,13 @@ class MergeChannelsStage : public BasePipelineStage
 
   private:
     void mergeChannels(VerticalSeamCarverData* data);
+
+        inline static const bool bRegistered_ =
+        SeamCarverStageFactory::getFactoryInstance().registerNewStage(
+            EPipelineStageId::STAGE_4, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+                return std::dynamic_pointer_cast<IPipelineStage>(
+                    std::make_shared<MergeChannelsStage>(pSenderReceiver));
+            });
 };
 }  // namespace sc
 

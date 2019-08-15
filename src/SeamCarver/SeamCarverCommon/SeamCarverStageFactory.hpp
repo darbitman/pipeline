@@ -17,9 +17,9 @@ class SeamCarverStageFactory
 
     static SeamCarverStageFactory& getFactoryInstance();
 
-    void registerNewStage(uint32_t stageId, createStageFunction function);
+    virtual bool registerNewStage(uint32_t stageId, createStageFunction function);
 
-    std::shared_ptr<IPipelineStage> createStage(
+    virtual std::shared_ptr<IPipelineStage> createStage(
         EPipelineStageId stageId, std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
 
     // deleted to prevent misuse

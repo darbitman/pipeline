@@ -5,13 +5,14 @@
 
 #include "BasePipelineStage.hpp"
 #include "PipelineSenderReceiver.hpp"
+#include "SeamCarverStageFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 namespace sc
 {
 class CumulativePathEnergyStage : public BasePipelineStage
 {
-public:
+  public:
     explicit CumulativePathEnergyStage(std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
 
     virtual ~CumulativePathEnergyStage();
@@ -29,20 +30,25 @@ public:
     // deleted to prevent misuse
     CumulativePathEnergyStage(const CumulativePathEnergyStage&) = delete;
     CumulativePathEnergyStage(const CumulativePathEnergyStage&&) = delete;
-    CumulativePathEnergyStage& operator=(const CumulativePathEnergyStage&) =
-        delete;
-    CumulativePathEnergyStage& operator=(const CumulativePathEnergyStage&&) =
-        delete;
+    CumulativePathEnergyStage& operator=(const CumulativePathEnergyStage&) = delete;
+    CumulativePathEnergyStage& operator=(const CumulativePathEnergyStage&&) = delete;
 
-protected:
+  protected:
     /**
      * @brief method that does the actual data processing
      * calls calculateCumulativePathEnergy
      */
     virtual void processData(std::shared_ptr<BasePipelineData> pData) override;
 
-private:
+  private:
     void calculateCumulativePathEnergy(VerticalSeamCarverData* pData);
+
+    inline static const bool bRegistered_ =
+        SeamCarverStageFactory::getFactoryInstance().registerNewStage(
+            EPipelineStageId::STAGE_1, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+                return std::dynamic_pointer_cast<IPipelineStage>(
+                    std::make_shared<CumulativePathEnergyStage>(pSenderReceiver));
+            });
 };
 }  // namespace sc
 

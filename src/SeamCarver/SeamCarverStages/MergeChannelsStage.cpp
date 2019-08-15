@@ -6,7 +6,6 @@
 
 #include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
-#include "SeamCarverStageFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -42,14 +41,5 @@ void MergeChannelsStage::processData(shared_ptr<BasePipelineData> pData)
 // {
 //     merge(data->bgr, *(data->getSavedImage()));
 // }
-
-namespace
-{
-SeamCarverStageFactoryRegistration registerstage(
-    EPipelineStageId::STAGE_4, [](shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
-        return dynamic_pointer_cast<IPipelineStage>(
-            make_shared<MergeChannelsStage>(pSenderReceiver));
-    });
-}
 
 }  // namespace sc

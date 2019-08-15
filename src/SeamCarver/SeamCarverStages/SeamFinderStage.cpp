@@ -4,7 +4,6 @@
 
 #include "PipelineCommon.hpp"
 #include "PipelineSenderReceiver.hpp"
-#include "SeamCarverStageFactoryRegistration.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
@@ -137,13 +136,5 @@ void SeamFinderStage::processData(shared_ptr<BasePipelineData> pData)
 //         }
 //     }  // for (int32_t n = 0; n < (int32_t)numSeamsToRemove_; n++)
 // }
-
-namespace
-{
-SeamCarverStageFactoryRegistration registerstage(
-    EPipelineStageId::STAGE_2, [](shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
-        return dynamic_pointer_cast<IPipelineStage>(make_shared<SeamFinderStage>(pSenderReceiver));
-    });
-}
 
 }  // namespace sc

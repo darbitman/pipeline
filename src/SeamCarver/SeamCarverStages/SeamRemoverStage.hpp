@@ -5,6 +5,7 @@
 
 #include "BasePipelineStage.hpp"
 #include "PipelineSenderReceiver.hpp"
+#include "SeamCarverStageFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
 namespace sc
@@ -40,6 +41,13 @@ class SeamRemoverStage : public BasePipelineStage
 
   private:
     void removeSeams(VerticalSeamCarverData* data);
+
+    inline static const bool bRegistered_ =
+        SeamCarverStageFactory::getFactoryInstance().registerNewStage(
+            EPipelineStageId::STAGE_3, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+                return std::dynamic_pointer_cast<IPipelineStage>(
+                    std::make_shared<SeamRemoverStage>(pSenderReceiver));
+            });
 };
 }  // namespace sc
 

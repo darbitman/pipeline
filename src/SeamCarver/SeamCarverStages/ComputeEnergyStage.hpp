@@ -5,6 +5,7 @@
 
 #include "BasePipelineStage.hpp"
 #include "PipelineSenderReceiver.hpp"
+#include "SeamCarverStageFactory.hpp"
 
 namespace sc
 {
@@ -56,6 +57,13 @@ class ComputeEnergyStage : public BasePipelineStage
     // void calculatePixelEnergyForEveryColumn(const std::shared_ptr<const cv::Mat>& image,
     //                                         std::vector<std::vector<double>>& outPixelEnergy,
     //                                         bool bDoOddRows);
+
+    inline static const bool bRegistered_ =
+        SeamCarverStageFactory::getFactoryInstance().registerNewStage(
+            EPipelineStageId::STAGE_0, [](std::shared_ptr<PipelineSenderReceiver> pSenderReceiver) {
+                return std::dynamic_pointer_cast<IPipelineStage>(
+                    std::make_shared<ComputeEnergyStage>(pSenderReceiver));
+            });
 };
 }  // namespace sc
 
