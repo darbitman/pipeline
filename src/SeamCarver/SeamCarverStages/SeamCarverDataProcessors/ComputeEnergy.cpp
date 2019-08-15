@@ -23,7 +23,10 @@ ComputeEnergy::~ComputeEnergy() {}
 
 void ComputeEnergy::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
 {
-    // TODO
+    if (pData == nullptr)
+    {
+        return;
+    }
 
     // set local data members for the computation
     numRows_ = pData->getNumberOfRows();
