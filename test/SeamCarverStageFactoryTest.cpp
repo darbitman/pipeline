@@ -9,12 +9,20 @@ using std::shared_ptr;
 
 namespace sc
 {
-TEST(SeamCarverStageFactory, CreateNullStage)
+TEST(SeamCarverStageFactoryTest, CreateNullStage)
+{
+    auto pStage =
+        SeamCarverStageFactory::getFactoryInstance().createStage((EPipelineStageId)(-1), nullptr);
+
+    EXPECT_EQ(pStage, nullptr);
+}
+
+TEST(SeamCarverStageFactoryTest, CreateValidStages)
 {
     auto pStage = SeamCarverStageFactory::getFactoryInstance().createStage(
         EPipelineStageId::STAGE_0, nullptr);
 
-    EXPECT_EQ(pStage, nullptr);
+    EXPECT_NE(pStage, nullptr);
 }
 
 }  // namespace sc
