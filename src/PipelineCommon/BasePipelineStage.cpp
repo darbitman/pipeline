@@ -37,8 +37,11 @@ void BasePipelineStage::runStage()
 {
     if (bIsInitialized_ && !bThreadIsRunning_)
     {
-        bThreadIsRunning_ = true;
         thread(&BasePipelineStage::runThread, this).detach();
+
+        // wait for thread to start
+        while (!bThreadIsRunning_)
+            ;
     }
 }
 
@@ -50,6 +53,8 @@ bool BasePipelineStage::isRunning() const { return bThreadIsRunning_; }
 
 void BasePipelineStage::runThread()
 {
+    bThreadIsRunning_ = true;
+
     while (bThreadIsRunning_)
     {
         auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
@@ -62,7 +67,8 @@ void BasePipelineStage::runThread()
                 if (pReceivedMessage->getMessageType() ==
                     EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
                 {
-                    processData(pReceivedMessage->getPipelineData());
+                    processMessage(pReceivedMessage);
+
                     pSenderReceiver_->send(pReceivedMessage);
                 }
                 else if (pReceivedMessage->getMessageType() ==
@@ -88,4 +94,10 @@ void BasePipelineStage::processData(shared_ptr<BasePipelineData> pData)
 {
     // DEFINE IN DERIVED CLASS
 }
+
+void BasePipelineStage::processMessage(shared_ptr<BasePipelineMessage> pMessage)
+{
+    // DEFINE IN DERIVED CLASS
+}
+
 }  // namespace sc

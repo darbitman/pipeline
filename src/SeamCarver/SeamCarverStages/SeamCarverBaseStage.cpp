@@ -41,4 +41,16 @@ void SeamCarverBaseStage::processData(shared_ptr<BasePipelineData> pData)
     }
 }
 
+void SeamCarverBaseStage::processMessage(shared_ptr<BasePipelineMessage> pMessage)
+{
+    if (pMessage == nullptr || pSeamCarverDataProcessor_ == nullptr)
+    {
+        return;
+    }
+    else
+    {
+        auto pData = dynamic_pointer_cast<VerticalSeamCarverData>(pMessage->getPipelineData());
+    }
+}
+
 }  // namespace sc

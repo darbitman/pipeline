@@ -42,6 +42,8 @@ class BasePipelineStage : public IPipelineStage
      */
     virtual void processData(std::shared_ptr<BasePipelineData> pData);
 
+    virtual void processMessage(std::shared_ptr<BasePipelineMessage> pMessage);
+
   private:
     const EPipelineStageId thisStageId_;
 

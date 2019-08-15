@@ -39,7 +39,9 @@ class SeamCarverBaseStage : public BasePipelineStage
     /**
      * @brief method that calls the SeamCarverDataProcessor
      */
-    virtual void processData(std::shared_ptr<BasePipelineData> pData);
+    virtual void processData(std::shared_ptr<BasePipelineData> pData) override;
+
+    virtual void processMessage(std::shared_ptr<BasePipelineMessage> pMessage) override;
 
   private:
     std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
