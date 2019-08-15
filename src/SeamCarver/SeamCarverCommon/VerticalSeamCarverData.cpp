@@ -143,4 +143,17 @@ void VerticalSeamCarverData::setFrameNumber(uint32_t newFrameNumber)
 void VerticalSeamCarverData::incrementFrameNumber() { ++frameNumber_; }
 
 uint32_t VerticalSeamCarverData::getFrameNumber() const { return frameNumber_; }
+
+size_t VerticalSeamCarverData::getNumberOfRows() const { return numRows_; }
+
+size_t VerticalSeamCarverData::getNumberOfColumns() const { return numColumns_; }
+
+size_t VerticalSeamCarverData::getBottomRowIndex() const { return bottomRow_; }
+
+size_t VerticalSeamCarverData::getRightColumnIndex() const { return rightColumn_; }
+
+size_t VerticalSeamCarverData::getNumberOfColorChannels() const { return numColorChannels_; }
+
+double VerticalSeamCarverData::getEdgePixelEnergy() const { return marginEnergy_; }
+
 }  // namespace sc

@@ -76,15 +76,15 @@ class VerticalSeamCarverData : public BasePipelineData
      */
     virtual uint32_t getFrameNumber() const;
 
-    // virtual size_t getNumberOfRows() const;
+    virtual size_t getNumberOfRows() const;
 
-    // virtual size_t getNumberOfColumns() const;
+    virtual size_t getNumberOfColumns() const;
 
-    // virtual size_t getBottomRowIndex() const;
+    virtual size_t getBottomRowIndex() const;
 
-    // virtual size_t getRightColumnIndex() const;
+    virtual size_t getRightColumnIndex() const;
 
-    // virtual size_t getNumberOfColorChannels() const;
+    virtual size_t getNumberOfColorChannels() const;
 
     // virtual void setSeamLength(size_t seamLength);
 
@@ -94,7 +94,7 @@ class VerticalSeamCarverData : public BasePipelineData
 
     // virtual size_t getNumberOfSeamsToRemove() const;
 
-    // virtual double getEdgePixelEnergy() const;
+    virtual double getEdgePixelEnergy() const;
 
     // virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
 
