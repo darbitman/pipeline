@@ -1,11 +1,13 @@
 #include "VerticalSeamCarverData.hpp"
 
 #include <cstdint>
+#include <vector>
 
 using cv::Mat;
 using std::make_shared;
 using std::numeric_limits;
 using std::shared_ptr;
+using std::vector;
 
 namespace sc
 {
@@ -155,5 +157,7 @@ size_t VerticalSeamCarverData::getRightColumnIndex() const { return rightColumn_
 size_t VerticalSeamCarverData::getNumberOfColorChannels() const { return numColorChannels_; }
 
 double VerticalSeamCarverData::getEdgePixelEnergy() const { return marginEnergy_; }
+
+vector<vector<double>>& VerticalSeamCarverData::getPixelEnergy2DVector() { return pixelEnergy; }
 
 }  // namespace sc

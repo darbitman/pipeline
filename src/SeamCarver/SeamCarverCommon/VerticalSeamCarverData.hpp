@@ -98,7 +98,7 @@ class VerticalSeamCarverData : public BasePipelineData
 
     // virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
 
-    // virtual std::vector<std::vector<double>>& getPixelEnergy2DVector() const;
+    virtual std::vector<std::vector<double>>& getPixelEnergy2DVector();
 
     // virtual std::vector<PriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
 
