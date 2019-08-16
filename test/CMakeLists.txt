@@ -140,3 +140,23 @@ target_link_libraries(
     ${OpenCV_LIBS}
     "-Xlinker --end-group"
 )
+
+
+
+
+add_executable(
+    ThreadRunnerTest
+    ${CMAKE_CURRENT_SOURCE_DIR}/ThreadRunnerTest.cpp
+)
+
+target_link_libraries(
+    ThreadRunnerTest
+    PRIVATE
+    gtest_main
+)
+
+target_include_directories(
+    ThreadRunnerTest
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/Common
+)
