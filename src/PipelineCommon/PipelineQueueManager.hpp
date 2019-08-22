@@ -15,17 +15,19 @@ namespace sc
 {
 class PipelineQueueManager
 {
+  private:
+    using value_type = std::unique_ptr<BasePipelineMessage>;
+
   public:
     PipelineQueueManager();
 
     ~PipelineQueueManager();
 
-    virtual int32_t createNewQueue(EPipelineQueueType newQueueType);
+    int32_t createNewQueue(EPipelineQueueType newQueueType);
 
-    virtual std::shared_ptr<SharedContainer<std::shared_ptr<BasePipelineMessage>>> getQueue(
-        int32_t queueId) const;
+    SharedContainer<value_type>* getQueue(int32_t queueId) const;
 
-    virtual size_t getNumberOfQueues() const;
+    size_t getNumberOfQueues() const;
 
     // deleted to prevent misuse
     PipelineQueueManager(const PipelineQueueManager&) = delete;
@@ -36,8 +38,7 @@ class PipelineQueueManager
   private:
     int32_t currentQueueId_;
 
-    std::unordered_map<int32_t,
-                       std::shared_ptr<sc::SharedContainer<std::shared_ptr<BasePipelineMessage>>>>
+    std::unordered_map<int32_t, std::unique_ptr<sc::SharedContainer<value_type>>>
         queueIdToQueueMap_;
 
     mutable std::mutex mapMutex_;

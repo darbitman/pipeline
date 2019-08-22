@@ -7,15 +7,18 @@
 
 #include "PipelineCommon.hpp"
 #include "PipelineDataMessage.hpp"
+#include "PriorityQueue.hpp"
 #include "SharedPriorityQueueAdapter.hpp"
 #include "SharedQueue.hpp"
 
 using std::dynamic_pointer_cast;
 using std::make_shared;
+using std::make_unique;
 using std::mutex;
 using std::shared_ptr;
 using std::static_pointer_cast;
 using std::unique_lock;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
@@ -37,19 +40,17 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
     {
         case EPipelineQueueType::QUEUE_TYPE_FIFO:
         {
-            queueIdToQueueMap_[currentQueueId_] =
-                make_shared<SharedQueue<shared_ptr<BasePipelineMessage>>>(true);
+            queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<value_type>>(true);
         }
         break;
         case EPipelineQueueType::QUEUE_TYPE_MIN_PQ:
         {
-            auto pNewPQ =
-                make_shared<PriorityQueue<shared_ptr<BasePipelineMessage>,
-                                          PipelineDataMessage::MessageNumberLessComparator>>(1000);
+            using comparator_type = PipelineDataMessage::MessageNumberLessComparator;
 
-            queueIdToQueueMap_[currentQueueId_] = make_shared<SharedPriorityQueueAdapter<
-                shared_ptr<BasePipelineMessage>, PipelineDataMessage::MessageNumberLessComparator>>(
-                pNewPQ, true);
+            auto pNewPQ = make_unique<PriorityQueue<value_type, comparator_type>>(1000);
+
+            queueIdToQueueMap_[currentQueueId_] =
+                make_unique<SharedPriorityQueueAdapter<value_type, comparator_type>>(pNewPQ, true);
         }
         break;
         default:
@@ -60,13 +61,14 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
     return currentQueueId_;
 }
 
-shared_ptr<SharedContainer<shared_ptr<BasePipelineMessage>>> PipelineQueueManager::getQueue(
+SharedContainer<PipelineQueueManager::value_type>* PipelineQueueManager::getQueue(
     int32_t queueId) const
 {
     unique_lock<mutex> mapLock(mapMutex_);
+
     if (queueIdToQueueMap_.count(queueId) != 0)
     {
-        return queueIdToQueueMap_.at(queueId);
+        return queueIdToQueueMap_.at(queueId).get();
     }
     else
     {
@@ -79,4 +81,5 @@ size_t PipelineQueueManager::getNumberOfQueues() const
     unique_lock<mutex> mapLock(mapMutex_);
     return queueIdToQueueMap_.size();
 }
+
 }  // namespace sc
