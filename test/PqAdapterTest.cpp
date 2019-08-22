@@ -11,9 +11,9 @@
 
 using std::greater;
 using std::less;
-using std::make_shared;
+using std::make_unique;
 using std::priority_queue;
-using std::shared_ptr;
+using std::unique_ptr;
 using std::vector;
 using namespace sc;
 
@@ -27,14 +27,14 @@ class PqAdapterTest : public ::testing::Test
   protected:
     virtual void SetUp()
     {
-        pPQueue_ = make_shared<PriorityQueue<int32_t, less<int32_t>>>(pqCapacity_);
+        pPQueue_ = make_unique<PriorityQueue<int32_t, less<int32_t>>>(pqCapacity_);
 
-        pAdapter_ = make_shared<SharedPriorityQueueAdapter<int32_t, less<int32_t>>>(pPQueue_);
+        pAdapter_ = make_unique<SharedPriorityQueueAdapter<int32_t, less<int32_t>>>(pPQueue_);
     }
 
-    shared_ptr<PriorityQueue<int32_t, less<int32_t>>> pPQueue_;
+    unique_ptr<PriorityQueue<int32_t, less<int32_t>>> pPQueue_;
 
-    shared_ptr<SharedPriorityQueueAdapter<int32_t, less<int32_t>>> pAdapter_;
+    unique_ptr<SharedPriorityQueueAdapter<int32_t, less<int32_t>>> pAdapter_;
 
     const size_t pqCapacity_;
 };
@@ -44,10 +44,6 @@ TEST_F(PqAdapterTest, EmptyOnCreation)
     EXPECT_EQ(pAdapter_->empty(), true);
 
     EXPECT_EQ(pAdapter_->size(), 0);
-
-    EXPECT_EQ(pPQueue_->empty(), true);
-
-    EXPECT_EQ(pPQueue_->size(), 0);
 }
 
 TEST_F(PqAdapterTest, MinOrientedPq)
