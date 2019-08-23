@@ -10,9 +10,10 @@
 #include "VerticalSeamCarverData.hpp"
 
 using std::greater;
-using std::make_shared;
+using std::make_unique;
+using std::move;
 using std::priority_queue;
-using std::shared_ptr;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
@@ -61,13 +62,14 @@ TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
         auto source = EPipelineStageId::INTERFACE_STAGE;
         auto destination = EPipelineStageId::STAGE_0;
 
-        auto pNewMessage = make_shared<PipelineDataMessage>(source, destination, nullptr);
+        unique_ptr<BasePipelineMessage> pNewMessage =
+            make_unique<PipelineDataMessage>(source, destination, nullptr);
 
         uint32_t randomNumber = (uint32_t)(rand() % 50);
         pNewMessage->setMessageNumber(randomNumber);
 
         randomFrameNumbers.push(randomNumber);
-        q2->push(pNewMessage);
+        q2->push(move(pNewMessage));
     }
 
     // both PQs must return the same number

@@ -7,8 +7,8 @@
 #include "PipelineSenderReceiver.hpp"
 #include "ShutdownMessage.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 
 namespace sc
 {
@@ -32,22 +32,24 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
     auto source = EPipelineStageId::INTERFACE_STAGE;
     auto destination = EPipelineStageId::STAGE_0;
-    shared_ptr<BasePipelineMessage> pMessage =
-        make_shared<PipelineDataMessage>(source, destination, nullptr);
+    unique_ptr<BasePipelineMessage> pMessage =
+        make_unique<PipelineDataMessage>(source, destination, nullptr);
+
+    const BasePipelineMessage* const savedPtr = pMessage.get();
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 
     auto pReceivedMessage = senderReceiver.receive(EPipelineStageId::STAGE_0);
 
-    EXPECT_EQ(pMessage, pReceivedMessage);
+    EXPECT_EQ(savedPtr, pReceivedMessage.get());
 }
 
 TEST_F(PipelineSenderReceiverTest, ShutdownThread)
 {
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
-    auto destination = EPipelineStageId::MESSAGE_ROUTER;
-    shared_ptr<BasePipelineMessage> pMessage = make_shared<ShutdownMessage>(destination);
+    unique_ptr<BasePipelineMessage> pMessage =
+        make_unique<ShutdownMessage>(EPipelineStageId::MESSAGE_ROUTER);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 
