@@ -29,7 +29,23 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 
     virtual ~SharedPriorityQueueAdapter() = default;
 
-    virtual const _Tp& front() override
+    virtual const _Tp& front() const override
+    {
+        std::unique_lock<std::mutex> mlock(mtx_);
+
+        // if this is a blocking queue, wait to be notified when when a new object
+        // is added
+        if (isBlocking)
+        {
+            while (pConstSizeMinPQ_->empty())
+            {
+                cv_.wait(mlock);
+            }
+        }
+        return pConstSizeMinPQ_->top();
+    }
+
+    virtual _Tp& front() override
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -85,7 +101,7 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
-        pConstSizeMinPQ_->push(std::forward<_Tp>(value));
+        pConstSizeMinPQ_->push(std::move(value));
 
         if (isBlocking)
         {

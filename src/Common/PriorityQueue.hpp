@@ -111,6 +111,8 @@ class PriorityQueue : public QueueInterface<_Tp>
      */
     virtual const _Tp& top() const override { return heap_[1]; }
 
+    virtual _Tp& top() override { return heap_[1]; }
+
     /**
      * @brief return the number of elements in the queue
      * @return size_t

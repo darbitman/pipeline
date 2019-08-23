@@ -18,7 +18,23 @@ class SharedQueue : public SharedContainer<_Tp>
 
     virtual ~SharedQueue() = default;
 
-    virtual const _Tp& front()
+    virtual const _Tp& front() const override
+    {
+        std::unique_lock<std::mutex> mlock(mtx_);
+
+        // if this is a blocking queue, wait to be notified when when a new object is added
+        if (isBlocking_)
+        {
+            while (queue_.empty())
+            {
+                cv_.wait(mlock);
+            }
+        }
+
+        return queue_.front();
+    }
+
+    virtual _Tp& front() override
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 

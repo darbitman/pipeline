@@ -9,7 +9,7 @@ namespace sc
 template <typename _Tp>
 class QueueInterface
 {
-public:
+  public:
     /**
      * @brief dtor
      */
@@ -33,10 +33,16 @@ public:
     virtual void pop() = 0;
 
     /**
-     * @brief return the top (minimum) element without deleting it
-     * @return const _Tp&: const reference to the minimum element
+     * @brief return the top element without deleting it
+     * @return const _Tp& const reference to the top element
      */
     virtual const _Tp& top() const = 0;
+
+    /**
+     * @brief return the top element without deleting it
+     * @return _Tp& reference to the top element
+     */
+    virtual _Tp& top() = 0;
 
     /**
      * @brief return the number of elements in the queue
@@ -50,6 +56,7 @@ public:
      */
     virtual bool empty() const = 0;
 };
+
 }  // namespace sc
 
 #endif

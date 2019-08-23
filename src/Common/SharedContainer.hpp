@@ -6,10 +6,12 @@ namespace sc
 template <typename _Tp>
 class SharedContainer
 {
-public:
-    virtual ~SharedContainer() = 0;
+  public:
+    virtual ~SharedContainer() {}
 
-    virtual const _Tp& front() = 0;
+    virtual const _Tp& front() const = 0;
+
+    virtual _Tp& front() = 0;
 
     virtual bool empty() const = 0;
 
@@ -21,11 +23,6 @@ public:
 
     virtual void pop() = 0;
 };
-
-template <typename _Tp>
-SharedContainer<_Tp>::~SharedContainer()
-{
-}
 
 }  // namespace sc
 
