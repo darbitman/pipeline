@@ -56,12 +56,12 @@ class PriorityQueue : public QueueInterface<_Tp>
             // more than the index, need to subtract 1
             if (N_ == (heap_.size() - 1))
             {
-                // heap_.push_back(element);
+                heap_.push_back(element);
                 ++N_;
             }
             else
             {
-                // heap_[++N_] = element;
+                throw std::invalid_argument("Type _Tp can't be copy constructed");
             }
 
             swim(N_);
@@ -83,12 +83,12 @@ class PriorityQueue : public QueueInterface<_Tp>
         // than the index, need to subtract 1
         if (N_ == (heap_.size() - 1))
         {
-            heap_.push_back(std::forward<_Tp>(element));
+            heap_.push_back(std::move(element));
             ++N_;
         }
         else
         {
-            heap_[++N_] = std::forward<_Tp>(element);
+            heap_[++N_] = std::move(element);
         }
 
         swim(N_);
