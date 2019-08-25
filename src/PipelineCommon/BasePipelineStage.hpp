@@ -15,7 +15,7 @@ class BasePipelineStage : public IPipelineStage
 {
   public:
     explicit BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
-                               std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
+                               PipelineSenderReceiver* pSenderReceiver);
 
     virtual ~BasePipelineStage();
 
@@ -40,9 +40,9 @@ class BasePipelineStage : public IPipelineStage
      * @brief method that does the actual data processing
      * derived class MUST provide an implementation
      */
-    virtual void processData(std::shared_ptr<BasePipelineData> pData);
+    virtual void processData(std::unique_ptr<BasePipelineData>& pData) = 0;
 
-    virtual void processMessage(std::shared_ptr<BasePipelineMessage> pMessage);
+    virtual void processMessage(std::unique_ptr<BasePipelineMessage>& pMessage) = 0;
 
   private:
     const EPipelineStageId thisStageId_;
@@ -55,7 +55,7 @@ class BasePipelineStage : public IPipelineStage
     // Indicates if this stage is initialized
     bool bIsInitialized_;
 
-    std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
+    PipelineSenderReceiver* pSenderReceiver_;
 
     void runThread();
 

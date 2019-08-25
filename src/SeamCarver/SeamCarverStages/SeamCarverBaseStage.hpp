@@ -14,10 +14,10 @@ class SeamCarverBaseStage : public BasePipelineStage
 {
   public:
     SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
-                        std::shared_ptr<PipelineSenderReceiver> pSenderReceiver,
-                        std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor);
+                        PipelineSenderReceiver* pSenderReceiver,
+                        std::unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor);
 
-    virtual ~SeamCarverBaseStage();
+    virtual ~SeamCarverBaseStage() override;
 
     virtual void initialize() override;
 
@@ -39,12 +39,12 @@ class SeamCarverBaseStage : public BasePipelineStage
     /**
      * @brief method that calls the SeamCarverDataProcessor
      */
-    virtual void processData(std::shared_ptr<BasePipelineData> pData) override;
+    virtual void processData(std::unique_ptr<BasePipelineData>& pData) override;
 
-    virtual void processMessage(std::shared_ptr<BasePipelineMessage> pMessage) override;
+    virtual void processMessage(std::unique_ptr<BasePipelineMessage>& pMessage) override;
 
   private:
-    std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
+    std::unique_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
 };
 }  // namespace sc
 

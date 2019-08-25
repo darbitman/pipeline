@@ -6,7 +6,7 @@
 #include "PipelineSenderReceiver.hpp"
 #include "SeamCarverStages.hpp"
 
-using std::shared_ptr;
+using std::unique_ptr;
 using namespace sc;
 
 SeamCarverStageFactory& SeamCarverStageFactory::getFactoryInstance()
@@ -26,16 +26,16 @@ bool SeamCarverStageFactory::registerNewStage(uint32_t stage_id, createStageFunc
     return false;
 }
 
-shared_ptr<IPipelineStage> SeamCarverStageFactory::createStage(
-    EPipelineStageId stage_id, shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+unique_ptr<IPipelineStage> SeamCarverStageFactory::createStage(
+    EPipelineStageId stage_id, PipelineSenderReceiver* pSenderReceiver)
 {
-    shared_ptr<IPipelineStage> p_new_stage(nullptr);
+    unique_ptr<IPipelineStage> p_new_stage(nullptr);
 
-    if (stage_id_to_createstagefunc_map_.count(stage_id) > 0)
-    {
-        auto stageCreateFunction = stage_id_to_createstagefunc_map_[stage_id];
-        p_new_stage = stageCreateFunction(pSenderReceiver);
-    }
+    // if (stage_id_to_createstagefunc_map_.count(stage_id) > 0)
+    // {
+    //     auto stageCreateFunction = stage_id_to_createstagefunc_map_[stage_id];
+    //     p_new_stage = stageCreateFunction(pSenderReceiver);
+    // }
 
     return p_new_stage;
 }

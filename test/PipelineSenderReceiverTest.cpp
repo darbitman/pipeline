@@ -32,8 +32,9 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
     auto source = EPipelineStageId::INTERFACE_STAGE;
     auto destination = EPipelineStageId::STAGE_0;
+    unique_ptr<BasePipelineData> pEmptyData;
     unique_ptr<BasePipelineMessage> pMessage =
-        make_unique<PipelineDataMessage>(source, destination, nullptr);
+        make_unique<PipelineDataMessage>(source, destination, pEmptyData);
 
     const BasePipelineMessage* const savedPtr = pMessage.get();
 

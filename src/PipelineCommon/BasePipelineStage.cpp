@@ -5,15 +5,15 @@
 #include "BasePipelineData.hpp"
 #include "ShutdownMessage.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
 using std::thread;
 using std::unique_lock;
+using std::unique_ptr;
 
 namespace sc
 {
 BasePipelineStage::BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
-                                     shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+                                     PipelineSenderReceiver* pSenderReceiver)
     : thisStageId_(thisStageId),
       queueType_(queueType),
       bThreadIsRunning_(false),
@@ -86,18 +86,8 @@ void BasePipelineStage::runThread()
 void BasePipelineStage::doStopStage()
 {
     // create a ShutdownMessage and send to itself
-    shared_ptr<BasePipelineMessage> pShutdownMessage = make_shared<ShutdownMessage>(thisStageId_);
+    unique_ptr<BasePipelineMessage> pShutdownMessage = make_unique<ShutdownMessage>(thisStageId_);
     pSenderReceiver_->send(pShutdownMessage);
-}
-
-void BasePipelineStage::processData(shared_ptr<BasePipelineData> pData)
-{
-    // DEFINE IN DERIVED CLASS
-}
-
-void BasePipelineStage::processMessage(shared_ptr<BasePipelineMessage> pMessage)
-{
-    // DEFINE IN DERIVED CLASS
 }
 
 }  // namespace sc

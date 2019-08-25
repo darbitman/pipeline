@@ -13,14 +13,13 @@ namespace sc
 class BaseSeamCarverInterface : public IPipelineInterface
 {
   public:
-    BaseSeamCarverInterface(EPipelineQueueType queueType,
-                            std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
+    BaseSeamCarverInterface(EPipelineQueueType queueType, PipelineSenderReceiver* pSenderReceiver);
 
     ~BaseSeamCarverInterface();
 
-    virtual void addNewDataToPipeline(std::shared_ptr<BasePipelineData> pPipelineData) override;
+    virtual void addNewDataToPipeline(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
-    virtual std::shared_ptr<BasePipelineData> getOutputFromPipeline();
+    virtual std::unique_ptr<BasePipelineData> getOutputFromPipeline();
 
     virtual bool doesNewResultExist() const;
 
@@ -35,7 +34,7 @@ class BaseSeamCarverInterface : public IPipelineInterface
 
     uint32_t frameNumber_;
 
-    std::shared_ptr<PipelineSenderReceiver> pSenderReceiver_;
+    PipelineSenderReceiver* pSenderReceiver_;
 };
 
 }  // namespace sc

@@ -10,14 +10,14 @@
 #include "SeamCarverProcessorFactory.hpp"
 
 using std::dynamic_pointer_cast;
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
 {
 VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
-    shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+    PipelineSenderReceiver* pSenderReceiver)
     : bPipelineCreated_(false), pSenderReceiver_(pSenderReceiver)
 {
 }
@@ -33,18 +33,18 @@ void VerticalSeamCarverPipelineBuilder::createPipeline()
     createStage(EPipelineStageId::STAGE_4, EPipelineQueueType::QUEUE_TYPE_FIFO);
 }
 
-shared_ptr<IPipelineInterface> VerticalSeamCarverPipelineBuilder::createPipelineInterface()
+unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelineInterface()
 {
     if (pPipelineInterface_ == nullptr)
     {
-        pPipelineInterface_ = make_shared<BaseSeamCarverInterface>(
+        pPipelineInterface_ = make_unique<BaseSeamCarverInterface>(
             EPipelineQueueType::QUEUE_TYPE_FIFO, pSenderReceiver_);
     }
 
     return pPipelineInterface_;
 }
 
-vector<shared_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages(
+vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages(
     EPipelineStageId stageId) const
 {
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
@@ -63,16 +63,16 @@ void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
     auto pProcessor = SeamCarverProcessorFactory::getFactoryInstance().createStage(stageId);
 
     auto pBaseStage =
-        make_shared<SeamCarverBaseStage>(stageId, queueType, pSenderReceiver_, pProcessor);
+        make_unique<SeamCarverBaseStage>(stageId, queueType, pSenderReceiver_, pProcessor);
 
     // create a vector if it hasn't been used before
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
     {
         stageIdToVectorOfPipelineStages_[stageId] =
-            make_shared<vector<shared_ptr<IPipelineStage>>>();
+            make_unique<vector<unique_ptr<IPipelineStage>>>();
     }
 
-    stageIdToVectorOfPipelineStages_[stageId]->push_back(pBaseStage);
+    stageIdToVectorOfPipelineStages_[stageId]->push_back(move(pBaseStage));
 }
 
 }  // namespace sc

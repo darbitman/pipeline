@@ -16,9 +16,13 @@ class BasePipelineMessage
 
     virtual EPipelineMessageType getMessageType() const = 0;
 
-    virtual std::shared_ptr<BasePipelineData> getPipelineData() const = 0;
+    virtual std::unique_ptr<BasePipelineData>& getData() = 0;
 
-    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) = 0;
+    virtual BasePipelineData* releasePipelineData() = 0;
+
+    virtual void resetPipelineData() = 0;
+
+    virtual void setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) = 0;
 
     virtual void setSource(EPipelineStageId source) = 0;
 

@@ -11,13 +11,14 @@
 
 using cv::Mat;
 using std::dynamic_pointer_cast;
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::move;
+using std::unique_ptr;
 
 namespace sc
 {
 BaseSeamCarverInterface::BaseSeamCarverInterface(EPipelineQueueType queueType,
-                                                 shared_ptr<PipelineSenderReceiver> pSenderReceiver)
+                                                 PipelineSenderReceiver* pSenderReceiver)
     : thisStageId_(EPipelineStageId::INTERFACE_STAGE),
       queueType_(queueType),
       totalDatObjectsInPipeline_(0),
@@ -28,23 +29,24 @@ BaseSeamCarverInterface::BaseSeamCarverInterface(EPipelineQueueType queueType,
 
 BaseSeamCarverInterface::~BaseSeamCarverInterface() {}
 
-void BaseSeamCarverInterface::addNewDataToPipeline(shared_ptr<BasePipelineData> pPipelineData)
+void BaseSeamCarverInterface::addNewDataToPipeline(unique_ptr<BasePipelineData>& pPipelineData)
 {
     if (pSenderReceiver_ != nullptr)
     {
         // create a new message to hold the BasePipelineData
-        auto pMessage = make_shared<PipelineDataMessage>(thisStageId_, EPipelineStageId::STAGE_0,
-                                                         pPipelineData);
+        unique_ptr<BasePipelineMessage> pMessage = make_unique<PipelineDataMessage>(
+            thisStageId_, EPipelineStageId::STAGE_0, pPipelineData);
 
         pSenderReceiver_->send(pMessage);
     }
 }
 
-shared_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFromPipeline()
+unique_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFromPipeline()
 {
     if (doesNewResultExist())
     {
-        return pSenderReceiver_->receive(thisStageId_)->getPipelineData();
+        auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
+        return unique_ptr<BasePipelineData>(pReceivedMessage->releasePipelineData());
     }
     else
     {

@@ -7,16 +7,16 @@
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
-using std::shared_ptr;
+using std::move;
+using std::unique_ptr;
 
 namespace sc
 {
-SeamCarverBaseStage::SeamCarverBaseStage(
-    EPipelineStageId thisStageId, EPipelineQueueType queueType,
-    shared_ptr<PipelineSenderReceiver> pSenderReceiver,
-    std::shared_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor)
+SeamCarverBaseStage::SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+                                         PipelineSenderReceiver* pSenderReceiver,
+                                         unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),
-      pSeamCarverDataProcessor_(pSeamCarverDataProcessor)
+      pSeamCarverDataProcessor_(move(pSeamCarverDataProcessor))
 {
 }
 
@@ -32,24 +32,19 @@ bool SeamCarverBaseStage::isInitialized() const { return BasePipelineStage::isIn
 
 bool SeamCarverBaseStage::isRunning() const { return BasePipelineStage::isRunning(); }
 
-void SeamCarverBaseStage::processData(shared_ptr<BasePipelineData> pData)
+void SeamCarverBaseStage::processData(std::unique_ptr<BasePipelineData>& pData)
 {
     if (pSeamCarverDataProcessor_ != nullptr)
     {
-        pSeamCarverDataProcessor_->runSeamCarverProcessor(
-            dynamic_pointer_cast<VerticalSeamCarverData>(pData));
+        pSeamCarverDataProcessor_->runSeamCarverProcessor(pData.get());
     }
 }
 
-void SeamCarverBaseStage::processMessage(shared_ptr<BasePipelineMessage> pMessage)
+void SeamCarverBaseStage::processMessage(unique_ptr<BasePipelineMessage>& pMessage)
 {
-    if (pMessage == nullptr || pSeamCarverDataProcessor_ == nullptr)
+    if (pMessage != nullptr && pSeamCarverDataProcessor_ != nullptr)
     {
-        return;
-    }
-    else
-    {
-        auto pData = dynamic_pointer_cast<VerticalSeamCarverData>(pMessage->getPipelineData());
+        processData(pMessage->getData());
     }
 }
 

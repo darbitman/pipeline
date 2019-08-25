@@ -16,9 +16,9 @@ class IPipelineStageBuilder
 
     virtual void createPipeline() = 0;
 
-    virtual std::shared_ptr<IPipelineInterface> createPipelineInterface() = 0;
+    virtual std::unique_ptr<IPipelineInterface>& createPipelineInterface() = 0;
 
-    virtual std::vector<std::shared_ptr<IPipelineStage>>* getStages(
+    virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(
         EPipelineStageId stageId) const = 0;
 };
 

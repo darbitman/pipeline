@@ -12,7 +12,7 @@ class ISeamCarverDataProcessor
   public:
     virtual ~ISeamCarverDataProcessor();
 
-    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) = 0;
+    virtual void runSeamCarverProcessor(BasePipelineData* pData) = 0;
 };
 }  // namespace sc
 

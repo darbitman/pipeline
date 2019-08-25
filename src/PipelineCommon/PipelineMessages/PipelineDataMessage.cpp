@@ -5,29 +5,35 @@
 #include "BasePipelineData.hpp"
 #include "PipelineCommon.hpp"
 
-using std::shared_ptr;
+using std::move;
+using std::unique_ptr;
 
 namespace sc
 {
 PipelineDataMessage::PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
-                                         shared_ptr<BasePipelineData> pPipelineData)
+                                         unique_ptr<BasePipelineData>& pPipelineData)
     : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA),
       source_(source),
       destination_(destination),
       messageNumber_(0),
-      pPipelineData_(pPipelineData)
+      pPipelineData_(move(pPipelineData))
 {
 }
 
 PipelineDataMessage::~PipelineDataMessage() {}
 
+unique_ptr<BasePipelineData>& PipelineDataMessage::getData() { return pPipelineData_; }
+
 EPipelineMessageType PipelineDataMessage::getMessageType() const { return messageType_; }
 
-shared_ptr<BasePipelineData> PipelineDataMessage::getPipelineData() const { return pPipelineData_; }
+BasePipelineData* PipelineDataMessage::releasePipelineData() { return pPipelineData_.release(); }
 
-void PipelineDataMessage::setPipelineData(shared_ptr<BasePipelineData> pPipelineData)
+void PipelineDataMessage::resetPipelineData() { pPipelineData_.reset(nullptr); }
+
+void PipelineDataMessage::setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData)
 {
-    pPipelineData_ = pPipelineData;
+    pPipelineData_.reset(nullptr);
+    pPipelineData_.swap(pPipelineData);
 }
 
 void PipelineDataMessage::setSource(EPipelineStageId source) { source_ = source; }

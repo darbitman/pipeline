@@ -5,8 +5,8 @@
 #include "VerticalSeamCarverData.hpp"
 
 using std::dynamic_pointer_cast;
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 
 namespace sc
 {
@@ -14,7 +14,7 @@ SeamFinder::SeamFinder() {}
 
 SeamFinder::~SeamFinder() {}
 
-void SeamFinder::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
+void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
 {
     // TODO
 }

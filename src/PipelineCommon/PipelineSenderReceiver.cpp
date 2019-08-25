@@ -6,11 +6,12 @@
 
 #include "PipelineQueueManager.hpp"
 
-using std::make_shared;
+using std::make_unique;
+using std::move;
 using std::mutex;
-using std::shared_ptr;
 using std::thread;
 using std::unique_lock;
+using std::unique_ptr;
 
 namespace sc
 {
@@ -20,7 +21,7 @@ PipelineSenderReceiver::PipelineSenderReceiver()
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true)
 {
-    pQueueManager_ = make_shared<PipelineQueueManager>();
+    pQueueManager_ = make_unique<PipelineQueueManager>();
 }
 
 PipelineSenderReceiver::~PipelineSenderReceiver() {}
@@ -65,7 +66,7 @@ bool PipelineSenderReceiver::isInitialized() const { return bInitialized_; }
 
 bool PipelineSenderReceiver::isShutdown() const { return bReceiverThreadShutdown_; }
 
-bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
+bool PipelineSenderReceiver::send(unique_ptr<BasePipelineMessage>& dataToSend)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(thisStageId_) != 0)
@@ -76,7 +77,7 @@ bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
         auto pQueue = pQueueManager_->getQueue(queueId);
         if (pQueue != nullptr)
         {
-            pQueue->push(dataToSend);
+            pQueue->push(move(dataToSend));
             return true;
         }
         else
@@ -90,7 +91,7 @@ bool PipelineSenderReceiver::send(shared_ptr<BasePipelineMessage> dataToSend)
     }
 }
 
-shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId receivingStageId)
+unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId receivingStageId)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(receivingStageId) != 0)
@@ -102,7 +103,7 @@ shared_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId
 
         if (pQueue != nullptr)
         {
-            auto pReceivedMessage = pQueue->front();
+            unique_ptr<BasePipelineMessage> pReceivedMessage = move(pQueue->front());
             pQueue->pop();
             return pReceivedMessage;
         }
@@ -181,7 +182,7 @@ void PipelineSenderReceiver::receiverThread()
     bReceiverThreadShutdown_ = true;
 }
 
-void PipelineSenderReceiver::forwardMessage(shared_ptr<BasePipelineMessage> pMessage)
+void PipelineSenderReceiver::forwardMessage(unique_ptr<BasePipelineMessage>& pMessage)
 {
     auto destinationId = pMessage->getDestination();
 
@@ -195,7 +196,7 @@ void PipelineSenderReceiver::forwardMessage(shared_ptr<BasePipelineMessage> pMes
 
         if (pQueue != nullptr)
         {
-            pQueue->push(pMessage);
+            pQueue->push(move(pMessage));
         }
     }
 }

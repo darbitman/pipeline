@@ -13,7 +13,7 @@ namespace sc
 class SeamCarverProcessorFactory
 {
   public:
-    typedef std::shared_ptr<ISeamCarverDataProcessor> (*createProcessorFunction)();
+    typedef std::unique_ptr<ISeamCarverDataProcessor> (*createProcessorFunction)();
 
     static SeamCarverProcessorFactory& getFactoryInstance();
 
@@ -21,9 +21,9 @@ class SeamCarverProcessorFactory
 
     virtual bool isStageRegistered(EPipelineStageId stageId) const;
 
-    std::shared_ptr<ISeamCarverDataProcessor> createStage(EPipelineStageId stageId);
+    std::unique_ptr<ISeamCarverDataProcessor> createStage(EPipelineStageId stageId);
 
-    std::shared_ptr<std::vector<EPipelineStageId>> getVectorOfRegisteredStages() const;
+    std::unique_ptr<std::vector<EPipelineStageId>> getVectorOfRegisteredStages() const;
 
     // deleted to prevent misuse
     SeamCarverProcessorFactory(const SeamCarverProcessorFactory&) = delete;

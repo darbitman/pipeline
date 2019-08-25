@@ -74,23 +74,6 @@ target_link_libraries(
 
 
 add_executable(
-    ComputeEnergyStageTest
-    ${CMAKE_CURRENT_SOURCE_DIR}/ComputeEnergyStageTest.cpp
-)
-
-target_link_libraries(
-    ComputeEnergyStageTest
-    PRIVATE
-    gtest_main
-    "-Xlinker --start-group"
-    PipelineCommon
-    SeamCarver
-    ${OpenCV_LIBS}
-    "-Xlinker --end-group"
-)
-
-
-add_executable(
     SeamCarverProcessorFactoryTest
     ${CMAKE_CURRENT_SOURCE_DIR}/SeamCarverProcessorFactoryTest.cpp
 )

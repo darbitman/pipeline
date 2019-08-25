@@ -4,9 +4,9 @@
 #include <vector>
 
 using cv::Mat;
-using std::make_shared;
+using std::make_unique;
 using std::numeric_limits;
-using std::shared_ptr;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
@@ -58,14 +58,14 @@ void VerticalSeamCarverData::initialize()
     bNeedToInitializeLocalData = false;
 }
 
-void VerticalSeamCarverData::saveImage(shared_ptr<Mat> image)
+void VerticalSeamCarverData::saveImage(unique_ptr<Mat>& image)
 {
-    savedImage_ = make_shared<Mat>(image->clone());
+    savedImage_ = make_unique<Mat>(image->clone());
 }
 
-shared_ptr<Mat> VerticalSeamCarverData::getSavedImage(bool bReleaseOwnership)
+unique_ptr<Mat> VerticalSeamCarverData::getSavedImage(bool bReleaseOwnership)
 {
-    shared_ptr<Mat> frameToReturn(nullptr);
+    unique_ptr<Mat> frameToReturn(nullptr);
 
     // if clearing the underlying data, then need to make sure image doesn't get deallocated or
     // copied over
@@ -77,7 +77,7 @@ shared_ptr<Mat> VerticalSeamCarverData::getSavedImage(bool bReleaseOwnership)
     else
     {
         // create a copy to the image
-        frameToReturn = savedImage_;
+        frameToReturn = move(savedImage_);
     }
 
     return frameToReturn;

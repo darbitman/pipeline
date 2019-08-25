@@ -14,7 +14,7 @@ class SeamRemover : public ISeamCarverDataProcessor
 
     virtual ~SeamRemover();
 
-    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
+    virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 
     // deleted to prevent misuse
     SeamRemover(const SeamRemover&) = delete;
@@ -26,8 +26,10 @@ class SeamRemover : public ISeamCarverDataProcessor
     inline static const bool bRegistered_ =
         SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
             EPipelineStageId::STAGE_3, []() {
-                return std::dynamic_pointer_cast<ISeamCarverDataProcessor>(
-                    std::make_shared<SeamRemover>());
+                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                    std::make_unique<SeamRemover>();
+
+                return pNewSeamCarverDataProcessor;
             });
 };
 

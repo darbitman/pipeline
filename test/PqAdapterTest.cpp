@@ -27,14 +27,14 @@ class PqAdapterTest : public ::testing::Test
   protected:
     virtual void SetUp()
     {
-        pPQueue_ = make_unique<PriorityQueue<int32_t, less<int32_t>>>(pqCapacity_);
+        pPQueue_ = make_unique<PriorityQueue<uint32_t, less<uint32_t>>>(pqCapacity_);
 
-        pAdapter_ = make_unique<SharedPriorityQueueAdapter<int32_t, less<int32_t>>>(pPQueue_);
+        pAdapter_ = make_unique<SharedPriorityQueueAdapter<uint32_t, less<uint32_t>>>(pPQueue_);
     }
 
-    unique_ptr<PriorityQueue<int32_t, less<int32_t>>> pPQueue_;
+    unique_ptr<PriorityQueue<uint32_t, less<uint32_t>>> pPQueue_;
 
-    unique_ptr<SharedPriorityQueueAdapter<int32_t, less<int32_t>>> pAdapter_;
+    unique_ptr<SharedPriorityQueueAdapter<uint32_t, less<uint32_t>>> pAdapter_;
 
     const size_t pqCapacity_;
 };
@@ -48,7 +48,7 @@ TEST_F(PqAdapterTest, EmptyOnCreation)
 
 TEST_F(PqAdapterTest, MinOrientedPq)
 {
-    priority_queue<int32_t, vector<int32_t>, greater<int32_t>> randomFrameNumbers;
+    priority_queue<uint32_t, vector<uint32_t>, greater<int32_t>> randomFrameNumbers;
 
     // generate random numbers and place them into the pq under test and the general pq from std
     for (int32_t i = 0; i < 10; ++i)

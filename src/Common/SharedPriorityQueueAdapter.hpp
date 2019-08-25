@@ -129,7 +129,7 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 
     mutable std::condition_variable cv_;
 
-    std::shared_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizeMinPQ_;
+    std::unique_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizeMinPQ_;
 };
 
 }  // namespace sc

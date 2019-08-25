@@ -4,7 +4,7 @@
 
 #include "PipelineCommon.hpp"
 
-using std::shared_ptr;
+using std::unique_ptr;
 
 namespace sc
 {
@@ -17,11 +17,15 @@ ShutdownMessage::ShutdownMessage(EPipelineStageId destination)
 
 ShutdownMessage::~ShutdownMessage() {}
 
+unique_ptr<BasePipelineData>& ShutdownMessage::getData() { return pPipelineData_; }
+
 EPipelineMessageType ShutdownMessage::getMessageType() const { return messageType_; }
 
-shared_ptr<BasePipelineData> ShutdownMessage::getPipelineData() const { return nullptr; }
+BasePipelineData* ShutdownMessage::releasePipelineData() { return nullptr; }
 
-void ShutdownMessage::setPipelineData(shared_ptr<BasePipelineData> pPipelineData) { return; }
+void ShutdownMessage::resetPipelineData() {}
+
+void ShutdownMessage::setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) {}
 
 void ShutdownMessage::setSource(EPipelineStageId source) { source_ = source; }
 

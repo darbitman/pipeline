@@ -16,11 +16,15 @@ class ShutdownMessage : public BasePipelineMessage
 
     virtual ~ShutdownMessage();
 
+    virtual std::unique_ptr<BasePipelineData>& getData() override;
+
     virtual EPipelineMessageType getMessageType() const override;
 
-    virtual std::shared_ptr<BasePipelineData> getPipelineData() const override;
+    virtual BasePipelineData* releasePipelineData() override;
 
-    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
+    virtual void resetPipelineData() override;
+
+    virtual void setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
     virtual void setSource(EPipelineStageId source) override;
 
@@ -48,6 +52,8 @@ class ShutdownMessage : public BasePipelineMessage
     EPipelineStageId destination_;
 
     int32_t messageNumber_;
+
+    std::unique_ptr<BasePipelineData> pPipelineData_;
 };
 }  // namespace sc
 

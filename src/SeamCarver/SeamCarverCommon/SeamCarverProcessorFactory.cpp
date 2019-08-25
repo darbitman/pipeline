@@ -7,8 +7,8 @@
 #include "PipelineCommon.hpp"
 #include "SeamCarverDataProcessors.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
@@ -36,10 +36,10 @@ bool SeamCarverProcessorFactory::isStageRegistered(EPipelineStageId stageId) con
     return (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0);
 }
 
-shared_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
+unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
     EPipelineStageId stageId)
 {
-    shared_ptr<ISeamCarverDataProcessor> p_new_stage(nullptr);
+    unique_ptr<ISeamCarverDataProcessor> p_new_stage(nullptr);
 
     if (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0)
     {
@@ -49,9 +49,9 @@ shared_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
     return p_new_stage;
 }
 
-shared_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages() const
+unique_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages() const
 {
-    auto pStageIds = make_shared<vector<EPipelineStageId>>();
+    auto pStageIds = make_unique<vector<EPipelineStageId>>();
 
     auto iter = stageIdToCreateProcessorFunctionMap_.begin();
     auto iterEnd = stageIdToCreateProcessorFunctionMap_.end();

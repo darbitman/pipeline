@@ -9,10 +9,10 @@
 
 using cv::Mat;
 using std::dynamic_pointer_cast;
-using std::make_shared;
+using std::make_unique;
 using std::ref;
-using std::shared_ptr;
 using std::thread;
+using std::unique_ptr;
 using std::vector;
 
 namespace sc
@@ -21,25 +21,26 @@ ComputeEnergy::ComputeEnergy() {}
 
 ComputeEnergy::~ComputeEnergy() {}
 
-void ComputeEnergy::runSeamCarverProcessor(shared_ptr<VerticalSeamCarverData> pData)
+void ComputeEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
-    if (pData == nullptr)
+    auto pSeamCarverData = dynamic_cast<VerticalSeamCarverData*>(pData);
+
+    if (pSeamCarverData != nullptr)
     {
-        return;
+        // set local data members for the computation
+        numRows_ = pSeamCarverData->getNumberOfRows();
+        numColumns_ = pSeamCarverData->getNumberOfColumns();
+        bottomRow_ = pSeamCarverData->getBottomRowIndex();
+        rightColumn_ = pSeamCarverData->getRightColumnIndex();
+        numColorChannels_ = pSeamCarverData->getNumberOfColorChannels();
+        marginEnergy_ = pSeamCarverData->getEdgePixelEnergy();
+
+        calculatePixelEnergy(pSeamCarverData->getSavedImage(),
+                             pSeamCarverData->getPixelEnergy2DVector());
     }
-
-    // set local data members for the computation
-    numRows_ = pData->getNumberOfRows();
-    numColumns_ = pData->getNumberOfColumns();
-    bottomRow_ = pData->getBottomRowIndex();
-    rightColumn_ = pData->getRightColumnIndex();
-    numColorChannels_ = pData->getNumberOfColorChannels();
-    marginEnergy_ = pData->getEdgePixelEnergy();
-
-    calculatePixelEnergy(pData->getSavedImage(), pData->getPixelEnergy2DVector());
 }
 
-void ComputeEnergy::calculatePixelEnergy(const shared_ptr<const Mat>& image,
+void ComputeEnergy::calculatePixelEnergy(const unique_ptr<const Mat>& image,
                                          vector<vector<double>>& outPixelEnergy)
 {
     // if more columns, split calculation into 2 operations to calculate for every row
@@ -72,7 +73,7 @@ void ComputeEnergy::calculatePixelEnergy(const shared_ptr<const Mat>& image,
     }
 }
 
-void ComputeEnergy::calculatePixelEnergyForEveryRow(const shared_ptr<const Mat>& image,
+void ComputeEnergy::calculatePixelEnergyForEveryRow(const unique_ptr<const Mat>& image,
                                                     vector<vector<double>>& outPixelEnergy,
                                                     bool bDoOddColumns)
 {
@@ -222,7 +223,7 @@ void ComputeEnergy::calculatePixelEnergyForEveryRow(const shared_ptr<const Mat>&
     }
 }
 
-void ComputeEnergy::calculatePixelEnergyForEveryColumn(const shared_ptr<const Mat>& image,
+void ComputeEnergy::calculatePixelEnergyForEveryColumn(const unique_ptr<const Mat>& image,
                                                        vector<vector<double>>& outPixelEnergy,
                                                        bool bDoOddRows)
 {

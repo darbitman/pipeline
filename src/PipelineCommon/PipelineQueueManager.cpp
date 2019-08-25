@@ -11,12 +11,8 @@
 #include "SharedPriorityQueueAdapter.hpp"
 #include "SharedQueue.hpp"
 
-using std::dynamic_pointer_cast;
-using std::make_shared;
 using std::make_unique;
 using std::mutex;
-using std::shared_ptr;
-using std::static_pointer_cast;
 using std::unique_lock;
 using std::unique_ptr;
 using std::vector;

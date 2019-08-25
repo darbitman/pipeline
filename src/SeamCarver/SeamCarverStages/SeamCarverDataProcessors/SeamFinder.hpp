@@ -14,7 +14,7 @@ class SeamFinder : public ISeamCarverDataProcessor
 
     virtual ~SeamFinder();
 
-    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
+    virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 
     // deleted to prevent misuse
     SeamFinder(const SeamFinder&) = delete;
@@ -26,8 +26,10 @@ class SeamFinder : public ISeamCarverDataProcessor
     inline static const bool bRegistered_ =
         SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
             EPipelineStageId::STAGE_2, []() {
-                return std::dynamic_pointer_cast<ISeamCarverDataProcessor>(
-                    std::make_shared<SeamFinder>());
+                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                    std::make_unique<SeamFinder>();
+
+                return pNewSeamCarverDataProcessor;
             });
 };
 

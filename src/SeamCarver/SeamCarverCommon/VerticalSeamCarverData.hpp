@@ -33,14 +33,14 @@ class VerticalSeamCarverData : public BasePipelineData
      * @brief save the image to internal data store
      * @param image the image to store internally for processing
      */
-    virtual void saveImage(std::shared_ptr<cv::Mat> image);
+    virtual void saveImage(std::unique_ptr<cv::Mat>& image);
 
     /**
      * @brief returns the saved image
      * @bool bReleaseOwnership indicates whether or not to release ownership of the image
-     * @return std::shared_ptr<cv::Mat>
+     * @return std::unique_ptr<cv::Mat>
      */
-    virtual std::shared_ptr<cv::Mat> getSavedImage(bool bReleaseOwnership = true);
+    virtual std::unique_ptr<cv::Mat> getSavedImage(bool bReleaseOwnership = true);
 
     /*
      * @brief reset internal data structures to their clean state
@@ -157,7 +157,7 @@ class VerticalSeamCarverData : public BasePipelineData
     uint32_t frameNumber_;
 
     // stores the image and output result
-    std::shared_ptr<cv::Mat> savedImage_;
+    std::unique_ptr<cv::Mat> savedImage_;
 };
 }  // namespace sc
 

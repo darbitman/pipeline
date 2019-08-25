@@ -17,25 +17,25 @@ class PipelineSenderReceiver
   public:
     PipelineSenderReceiver();
 
-    virtual ~PipelineSenderReceiver();
+    ~PipelineSenderReceiver();
 
-    virtual void initialize();
+    void initialize();
 
-    virtual void registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType);
+    void registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType);
 
-    virtual void unregisterStage(EPipelineStageId stageId);
+    void unregisterStage(EPipelineStageId stageId);
 
-    virtual bool isStageRegistered(EPipelineStageId stageId);
+    bool isStageRegistered(EPipelineStageId stageId);
 
-    virtual bool isInitialized() const;
+    bool isInitialized() const;
 
-    virtual bool isShutdown() const;
+    bool isShutdown() const;
 
-    virtual bool send(std::shared_ptr<BasePipelineMessage> dataToSend);
+    bool send(std::unique_ptr<BasePipelineMessage>& dataToSend);
 
-    virtual std::shared_ptr<BasePipelineMessage> receive(EPipelineStageId receivingStageId);
+    std::unique_ptr<BasePipelineMessage> receive(EPipelineStageId receivingStageId);
 
-    virtual bool canReceive(EPipelineStageId receivingStageId) const;
+    bool canReceive(EPipelineStageId receivingStageId) const;
 
     // deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
@@ -52,7 +52,7 @@ class PipelineSenderReceiver
 
     std::atomic<bool> bReceiverThreadShutdown_;
 
-    std::shared_ptr<PipelineQueueManager> pQueueManager_;
+    std::unique_ptr<PipelineQueueManager> pQueueManager_;
 
     std::unordered_map<EPipelineStageId, int32_t> stageIdToQueueIdMap_;
 
@@ -60,8 +60,9 @@ class PipelineSenderReceiver
 
     void receiverThread();
 
-    void forwardMessage(std::shared_ptr<BasePipelineMessage> pMessage);
+    void forwardMessage(std::unique_ptr<BasePipelineMessage>& pMessage);
 };
+
 }  // namespace sc
 
 #endif

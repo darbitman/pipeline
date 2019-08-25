@@ -15,23 +15,27 @@ class PipelineDataMessage : public BasePipelineMessage
   public:
     struct MessageNumberLessComparator
     {
-        bool operator()(std::shared_ptr<const BasePipelineMessage> pM1,
-                        std::shared_ptr<const BasePipelineMessage> pM2)
+        bool operator()(std::unique_ptr<BasePipelineMessage>& pM1,
+                        std::unique_ptr<BasePipelineMessage>& pM2)
         {
             return (pM1->getMessageNumber() < pM2->getMessageNumber());
         }
     };
 
     PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
-                        std::shared_ptr<BasePipelineData> pPipelineData);
+                        std::unique_ptr<BasePipelineData>& pPipelineData);
 
     ~PipelineDataMessage();
 
+    virtual std::unique_ptr<BasePipelineData>& getData() override;
+
     virtual EPipelineMessageType getMessageType() const override;
 
-    virtual std::shared_ptr<BasePipelineData> getPipelineData() const override;
+    virtual BasePipelineData* releasePipelineData() override;
 
-    virtual void setPipelineData(std::shared_ptr<BasePipelineData> pPipelineData) override;
+    virtual void resetPipelineData() override;
+
+    virtual void setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
     virtual void setSource(EPipelineStageId source) override;
 
@@ -60,7 +64,7 @@ class PipelineDataMessage : public BasePipelineMessage
 
     int32_t messageNumber_;
 
-    std::shared_ptr<BasePipelineData> pPipelineData_;
+    std::unique_ptr<BasePipelineData> pPipelineData_;
 };
 
 }  // namespace sc

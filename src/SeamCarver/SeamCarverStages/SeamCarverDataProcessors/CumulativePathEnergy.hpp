@@ -14,7 +14,7 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
 
     virtual ~CumulativePathEnergy();
 
-    virtual void runSeamCarverProcessor(std::shared_ptr<VerticalSeamCarverData> pData) override;
+    virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 
     // deleted to prevent misuse
     CumulativePathEnergy(const CumulativePathEnergy&) = delete;
@@ -26,8 +26,10 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
     inline static const bool bRegistered_ =
         SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
             EPipelineStageId::STAGE_1, []() {
-                return std::dynamic_pointer_cast<ISeamCarverDataProcessor>(
-                    std::make_shared<CumulativePathEnergy>());
+                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                    std::make_unique<CumulativePathEnergy>();
+
+                return pNewSeamCarverDataProcessor;
             });
 };
 

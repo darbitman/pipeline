@@ -12,15 +12,15 @@ namespace sc
 class SeamCarverStageFactory
 {
   public:
-    typedef std::shared_ptr<IPipelineStage> (*createStageFunction)(
-        std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
+    typedef std::unique_ptr<IPipelineStage> (*createStageFunction)(
+        PipelineSenderReceiver* pSenderReceiver);
 
     static SeamCarverStageFactory& getFactoryInstance();
 
     virtual bool registerNewStage(uint32_t stageId, createStageFunction function);
 
-    virtual std::shared_ptr<IPipelineStage> createStage(
-        EPipelineStageId stageId, std::shared_ptr<PipelineSenderReceiver> pSenderReceiver);
+    virtual std::unique_ptr<IPipelineStage> createStage(EPipelineStageId stageId,
+                                                        PipelineSenderReceiver* pSenderReceiver);
 
     // deleted to prevent misuse
     SeamCarverStageFactory(const SeamCarverStageFactory&) = delete;
