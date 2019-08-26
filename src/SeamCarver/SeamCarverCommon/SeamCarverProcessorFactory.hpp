@@ -13,7 +13,7 @@ namespace sc
 class SeamCarverProcessorFactory
 {
   public:
-    typedef std::unique_ptr<ISeamCarverDataProcessor> (*createProcessorFunction)();
+    using createProcessorFunction = std::unique_ptr<ISeamCarverDataProcessor> (*)();
 
     static SeamCarverProcessorFactory& getFactoryInstance();
 

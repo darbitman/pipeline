@@ -14,9 +14,9 @@ namespace sc
 class ComputeEnergy : public ISeamCarverDataProcessor
 {
   public:
-    ComputeEnergy();
+    ComputeEnergy() = default;
 
-    virtual ~ComputeEnergy();
+    virtual ~ComputeEnergy() override = default;
 
     virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 

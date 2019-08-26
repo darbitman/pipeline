@@ -17,17 +17,13 @@ class SeamCarverBaseStage : public BasePipelineStage
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor);
 
-    virtual ~SeamCarverBaseStage() override;
+    virtual ~SeamCarverBaseStage() override = default;
 
-    virtual void initialize() override;
-
-    virtual void runStage() override;
-
-    virtual void stopStage() override;
-
-    virtual bool isInitialized() const override;
-
-    virtual bool isRunning() const override;
+    using BasePipelineStage::initialize;
+    using BasePipelineStage::isInitialized;
+    using BasePipelineStage::isRunning;
+    using BasePipelineStage::runStage;
+    using BasePipelineStage::stopStage;
 
     // deleted to prevent misuse
     SeamCarverBaseStage(const SeamCarverBaseStage&) = delete;
@@ -36,9 +32,6 @@ class SeamCarverBaseStage : public BasePipelineStage
     SeamCarverBaseStage& operator=(SeamCarverBaseStage&&) = delete;
 
   protected:
-    /**
-     * @brief method that calls the SeamCarverDataProcessor
-     */
     virtual void processData(std::unique_ptr<BasePipelineData>& pData) override;
 
     virtual void processMessage(std::unique_ptr<BasePipelineMessage>& pMessage) override;

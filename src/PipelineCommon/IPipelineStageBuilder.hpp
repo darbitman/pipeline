@@ -12,7 +12,7 @@ namespace sc
 class IPipelineStageBuilder
 {
   public:
-    virtual ~IPipelineStageBuilder();
+    virtual ~IPipelineStageBuilder() = 0;
 
     virtual void createPipeline() = 0;
 

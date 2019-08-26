@@ -15,7 +15,7 @@ class BaseSeamCarverInterface : public IPipelineInterface
   public:
     BaseSeamCarverInterface(EPipelineQueueType queueType, PipelineSenderReceiver* pSenderReceiver);
 
-    ~BaseSeamCarverInterface();
+    ~BaseSeamCarverInterface() = default;
 
     virtual void addNewDataToPipeline(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
@@ -30,7 +30,7 @@ class BaseSeamCarverInterface : public IPipelineInterface
 
     const EPipelineQueueType queueType_;
 
-    size_t totalDatObjectsInPipeline_;
+    size_t totalDataObjectsInPipeline_;
 
     uint32_t frameNumber_;
 

@@ -21,13 +21,11 @@ BaseSeamCarverInterface::BaseSeamCarverInterface(EPipelineQueueType queueType,
                                                  PipelineSenderReceiver* pSenderReceiver)
     : thisStageId_(EPipelineStageId::INTERFACE_STAGE),
       queueType_(queueType),
-      totalDatObjectsInPipeline_(0),
+      totalDataObjectsInPipeline_(0),
       frameNumber_(0),
       pSenderReceiver_(pSenderReceiver)
 {
 }
-
-BaseSeamCarverInterface::~BaseSeamCarverInterface() {}
 
 void BaseSeamCarverInterface::addNewDataToPipeline(unique_ptr<BasePipelineData>& pPipelineData)
 {
@@ -50,7 +48,7 @@ unique_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFromPipeline()
     }
     else
     {
-        return nullptr;
+        return unique_ptr<BasePipelineData>();
     }
 }
 
@@ -61,7 +59,7 @@ bool BaseSeamCarverInterface::doesNewResultExist() const
 
 size_t BaseSeamCarverInterface::getNumberOfDataObjectsInPipeline() const
 {
-    return totalDatObjectsInPipeline_;
+    return totalDataObjectsInPipeline_;
 }
 
 }  // namespace sc

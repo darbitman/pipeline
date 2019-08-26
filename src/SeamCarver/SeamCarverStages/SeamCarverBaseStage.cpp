@@ -12,25 +12,14 @@ using std::unique_ptr;
 
 namespace sc
 {
-SeamCarverBaseStage::SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
-                                         PipelineSenderReceiver* pSenderReceiver,
-                                         unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor)
+SeamCarverBaseStage::SeamCarverBaseStage(
+    EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    PipelineSenderReceiver* pSenderReceiver,
+    unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),
       pSeamCarverDataProcessor_(move(pSeamCarverDataProcessor))
 {
 }
-
-SeamCarverBaseStage::~SeamCarverBaseStage() {}
-
-void SeamCarverBaseStage::initialize() { BasePipelineStage::initialize(); }
-
-void SeamCarverBaseStage::runStage() { BasePipelineStage::runStage(); }
-
-void SeamCarverBaseStage::stopStage() { BasePipelineStage::stopStage(); }
-
-bool SeamCarverBaseStage::isInitialized() const { return BasePipelineStage::isInitialized(); }
-
-bool SeamCarverBaseStage::isRunning() const { return BasePipelineStage::isRunning(); }
 
 void SeamCarverBaseStage::processData(std::unique_ptr<BasePipelineData>& pData)
 {

@@ -93,22 +93,6 @@ target_link_libraries(
 
 
 add_executable(
-    SeamCarverStageFactoryTest
-    ${CMAKE_CURRENT_SOURCE_DIR}/SeamCarverStageFactoryTest.cpp
-)
-
-target_link_libraries(
-    SeamCarverStageFactoryTest
-    PRIVATE
-    gtest_main
-    "-Xlinker --start-group"
-    PipelineCommon
-    SeamCarver
-    ${OpenCV_LIBS}
-    "-Xlinker --end-group"
-)
-
-add_executable(
     VerticalSeamCarverPipelineBuilderTest
     ${CMAKE_CURRENT_SOURCE_DIR}/VerticalSeamCarverPipelineBuilderTest.cpp
 )

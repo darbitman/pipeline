@@ -17,7 +17,7 @@ class BasePipelineStage : public IPipelineStage
     explicit BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
                                PipelineSenderReceiver* pSenderReceiver);
 
-    virtual ~BasePipelineStage();
+    virtual ~BasePipelineStage() override;
 
     virtual void initialize() override;
 

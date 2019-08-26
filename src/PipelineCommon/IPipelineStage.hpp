@@ -10,7 +10,7 @@ namespace sc
 class IPipelineStage
 {
   public:
-    virtual ~IPipelineStage() {}
+    virtual ~IPipelineStage() = default;
 
     virtual void initialize() = 0;
 

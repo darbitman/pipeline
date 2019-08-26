@@ -17,10 +17,6 @@ using std::vector;
 
 namespace sc
 {
-ComputeEnergy::ComputeEnergy() {}
-
-ComputeEnergy::~ComputeEnergy() {}
-
 void ComputeEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
     auto pSeamCarverData = dynamic_cast<VerticalSeamCarverData*>(pData);
