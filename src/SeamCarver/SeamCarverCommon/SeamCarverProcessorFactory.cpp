@@ -13,11 +13,7 @@ using std::vector;
 
 namespace sc
 {
-SeamCarverProcessorFactory& SeamCarverProcessorFactory::getFactoryInstance()
-{
-    static SeamCarverProcessorFactory factory;
-    return factory;
-}
+
 
 bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
                                                   createProcessorFunction function)
@@ -31,7 +27,7 @@ bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
     return false;
 }
 
-bool SeamCarverProcessorFactory::isStageRegistered(EPipelineStageId stageId) const
+bool SeamCarverProcessorFactory::isStageRegistered(EPipelineStageId stageId)
 {
     return (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0);
 }
@@ -49,7 +45,7 @@ unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
     return p_new_stage;
 }
 
-unique_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages() const
+unique_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages()
 {
     auto pStageIds = make_unique<vector<EPipelineStageId>>();
 

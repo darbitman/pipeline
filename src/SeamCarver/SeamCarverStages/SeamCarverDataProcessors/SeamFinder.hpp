@@ -24,7 +24,7 @@ class SeamFinder : public ISeamCarverDataProcessor
 
   private:
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
+        SeamCarverProcessorFactory::registerNewStage(
             EPipelineStageId::STAGE_2, []() {
                 std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                     std::make_unique<SeamFinder>();

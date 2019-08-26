@@ -47,7 +47,7 @@ class ComputeEnergy : public ISeamCarverDataProcessor
                                             bool bDoOddRows);
 
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::getFactoryInstance().registerNewStage(
+        SeamCarverProcessorFactory::registerNewStage(
             EPipelineStageId::STAGE_0, []() {
                 std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                     std::make_unique<ComputeEnergy>();

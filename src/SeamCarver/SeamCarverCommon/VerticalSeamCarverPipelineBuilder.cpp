@@ -22,8 +22,6 @@ VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
 {
 }
 
-VerticalSeamCarverPipelineBuilder::~VerticalSeamCarverPipelineBuilder() {}
-
 void VerticalSeamCarverPipelineBuilder::createPipeline()
 {
     createStage(EPipelineStageId::STAGE_0, EPipelineQueueType::QUEUE_TYPE_FIFO);
@@ -60,11 +58,6 @@ vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages
 void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
                                                     EPipelineQueueType queueType)
 {
-    auto pProcessor = SeamCarverProcessorFactory::getFactoryInstance().createStage(stageId);
-
-    auto pBaseStage =
-        make_unique<SeamCarverBaseStage>(stageId, queueType, pSenderReceiver_, pProcessor);
-
     // create a vector if it hasn't been used before
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
     {
@@ -72,7 +65,15 @@ void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
             make_unique<vector<unique_ptr<IPipelineStage>>>();
     }
 
-    stageIdToVectorOfPipelineStages_[stageId]->push_back(move(pBaseStage));
+    auto pProcessor = SeamCarverProcessorFactory::createStage(stageId);
+
+    if (pProcessor != nullptr)
+    {
+        unique_ptr<IPipelineStage> pBaseStage =
+            make_unique<SeamCarverBaseStage>(stageId, queueType, pSenderReceiver_, pProcessor);
+
+        stageIdToVectorOfPipelineStages_[stageId]->push_back(move(pBaseStage));
+    }
 }
 
 }  // namespace sc

@@ -15,10 +15,9 @@ namespace sc
 class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
 {
   public:
-    explicit VerticalSeamCarverPipelineBuilder(
-        PipelineSenderReceiver* pSenderReceiver);
+    explicit VerticalSeamCarverPipelineBuilder(PipelineSenderReceiver* pSenderReceiver);
 
-    virtual ~VerticalSeamCarverPipelineBuilder();
+    virtual ~VerticalSeamCarverPipelineBuilder() = default;
 
     virtual void createPipeline() override;
 
@@ -40,7 +39,7 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
 
     PipelineSenderReceiver* pSenderReceiver_;
 
-    void createStage(EPipelineStageId stageId, EPipelineQueueType queueId);
+    void createStage(EPipelineStageId stageId, EPipelineQueueType queueType);
 };
 }  // namespace sc
 

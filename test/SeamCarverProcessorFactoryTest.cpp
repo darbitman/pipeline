@@ -14,7 +14,7 @@ namespace sc
 TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
 {
     auto pStage =
-        SeamCarverProcessorFactory::getFactoryInstance().createStage((EPipelineStageId)(-1));
+        SeamCarverProcessorFactory::createStage((EPipelineStageId)(-1));
 
     EXPECT_EQ(pStage, nullptr);
 }
@@ -22,16 +22,16 @@ TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
 TEST(SeamCarverProcessorFactoryTest, CreateValidStages)
 {
     auto pRegisteredStages =
-        SeamCarverProcessorFactory::getFactoryInstance().getVectorOfRegisteredStages();
+        SeamCarverProcessorFactory::getVectorOfRegisteredStages();
 
     for (size_t i = 0; i < pRegisteredStages->size(); ++i)
     {
-        EXPECT_EQ(SeamCarverProcessorFactory::getFactoryInstance().isStageRegistered(
+        EXPECT_EQ(SeamCarverProcessorFactory::isStageRegistered(
                       (*pRegisteredStages)[i]),
                   true);
 
         EXPECT_NE(
-            SeamCarverProcessorFactory::getFactoryInstance().createStage((*pRegisteredStages)[i]),
+            SeamCarverProcessorFactory::createStage((*pRegisteredStages)[i]),
             nullptr);
     }
 }
