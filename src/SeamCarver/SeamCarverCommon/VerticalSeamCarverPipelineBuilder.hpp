@@ -21,6 +21,8 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
 
     virtual void createPipeline() override;
 
+    virtual std::unique_ptr<IPipelineStage> createNewStage(EPipelineStageId stageId, EPipelineQueueType queueType) override;
+
     virtual std::unique_ptr<IPipelineInterface>& createPipelineInterface() override;
 
     virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(

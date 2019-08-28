@@ -24,8 +24,6 @@ PipelineSenderReceiver::PipelineSenderReceiver()
     pQueueManager_ = make_unique<PipelineQueueManager>();
 }
 
-PipelineSenderReceiver::~PipelineSenderReceiver() {}
-
 void PipelineSenderReceiver::initialize()
 {
     if (!bInitialized_)

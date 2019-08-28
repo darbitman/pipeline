@@ -17,7 +17,7 @@ class PipelineSenderReceiver
   public:
     PipelineSenderReceiver();
 
-    ~PipelineSenderReceiver();
+    ~PipelineSenderReceiver() = default;
 
     void initialize();
 
