@@ -17,6 +17,9 @@ class BaseSeamCarverInterface : public IPipelineInterface
 
     ~BaseSeamCarverInterface() = default;
 
+    /// @brief
+    /// @param pPipelineData This unique_ptr will no longer be the owner of the BasePipelineData. It
+    /// will be a nullptr.
     virtual void addNewDataToPipeline(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
     virtual std::unique_ptr<BasePipelineData> getOutputFromPipeline();

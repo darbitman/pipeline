@@ -35,6 +35,9 @@ void BaseSeamCarverInterface::addNewDataToPipeline(unique_ptr<BasePipelineData>&
         unique_ptr<BasePipelineMessage> pMessage = make_unique<PipelineDataMessage>(
             thisStageId_, EPipelineStageId::STAGE_0, pPipelineData);
 
+        // set its frame number
+        pMessage->setMessageNumber(frameNumber_++);
+
         pSenderReceiver_->send(pMessage);
     }
 }

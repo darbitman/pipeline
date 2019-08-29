@@ -21,8 +21,6 @@ namespace sc
 {
 PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
 
-PipelineQueueManager::~PipelineQueueManager() {}
-
 int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
 {
     unique_lock<mutex> mapLock(mapMutex_);
@@ -55,6 +53,18 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
     }
 
     return currentQueueId_;
+}
+
+bool PipelineQueueManager::deleteQueue(int32_t queueId)
+{
+    if (queueIdToQueueMap_.count(queueId) == 0)
+    {
+        return false;
+    }
+    else
+    {
+        queueIdToQueueMap_.erase(queueId);
+    }
 }
 
 SharedContainer<PipelineQueueManager::value_type>* PipelineQueueManager::getQueue(
