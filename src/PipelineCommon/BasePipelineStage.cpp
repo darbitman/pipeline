@@ -1,5 +1,6 @@
 #include "BasePipelineStage.hpp"
 
+#include <chrono>
 #include <thread>
 
 #include "BasePipelineData.hpp"
@@ -9,6 +10,8 @@ using std::make_unique;
 using std::thread;
 using std::unique_lock;
 using std::unique_ptr;
+using std::chrono::seconds;
+using std::this_thread::sleep_for;
 
 namespace sc
 {
@@ -18,6 +21,7 @@ BasePipelineStage::BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueu
       queueType_(queueType),
       bThreadIsRunning_(false),
       bIsInitialized_(false),
+      bThreadHasJoined_(false),
       pSenderReceiver_(pSenderReceiver)
 {
 }
@@ -37,7 +41,7 @@ void BasePipelineStage::runStage()
 {
     if (bIsInitialized_ && !bThreadIsRunning_)
     {
-        thread(&BasePipelineStage::runThread, this).detach();
+        processingThread_ = thread(&BasePipelineStage::runThread, this);
 
         // wait for thread to start
         while (!bThreadIsRunning_)
@@ -57,24 +61,29 @@ void BasePipelineStage::runThread()
 
     while (bThreadIsRunning_)
     {
+        // don't need to check if pSenderReceiver_ is a nullptr since this method (thread) can't be
+        // called/started if it's a nullptr
         auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
 
         if (pReceivedMessage != nullptr)
         {
             // check if message is destined to this stage
+            // if not, drop the message
             if (pReceivedMessage->getDestination() == thisStageId_)
             {
-                if (pReceivedMessage->getMessageType() ==
-                    EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                switch (pReceivedMessage->getMessageType())
                 {
-                    processMessage(pReceivedMessage);
+                    case EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA:
+                        processMessage(pReceivedMessage);
+                        pSenderReceiver_->send(pReceivedMessage);
+                        break;
 
-                    pSenderReceiver_->send(pReceivedMessage);
-                }
-                else if (pReceivedMessage->getMessageType() ==
-                         EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
-                {
-                    bThreadIsRunning_ = false;
+                    case EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN:
+                        bThreadIsRunning_ = false;
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -85,9 +94,32 @@ void BasePipelineStage::runThread()
 
 void BasePipelineStage::doStopStage()
 {
-    // create a ShutdownMessage and send to itself
-    unique_ptr<BasePipelineMessage> pShutdownMessage = make_unique<ShutdownMessage>(thisStageId_);
-    pSenderReceiver_->send(pShutdownMessage);
+    if (pSenderReceiver_ != nullptr)
+    {
+        // create a ShutdownMessage and send to itself
+        unique_ptr<BasePipelineMessage> pShutdownMessage =
+            make_unique<ShutdownMessage>(thisStageId_);
+        pSenderReceiver_->send(pShutdownMessage);
+    }
+    else
+    {
+        bThreadIsRunning_ = false;
+    }
+
+    if (!bThreadHasJoined_)
+    {
+        while (!processingThread_.joinable())
+            ;
+
+        processingThread_.join();
+
+        bThreadHasJoined_ = true;
+    }
+
+    if (bIsInitialized_)
+    {
+        bIsInitialized_ = false;
+    }
 }
 
 }  // namespace sc

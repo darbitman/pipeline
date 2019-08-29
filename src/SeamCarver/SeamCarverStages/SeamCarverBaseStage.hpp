@@ -17,6 +17,10 @@ class SeamCarverBaseStage : public BasePipelineStage
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor);
 
+    SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+                        PipelineSenderReceiver* pSenderReceiver,
+                        std::unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor);
+
     virtual ~SeamCarverBaseStage() override = default;
 
     using BasePipelineStage::initialize;

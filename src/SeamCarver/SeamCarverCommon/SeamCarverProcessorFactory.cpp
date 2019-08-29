@@ -13,8 +13,6 @@ using std::vector;
 
 namespace sc
 {
-
-
 bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
                                                   createProcessorFunction function)
 {
@@ -49,12 +47,9 @@ unique_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegi
 {
     auto pStageIds = make_unique<vector<EPipelineStageId>>();
 
-    auto iter = stageIdToCreateProcessorFunctionMap_.begin();
-    auto iterEnd = stageIdToCreateProcessorFunctionMap_.end();
-
-    for (; iter != iterEnd; ++iter)
+    for (auto& stageIdCreateProcessorPair : stageIdToCreateProcessorFunctionMap_)
     {
-        pStageIds->push_back(iter->first);
+        pStageIds->push_back(stageIdCreateProcessorPair.first);
     }
 
     return pStageIds;

@@ -21,6 +21,15 @@ SeamCarverBaseStage::SeamCarverBaseStage(
 {
 }
 
+SeamCarverBaseStage::SeamCarverBaseStage(
+    EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    PipelineSenderReceiver* pSenderReceiver,
+    unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor)
+    : BasePipelineStage(thisStageId, queueType, pSenderReceiver),
+      pSeamCarverDataProcessor_(move(pSeamCarverDataProcessor))
+{
+}
+
 void SeamCarverBaseStage::processData(std::unique_ptr<BasePipelineData>& pData)
 {
     if (pSeamCarverDataProcessor_ != nullptr)
