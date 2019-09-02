@@ -18,7 +18,7 @@ class SharedQueue : public SharedContainer<_Tp>
 
     virtual ~SharedQueue() = default;
 
-    virtual const _Tp& front() const override
+    [[nodiscard]] virtual const _Tp& front() const override
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -34,7 +34,7 @@ class SharedQueue : public SharedContainer<_Tp>
         return queue_.front();
     }
 
-    virtual _Tp& front() override
+    [[nodiscard]] virtual _Tp& front() override
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
@@ -50,14 +50,14 @@ class SharedQueue : public SharedContainer<_Tp>
         return queue_.front();
     }
 
-    virtual bool empty() const
+    [[nodiscard]] virtual bool empty() const
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
         return queue_.empty();
     }
 
-    virtual size_t size() const
+    [[nodiscard]] virtual size_t size() const
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
