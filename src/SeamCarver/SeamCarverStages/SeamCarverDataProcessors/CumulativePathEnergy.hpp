@@ -23,14 +23,22 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
     CumulativePathEnergy& operator=(CumulativePathEnergy&&) = delete;
 
   private:
-    inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerNewStage(
-            EPipelineStageId::STAGE_1, []() {
-                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
-                    std::make_unique<CumulativePathEnergy>();
+    // image dimensions
+    size_t numRows_;
+    size_t numColumns_;
+    size_t bottomRow_;
+    size_t rightColumn_;
+    size_t numColorChannels_;
+    double marginEnergy_;
+    double posInf_;
 
-                return pNewSeamCarverDataProcessor;
-            });
+    inline static const bool bRegistered_ =
+        SeamCarverProcessorFactory::registerNewStage(EPipelineStageId::STAGE_1, []() {
+            std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                std::make_unique<CumulativePathEnergy>();
+
+            return pNewSeamCarverDataProcessor;
+        });
 };
 
 }  // namespace sc

@@ -21,12 +21,10 @@ VerticalSeamCarverData::VerticalSeamCarverData(double marginEnergy)
       seamLength_(0),
       numSeamsToRemove_(0),
       marginEnergy_(marginEnergy),
-      frameNumber_(0)
+      frameNumber_(0),
+      posInf_(numeric_limits<double>::max())
 {
-    posInf_ = numeric_limits<double>::max();
 }
-
-VerticalSeamCarverData::~VerticalSeamCarverData() {}
 
 void VerticalSeamCarverData::initialize()
 {
@@ -159,5 +157,17 @@ size_t VerticalSeamCarverData::getNumberOfColorChannels() const { return numColo
 double VerticalSeamCarverData::getEdgePixelEnergy() const { return marginEnergy_; }
 
 vector<vector<double>>& VerticalSeamCarverData::getPixelEnergy2DVector() { return pixelEnergy; }
+
+vector<vector<bool>>& VerticalSeamCarverData::getMarkedPixel2DVector() { return markedPixels; }
+
+vector<vector<int32_t>>& VerticalSeamCarverData::getPreviousColumnToCurrentPixel2DVector()
+{
+    return columnTo;
+}
+
+vector<vector<double>>& VerticalSeamCarverData::getTotalEnergyToPixel2DVector()
+{
+    return totalEnergyTo;
+}
 
 }  // namespace sc

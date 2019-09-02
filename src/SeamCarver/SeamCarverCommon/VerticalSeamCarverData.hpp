@@ -16,7 +16,7 @@ class VerticalSeamCarverData : public BasePipelineData
   public:
     explicit VerticalSeamCarverData(double marginEnergy = 390150.0);
 
-    virtual ~VerticalSeamCarverData();
+    virtual ~VerticalSeamCarverData() = default;
 
     /**
      * @brief initialize internal data stores
@@ -96,34 +96,21 @@ class VerticalSeamCarverData : public BasePipelineData
 
     virtual double getEdgePixelEnergy() const;
 
-    // virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector() const;
+    virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector();
 
     virtual std::vector<std::vector<double>>& getPixelEnergy2DVector();
 
     // virtual std::vector<PriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
 
-    // virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector() const;
+    virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector();
 
-    // virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector() const;
+    virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector();
 
     /**********************************************************************************/
-    // vector to store pixels that have been previously markedPixels for removal
-    // will ignore these markedPixels pixels when searching for a new seam
-    std::vector<std::vector<bool>> markedPixels;
-
-    // individual pixel energy
-    std::vector<std::vector<double>> pixelEnergy;
-
     // vector of min oriented priority queues that store the location of the pixels to remove
     // the index to the vector corresponds to the rows
     // the column index is stored in the PQ
     std::vector<PriorityQueue<int32_t>> discoveredSeams;
-
-    // store cumulative energy to each pixel
-    std::vector<std::vector<double>> totalEnergyTo;
-
-    // store the column of the pixel in the "previous" row to get to the current pixel
-    std::vector<std::vector<int32_t>> columnTo;
 
     // store the current seam being discovered
     std::vector<size_t> currentSeam;
@@ -158,6 +145,19 @@ class VerticalSeamCarverData : public BasePipelineData
 
     // stores the image and output result
     std::unique_ptr<cv::Mat> savedImage_;
+
+    // vector to store pixels that have been previously markedPixels for removal
+    // will ignore these markedPixels pixels when searching for a new seam
+    std::vector<std::vector<bool>> markedPixels;
+
+    // individual pixel energy
+    std::vector<std::vector<double>> pixelEnergy;
+
+    // store cumulative energy to each pixel
+    std::vector<std::vector<double>> totalEnergyTo;
+
+    // store the column of the pixel in the "previous" row to get to the current pixel
+    std::vector<std::vector<int32_t>> columnTo;
 };
 }  // namespace sc
 
