@@ -30,10 +30,15 @@ class BasePipelineStage : public IPipelineStage
     /// BasePipelineStage was not initialized.
     virtual void runStage() override;
 
+    /// @brief This method stops the thread that reads the input queue
     virtual void stopStage() override;
 
+    /// @brief Returns the status of this stage
+    /// @return bool
     virtual bool isInitialized() const override;
 
+    /// @brief Returns the status of the thread
+    /// @return bool
     virtual bool isRunning() const override;
 
     // deleted to prevent misuse
