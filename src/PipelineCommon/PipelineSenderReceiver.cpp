@@ -19,9 +19,9 @@ PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
       thisStageId_(EPipelineStageId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
-      bReceiverThreadShutdown_(true)
+      bReceiverThreadShutdown_(true),
+      pQueueManager_(make_unique<PipelineQueueManager>())
 {
-    pQueueManager_ = make_unique<PipelineQueueManager>();
 }
 
 void PipelineSenderReceiver::initialize()
@@ -126,8 +126,7 @@ bool PipelineSenderReceiver::canReceive(EPipelineStageId receivingStageId) const
     auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
     mapLock.unlock();
 
-    auto pQueue = pQueueManager_->getQueue(queueId);
-    if (pQueue == nullptr)
+    if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue == nullptr)
     {
         return false;
     }
