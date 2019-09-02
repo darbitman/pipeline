@@ -10,9 +10,9 @@ namespace sc
 class CumulativePathEnergy : public ISeamCarverDataProcessor
 {
   public:
-    CumulativePathEnergy();
+    CumulativePathEnergy() = default;
 
-    virtual ~CumulativePathEnergy();
+    virtual ~CumulativePathEnergy() = default;
 
     virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 

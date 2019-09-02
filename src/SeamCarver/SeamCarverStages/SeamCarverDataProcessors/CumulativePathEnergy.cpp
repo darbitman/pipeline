@@ -10,10 +10,6 @@ using std::unique_ptr;
 
 namespace sc
 {
-CumulativePathEnergy::CumulativePathEnergy() {}
-
-CumulativePathEnergy::~CumulativePathEnergy() {}
-
 void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
     VerticalSeamCarverData* pSeamCarverData = static_cast<VerticalSeamCarverData*>(pData);
