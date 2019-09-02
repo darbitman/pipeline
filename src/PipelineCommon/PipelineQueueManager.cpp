@@ -64,6 +64,7 @@ bool PipelineQueueManager::deleteQueue(int32_t queueId)
     else
     {
         queueIdToQueueMap_.erase(queueId);
+        return true;
     }
 }
 
