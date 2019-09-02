@@ -27,14 +27,6 @@ class ComputeEnergy : public ISeamCarverDataProcessor
     ComputeEnergy& operator=(ComputeEnergy&&) = delete;
 
   private:
-    // image dimensions
-    size_t numRows_;
-    size_t numColumns_;
-    size_t bottomRow_;
-    size_t rightColumn_;
-    size_t numColorChannels_;
-    double marginEnergy_;
-
     void calculatePixelEnergy(const std::unique_ptr<const cv::Mat>& image,
                               std::vector<std::vector<double>>& outPixelEnergy);
 
@@ -46,14 +38,21 @@ class ComputeEnergy : public ISeamCarverDataProcessor
                                             std::vector<std::vector<double>>& outPixelEnergy,
                                             bool bDoOddRows);
 
-    inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerNewStage(
-            EPipelineStageId::STAGE_0, []() {
-                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
-                    std::make_unique<ComputeEnergy>();
+    // image dimensions
+    size_t numRows_;
+    size_t numColumns_;
+    size_t bottomRow_;
+    size_t rightColumn_;
+    size_t numColorChannels_;
+    double marginEnergy_;
 
-                return pNewSeamCarverDataProcessor;
-            });
+    inline static const bool bRegistered_ =
+        SeamCarverProcessorFactory::registerNewStage(EPipelineStageId::STAGE_0, []() {
+            std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                std::make_unique<ComputeEnergy>();
+
+            return pNewSeamCarverDataProcessor;
+        });
 };
 
 }  // namespace sc
