@@ -71,13 +71,13 @@ void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
         // find minimum energy path from previous row to every pixel in the current row
         for (size_t column = 0; column < numColumns_; ++column)
         {
-            // initialize min energy to +INF and initialize the previous column to -1
-            //   to set error state
+            // initialize min energy to +INF and initialize the previous column to -1 to set invalid
+            // state
             minEnergy = posInf_;
             minEnergyColumn = -1;
 
             // save some cycles by not doing any comparisons if the current pixel has been
-            //      previously marked
+            // previously marked
             if (!markedPixels[row][column])
             {
                 // check above
@@ -114,7 +114,7 @@ void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
             energyUp = energyUpRight;
             markedUp = markedUpRight;
 
-            // get markedPixels and totalEnergyTo pSeamCarverData for pixels right/above
+            // for pixel to the right/above, get its marked flag and get the total energy to it
             if (numColumns_ > 1 && column < numColumns_ - 2)
             {
                 energyUpRight = totalEnergyTo[row - 1][column + 2];
@@ -124,16 +124,15 @@ void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
             // assign cumulative energy to current pixel and save the column of the parent pixel
             if (minEnergyColumn == -1)
             {
-                // current pixel is unreachable from parent pixels since they are all
-                // markedPixels
-                //   OR current pixel already markedPixels
-                // set energy to reach current pixel to +INF
+                // current pixel is unreachable from parent pixels
                 totalEnergyTo[row][column] = posInf_;
             }
             else
             {
                 totalEnergyTo[row][column] = minEnergy + pixelEnergy[row][column];
             }
+
+            // this is either -1 or a valid column
             columnTo[row][column] = minEnergyColumn;
         }
     }
