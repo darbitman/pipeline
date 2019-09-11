@@ -63,7 +63,7 @@ TEST_F(PipelineQueueManagerTest, VerifyMinOrientedPQ)
         auto destination = EPipelineStageId::STAGE_0;
         unique_ptr<BasePipelineData> pEmptyData;
         unique_ptr<BasePipelineMessage> pNewMessage =
-            make_unique<PipelineDataMessage>(source, destination, pEmptyData);
+            make_unique<PipelineDataMessage>(source, destination, 0, pEmptyData);
 
         uint32_t randomNumber = (uint32_t)(rand() % 50);
         pNewMessage->setMessageNumber(randomNumber);

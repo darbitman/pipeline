@@ -22,48 +22,35 @@ class PipelineDataMessage : public BasePipelineMessage
         }
     };
 
+    PipelineDataMessage();
+
     PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
-                        std::unique_ptr<BasePipelineData>& pPipelineData);
+                        uint32_t messageNumber);
 
-    ~PipelineDataMessage();
+    PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
+                        uint32_t messageNumber, std::unique_ptr<BasePipelineData>& pPipelineData);
 
-    virtual std::unique_ptr<BasePipelineData>& getData() override;
+    virtual ~PipelineDataMessage() = default;
 
-    virtual EPipelineMessageType getMessageType() const override;
+    /// @brief Set the owner of the data to this PipelineDataMessage
+    /// @param pPipelineData
+    /// Ownership will be released from the unique_ptr passed in, and will be transferred to this
+    /// PipelineDataMessage. If this message owns data already, that data will be deleted.
+    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
-    virtual BasePipelineData* releasePipelineData() override;
+    virtual std::unique_ptr<BasePipelineData>& getOwnedData() override;
 
-    virtual void resetPipelineData() override;
+    virtual BasePipelineData* releaseOwnedData() override;
 
-    virtual void setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
+    virtual void deleteOwnedData() override;
 
-    virtual void setSource(EPipelineStageId source) override;
-
-    virtual EPipelineStageId getSource() const override;
-
-    virtual void setDestination(EPipelineStageId destination) override;
-
-    virtual EPipelineStageId getDestination() const override;
-
-    virtual void setMessageNumber(int32_t newMessageNumber) override;
-
-    virtual int32_t getMessageNumber() const override;
-
-    // deleted to prevent misuse
+    /// Deleted to prevent misuse
     PipelineDataMessage(const PipelineDataMessage&) = delete;
     PipelineDataMessage(const PipelineDataMessage&&) = delete;
     PipelineDataMessage& operator=(const PipelineDataMessage&) = delete;
     PipelineDataMessage& operator=(const PipelineDataMessage&&) = delete;
 
   private:
-    EPipelineMessageType messageType_;
-
-    EPipelineStageId source_;
-
-    EPipelineStageId destination_;
-
-    int32_t messageNumber_;
-
     std::unique_ptr<BasePipelineData> pPipelineData_;
 };
 

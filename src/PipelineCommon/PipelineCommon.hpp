@@ -5,6 +5,7 @@ namespace sc
 {
 enum EPipelineStageId
 {
+    UNKNOWN_STAGE,
     MESSAGE_ROUTER,
     INTERFACE_STAGE,
     STAGE_0,

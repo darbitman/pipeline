@@ -98,7 +98,7 @@ void BasePipelineStage::doStopStage()
     {
         // create a ShutdownMessage and send to itself
         unique_ptr<BasePipelineMessage> pShutdownMessage =
-            make_unique<ShutdownMessage>(thisStageId_);
+            make_unique<ShutdownMessage>(thisStageId_, thisStageId_, 0);
         pSenderReceiver_->send(pShutdownMessage);
     }
     else

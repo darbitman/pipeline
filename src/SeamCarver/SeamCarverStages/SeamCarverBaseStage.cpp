@@ -42,7 +42,7 @@ void SeamCarverBaseStage::processMessage(unique_ptr<BasePipelineMessage>& pMessa
 {
     if (pMessage != nullptr && pSeamCarverDataProcessor_ != nullptr)
     {
-        processData(pMessage->getData());
+        processData(pMessage->getOwnedData());
     }
 }
 

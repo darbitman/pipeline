@@ -34,7 +34,7 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
     auto destination = EPipelineStageId::STAGE_0;
     unique_ptr<BasePipelineData> pEmptyData;
     unique_ptr<BasePipelineMessage> pMessage =
-        make_unique<PipelineDataMessage>(source, destination, pEmptyData);
+        make_unique<PipelineDataMessage>(source, destination, 0, pEmptyData);
 
     const BasePipelineMessage* const savedPtr = pMessage.get();
 
@@ -50,7 +50,7 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
     unique_ptr<BasePipelineMessage> pMessage =
-        make_unique<ShutdownMessage>(EPipelineStageId::MESSAGE_ROUTER);
+        make_unique<ShutdownMessage>(EPipelineStageId::MESSAGE_ROUTER, EPipelineStageId::MESSAGE_ROUTER, 0);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 

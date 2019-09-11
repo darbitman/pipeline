@@ -19,21 +19,18 @@ namespace sc
 {
 void ComputeEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
-    auto pSeamCarverData = dynamic_cast<VerticalSeamCarverData*>(pData);
+    auto pSeamCarverData = static_cast<VerticalSeamCarverData*>(pData);
 
-    if (pSeamCarverData != nullptr)
-    {
-        // set local data members for the computation
-        numRows_ = pSeamCarverData->getNumberOfRows();
-        numColumns_ = pSeamCarverData->getNumberOfColumns();
-        bottomRow_ = pSeamCarverData->getBottomRowIndex();
-        rightColumn_ = pSeamCarverData->getRightColumnIndex();
-        numColorChannels_ = pSeamCarverData->getNumberOfColorChannels();
-        marginEnergy_ = pSeamCarverData->getEdgePixelEnergy();
+    // set local data members for the computation
+    numRows_ = pSeamCarverData->getNumberOfRows();
+    numColumns_ = pSeamCarverData->getNumberOfColumns();
+    bottomRow_ = pSeamCarverData->getBottomRowIndex();
+    rightColumn_ = pSeamCarverData->getRightColumnIndex();
+    numColorChannels_ = pSeamCarverData->getNumberOfColorChannels();
+    marginEnergy_ = pSeamCarverData->getEdgePixelEnergy();
 
-        calculatePixelEnergy(pSeamCarverData->getSavedImage(),
-                             pSeamCarverData->getPixelEnergy2DVector());
-    }
+    calculatePixelEnergy(pSeamCarverData->getSavedImage(),
+                         pSeamCarverData->getPixelEnergy2DVector());
 }
 
 void ComputeEnergy::calculatePixelEnergy(const unique_ptr<const Mat>& image,
@@ -117,7 +114,7 @@ void ComputeEnergy::calculatePixelEnergyForEveryRow(const unique_ptr<const Mat>&
     // multiple memory accesses
     for (size_t row = 0; row < numRows_; row++)
     {
-        /***** ODD COLUMNS *****/
+        // ODD COLUMNS
         if (bDoOddColumns)
         {
             // initialize starting column
@@ -167,7 +164,7 @@ void ComputeEnergy::calculatePixelEnergyForEveryRow(const unique_ptr<const Mat>&
                 }
             }
         }
-        /***** EVEN COLUMNS *****/
+        // EVEN COLUMNS
         else
         {
             // initialize starting column
@@ -267,7 +264,7 @@ void ComputeEnergy::calculatePixelEnergyForEveryColumn(const unique_ptr<const Ma
     // to prevent multiple memory accesses
     for (size_t column = 0; column < numColumns_; column++)
     {
-        /***** ODD ROWS *****/
+        // ODD ROWS
         if (bDoOddRows)
         {
             // initialize starting row
@@ -317,7 +314,7 @@ void ComputeEnergy::calculatePixelEnergyForEveryColumn(const unique_ptr<const Ma
                 }
             }
         }
-        /***** EVEN ROWS *****/
+        // EVEN ROWS
         else
         {
             // initialize starting row

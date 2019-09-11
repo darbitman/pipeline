@@ -1,3 +1,4 @@
+
 #ifndef SHUTDOWNMESSAGE_HPP
 #define SHUTDOWNMESSAGE_HPP
 
@@ -12,49 +13,33 @@ namespace sc
 class ShutdownMessage : public BasePipelineMessage
 {
   public:
-    explicit ShutdownMessage(EPipelineStageId destination);
+    ShutdownMessage();
+
+    ShutdownMessage(EPipelineStageId source, EPipelineStageId destination, uint32_t messageNumber);
 
     virtual ~ShutdownMessage();
 
-    virtual std::unique_ptr<BasePipelineData>& getData() override;
+    /// @brief This call does nothing for ShutdownMessage
+    virtual void setOwnedData([
+        [maybe_unused]] std::unique_ptr<BasePipelineData>& pPipelineData) override;
 
-    virtual EPipelineMessageType getMessageType() const override;
+    /// @brief this call does nothing for ShutdownMessage
+    virtual std::unique_ptr<BasePipelineData>& getOwnedData() override;
 
-    virtual BasePipelineData* releasePipelineData() override;
+    virtual BasePipelineData* releaseOwnedData() override;
 
-    virtual void resetPipelineData() override;
+    virtual void deleteOwnedData() override;
 
-    virtual void setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
-
-    virtual void setSource(EPipelineStageId source) override;
-
-    virtual EPipelineStageId getSource() const override;
-
-    virtual void setDestination(EPipelineStageId destination) override;
-
-    virtual EPipelineStageId getDestination() const override;
-
-    virtual void setMessageNumber(int32_t newMessageNumber) override;
-
-    virtual int32_t getMessageNumber() const override;
-
-    // deleted to prevent misuse
+    /// Deleted to prevent misuse
     ShutdownMessage(const ShutdownMessage&) = delete;
     ShutdownMessage(const ShutdownMessage&&) = delete;
     ShutdownMessage& operator=(const ShutdownMessage&) = delete;
     ShutdownMessage& operator=(const ShutdownMessage&&) = delete;
 
   private:
-    EPipelineMessageType messageType_;
-
-    EPipelineStageId source_;
-
-    EPipelineStageId destination_;
-
-    int32_t messageNumber_;
-
-    std::unique_ptr<BasePipelineData> pPipelineData_;
+    std::unique_ptr<BasePipelineData> pNullPipelineData_;
 };
+
 }  // namespace sc
 
 #endif

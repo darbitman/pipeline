@@ -10,48 +10,31 @@ using std::unique_ptr;
 
 namespace sc
 {
+PipelineDataMessage::PipelineDataMessage()
+    : BasePipelineMessage(EPipelineStageId::UNKNOWN_STAGE, EPipelineStageId::UNKNOWN_STAGE,
+                          EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+{
+}
+
 PipelineDataMessage::PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
+                                         uint32_t messageNumber,
                                          unique_ptr<BasePipelineData>& pPipelineData)
-    : messageType_(EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA),
-      source_(source),
-      destination_(destination),
-      messageNumber_(0),
+    : BasePipelineMessage(source, destination, EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA,
+                          messageNumber),
       pPipelineData_(move(pPipelineData))
 {
 }
 
-PipelineDataMessage::~PipelineDataMessage() {}
-
-unique_ptr<BasePipelineData>& PipelineDataMessage::getData() { return pPipelineData_; }
-
-EPipelineMessageType PipelineDataMessage::getMessageType() const { return messageType_; }
-
-BasePipelineData* PipelineDataMessage::releasePipelineData() { return pPipelineData_.release(); }
-
-void PipelineDataMessage::resetPipelineData() { pPipelineData_.reset(nullptr); }
-
-void PipelineDataMessage::setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData)
+void PipelineDataMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData)
 {
     pPipelineData_.reset(nullptr);
     pPipelineData_.swap(pPipelineData);
 }
 
-void PipelineDataMessage::setSource(EPipelineStageId source) { source_ = source; }
+unique_ptr<BasePipelineData>& PipelineDataMessage::getOwnedData() { return pPipelineData_; }
 
-EPipelineStageId PipelineDataMessage::getSource() const { return source_; }
+BasePipelineData* PipelineDataMessage::releaseOwnedData() { return pPipelineData_.release(); }
 
-void PipelineDataMessage::setDestination(EPipelineStageId destination)
-{
-    destination_ = destination;
-}
-
-EPipelineStageId PipelineDataMessage::getDestination() const { return destination_; }
-
-void PipelineDataMessage::setMessageNumber(int32_t newMessageNumber)
-{
-    messageNumber_ = newMessageNumber;
-}
-
-int32_t PipelineDataMessage::getMessageNumber() const { return messageNumber_; }
+void PipelineDataMessage::deleteOwnedData() { pPipelineData_.reset(nullptr); }
 
 }  // namespace sc

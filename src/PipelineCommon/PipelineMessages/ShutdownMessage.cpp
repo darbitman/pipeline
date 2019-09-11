@@ -8,38 +8,27 @@ using std::unique_ptr;
 
 namespace sc
 {
-ShutdownMessage::ShutdownMessage(EPipelineStageId destination)
-    : messageType_(EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN),
-      destination_(destination),
-      messageNumber_(0)
+ShutdownMessage::ShutdownMessage()
+    : BasePipelineMessage(EPipelineStageId::UNKNOWN_STAGE, EPipelineStageId::UNKNOWN_STAGE,
+                          EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+{
+}
+
+ShutdownMessage::ShutdownMessage(EPipelineStageId source, EPipelineStageId destination,
+                                 uint32_t messageNumber)
+    : BasePipelineMessage(source, destination, EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN,
+                          messageNumber)
 {
 }
 
 ShutdownMessage::~ShutdownMessage() {}
 
-unique_ptr<BasePipelineData>& ShutdownMessage::getData() { return pPipelineData_; }
+unique_ptr<BasePipelineData>& ShutdownMessage::getOwnedData() { return pNullPipelineData_; }
 
-EPipelineMessageType ShutdownMessage::getMessageType() const { return messageType_; }
+BasePipelineData* ShutdownMessage::releaseOwnedData() { return nullptr; }
 
-BasePipelineData* ShutdownMessage::releasePipelineData() { return nullptr; }
+void ShutdownMessage::deleteOwnedData() {}
 
-void ShutdownMessage::resetPipelineData() {}
-
-void ShutdownMessage::setPipelineData(std::unique_ptr<BasePipelineData>& pPipelineData) {}
-
-void ShutdownMessage::setSource(EPipelineStageId source) { source_ = source; }
-
-EPipelineStageId ShutdownMessage::getSource() const { return source_; }
-
-void ShutdownMessage::setDestination(EPipelineStageId destination) { destination_ = destination; }
-
-EPipelineStageId ShutdownMessage::getDestination() const { return destination_; }
-
-void ShutdownMessage::setMessageNumber(int32_t newMessageNumber)
-{
-    messageNumber_ = newMessageNumber;
-}
-
-int32_t ShutdownMessage::getMessageNumber() const { return messageNumber_; }
+void ShutdownMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) {}
 
 }  // namespace sc
