@@ -34,18 +34,20 @@ void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
     auto& totalEnergyTo = data.getTotalEnergyToPixel2DVector();
     auto& columnTo = data.getPreviousColumnToCurrentPixel2DVector();
     auto& discoveredSeams = data.getDiscoveredSeamsVectorOfPqs();
+    auto& currentSeam = data.currentSeam;
     auto numRows = data.getNumberOfRows();
     auto numColumns = data.getNumberOfColumns();
     auto bottomRow = data.getBottomRowIndex();
     auto posInf = data.getPositiveInfinity();
 
-    /*** RUN SEAM DISCOVERY ***/
+    /// RUN SEAM DISCOVERY
     int64_t numSeamsToRemove{int64_t(data.getNumberOfSeamsToRemove())};
+
     for (int32_t n = 0; n < numSeamsToRemove; ++n)
     {
         // initialize total energy to +INF and run linear search for a pixel of least
         // cumulative energy (if one exists) in the bottom row
-        double minTotalEnergy = data.getPositiveInfinity();
+        double minTotalEnergy = posInf;
         int32_t minTotalEnergyColumn = -1;
         for (size_t column = 0; column < numColumns; column++)
         {
@@ -73,7 +75,7 @@ void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
 
         // save last column as part of currentSeam that will be checked whether it can fully
         // reach the top row
-        data.currentSeam[bottomRow] = minTotalEnergyColumn;
+        currentSeam[bottomRow] = minTotalEnergyColumn;
 
         // initialize column variables
         prevColumn = minTotalEnergyColumn;
@@ -105,7 +107,7 @@ void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
             }
 
             // save the column of the pixel in the current row
-            data.currentSeam[(size_t)row] = currentColumn;
+            currentSeam[(size_t)row] = currentColumn;
 
             // save current column to be used for the next iteration of the loop
             prevColumn = currentColumn;
@@ -121,12 +123,12 @@ void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
             // copy current seam into the discovered seams and mark appropriate pixels
             for (size_t row = 0; row < numRows; row++)
             {
-                currentColumn = data.currentSeam[row];
+                currentColumn = currentSeam[row];
                 discoveredSeams[row].push(currentColumn);
                 markedPixels[row][currentColumn] = true;
             }
         }
-    }  // for (int32_t n = 0; n < (int32_t)numSeamsToRemove_; n++)
+    }
 }
 
 }  // namespace sc
