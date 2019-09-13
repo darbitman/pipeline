@@ -1,13 +1,10 @@
-#ifndef BASEPIPELINEDATA_HPP
-#define BASEPIPELINEDATA_HPP
+#pragma once
 
 namespace sc
 {
 class BasePipelineData
 {
-public:
+  public:
     virtual ~BasePipelineData() = 0;
 };
 }  // namespace sc
-
-#endif

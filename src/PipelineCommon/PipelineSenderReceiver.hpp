@@ -1,5 +1,4 @@
-#ifndef PIPELINESENDERRECEIVER_HPP
-#define PIPELINESENDERRECEIVER_HPP
+#pragma once
 
 #include <atomic>
 #include <cstdint>
@@ -64,5 +63,3 @@ class PipelineSenderReceiver
 };
 
 }  // namespace sc
-
-#endif

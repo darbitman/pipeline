@@ -1,5 +1,4 @@
-#ifndef BASEPIPELINESTAGE_HPP
-#define BASEPIPELINESTAGE_HPP
+#pragma once
 
 #include <atomic>
 #include <memory>
@@ -48,16 +47,12 @@ class BasePipelineStage : public IPipelineStage
     BasePipelineStage& operator=(BasePipelineStage&&) = delete;
 
   protected:
-    /**
-     * @brief method that processes the incoming message
-     * @param pMessage
-     */
+    /// @brief method that processes the incoming message
+    /// @param pMessage
     virtual void processMessage(std::unique_ptr<BasePipelineMessage>& pMessage) = 0;
 
-    /**
-     * @brief method that does the actual data processing
-     * @param pData
-     */
+    /// @brief method that does the actual data processing
+    /// @param pData
     virtual void processData(std::unique_ptr<BasePipelineData>& pData) = 0;
 
   private:
@@ -86,5 +81,3 @@ class BasePipelineStage : public IPipelineStage
 };
 
 }  // namespace sc
-
-#endif

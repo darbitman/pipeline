@@ -1,5 +1,4 @@
-#ifndef SEAMCARVERPIPELINECONTROLLER_HPP
-#define SEAMCARVERPIPELINECONTROLLER_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -23,5 +22,3 @@ class SeamCarverPipelineController
 };
 
 }  // namespace sc
-
-#endif

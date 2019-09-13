@@ -1,5 +1,4 @@
-#ifndef PIPELINEQUEUEMANAGER_HPP
-#define PIPELINEQUEUEMANAGER_HPP
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -59,5 +58,3 @@ class PipelineQueueManager
     mutable std::mutex mapMutex_;
 };
 }  // namespace sc
-
-#endif

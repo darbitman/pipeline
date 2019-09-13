@@ -1,5 +1,4 @@
-#ifndef IPIPELINEINTERFACE_HPP
-#define IPIPELINEINTERFACE_HPP
+#pragma once
 
 #include <memory>
 
@@ -22,5 +21,3 @@ class IPipelineInterface
 };
 
 }  // namespace sc
-
-#endif

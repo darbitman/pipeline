@@ -1,5 +1,4 @@
-#ifndef IPIPELINESTAGE_HPP
-#define IPIPELINESTAGE_HPP
+#pragma once
 
 #include <memory>
 
@@ -23,5 +22,3 @@ class IPipelineStage
     virtual bool isRunning() const = 0;
 };
 }  // namespace sc
-
-#endif

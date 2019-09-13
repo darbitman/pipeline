@@ -1,5 +1,4 @@
-#ifndef IPIPELINESTAGEBUILDER_HPP
-#define IPIPELINESTAGEBUILDER_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -26,5 +25,3 @@ class IPipelineStageBuilder
 };
 
 }  // namespace sc
-
-#endif
