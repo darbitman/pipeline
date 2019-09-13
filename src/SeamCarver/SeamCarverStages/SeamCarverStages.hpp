@@ -1,5 +1,4 @@
-#ifndef SEAMCARVERSTAGES_HPP
-#define SEAMCARVERSTAGES_HPP
+#pragma once
 
 #if __has_include("ComputeEnergyStage.hpp")
 #include "ComputeEnergyStage.hpp"
@@ -19,6 +18,4 @@
 
 #if __has_include("SeamRemoverStage.hpp")
 #include "SeamRemoverStage.hpp"
-#endif
-
 #endif

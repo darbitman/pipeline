@@ -1,5 +1,4 @@
-#ifndef CUMULATIVEPATHENERGY_HPP
-#define CUMULATIVEPATHENERGY_HPP
+#pragma once
 
 #include "ISeamCarverDataProcessor.hpp"
 #include "SeamCarverProcessorFactory.hpp"
@@ -42,5 +41,3 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
 };
 
 }  // namespace sc
-
-#endif

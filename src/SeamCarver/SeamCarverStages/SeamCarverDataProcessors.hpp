@@ -1,5 +1,4 @@
-#ifndef SEAMCARVERDATAPROCESSORS_HPP
-#define SEAMCARVERDATAPROCESSORS_HPP
+#pragma once
 
 #if __has_include("ComputeEnergy.hpp")
 #include "ComputeEnergy.hpp"
@@ -19,6 +18,4 @@
 
 #if __has_include("SeamRemover.hpp")
 #include "SeamRemover.hpp"
-#endif
-
 #endif

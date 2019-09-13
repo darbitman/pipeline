@@ -1,5 +1,4 @@
-#ifndef ISEAMCARVERDATAPROCESSOR_HPP
-#define ISEAMCARVERDATAPROCESSOR_HPP
+#pragma once
 
 #include <memory>
 
@@ -15,5 +14,3 @@ class ISeamCarverDataProcessor
     virtual void runSeamCarverProcessor(BasePipelineData* pData) = 0;
 };
 }  // namespace sc
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SEAMREMOVER_HPP
-#define SEAMREMOVER_HPP
+#pragma once
 
 #include "ISeamCarverDataProcessor.hpp"
 #include "SeamCarverProcessorFactory.hpp"
@@ -24,15 +23,12 @@ class SeamRemover : public ISeamCarverDataProcessor
 
   private:
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerNewStage(
-            EPipelineStageId::STAGE_3, []() {
-                std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
-                    std::make_unique<SeamRemover>();
+        SeamCarverProcessorFactory::registerNewStage(EPipelineStageId::STAGE_3, []() {
+            std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
+                std::make_unique<SeamRemover>();
 
-                return pNewSeamCarverDataProcessor;
-            });
+            return pNewSeamCarverDataProcessor;
+        });
 };
 
 }  // namespace sc
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef COMPUTEENERGY_HPP
-#define COMPUTEENERGY_HPP
+#pragma once
 
 #include <memory>
 #include <opencv2/opencv.hpp>
@@ -56,5 +55,3 @@ class ComputeEnergy : public ISeamCarverDataProcessor
 };
 
 }  // namespace sc
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SEAMCARVERBASESTAGE_HPP
-#define SEAMCARVERBASESTAGE_HPP
+#pragma once
 
 #include <memory>
 
@@ -44,5 +43,3 @@ class SeamCarverBaseStage : public BasePipelineStage
     std::unique_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
 };
 }  // namespace sc
-
-#endif

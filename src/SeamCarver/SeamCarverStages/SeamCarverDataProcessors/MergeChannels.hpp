@@ -1,5 +1,4 @@
-#ifndef MERGECHANNELS_HPP
-#define MERGECHANNELS_HPP
+#pragma once
 
 #include "ISeamCarverDataProcessor.hpp"
 #include "SeamCarverProcessorFactory.hpp"
@@ -34,5 +33,3 @@ class MergeChannels : public ISeamCarverDataProcessor
 };
 
 }  // namespace sc
-
-#endif
