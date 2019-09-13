@@ -1,5 +1,4 @@
-#ifndef SHAREDCONTAINER_HPP
-#define SHAREDCONTAINER_HPP
+#pragma once
 
 namespace sc
 {
@@ -25,5 +24,3 @@ class SharedContainer
 };
 
 }  // namespace sc
-
-#endif

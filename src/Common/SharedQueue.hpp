@@ -1,5 +1,4 @@
-#ifndef SHAREDQUEUE_HPP
-#define SHAREDQUEUE_HPP
+#pragma once
 
 #include <condition_variable>
 #include <mutex>
@@ -142,4 +141,3 @@ class SharedQueue : public SharedContainer<_Tp>
 };
 
 }  // namespace sc
-#endif

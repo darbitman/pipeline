@@ -1,5 +1,4 @@
-#ifndef THREADRUNNER_HPP
-#define THREADRUNNER_HPP
+#pragma once
 
 #include <atomic>
 #include <memory>
@@ -100,5 +99,3 @@ class ThreadRunner : protected std::thread
     std::atomic<bool> bThreadIsDetached_;
 };
 }  // namespace sc
-
-#endif

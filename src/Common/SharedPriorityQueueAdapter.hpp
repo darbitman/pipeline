@@ -1,5 +1,4 @@
-#ifndef SHAREDPRIORITYQUEUEADAPTER_HPP
-#define SHAREDPRIORITYQUEUEADAPTER_HPP
+#pragma once
 
 #include <condition_variable>
 #include <memory>
@@ -133,5 +132,3 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
 };
 
 }  // namespace sc
-
-#endif

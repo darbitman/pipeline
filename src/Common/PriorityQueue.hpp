@@ -1,5 +1,4 @@
-#ifndef PRIORITYQUEUE_HPP
-#define PRIORITYQUEUE_HPP
+#pragma once
 
 #include "QueueInterface.hpp"
 
@@ -12,10 +11,8 @@ template <typename _Tp, typename _ComparatorType = std::less<_Tp>>
 class PriorityQueue : public QueueInterface<_Tp>
 {
   public:
-    /**
-     * @brief initialize priority queue
-     * @param initial capacity of internal store
-     */
+    /// @brief initialize priority queue
+    /// @param initial capacity of internal store
     explicit PriorityQueue(size_t initialCapacity) : N_(0)
     {
         // binary heaps do not use element 0
@@ -24,29 +21,21 @@ class PriorityQueue : public QueueInterface<_Tp>
         heap_.push_back(0);
     }
 
-    /**
-     * @brief default ctor
-     */
+    /// @brief default ctor
     PriorityQueue() : N_(0)
     {
         // first element is unused
         heap_.push_back(0);
     }
 
-    /**
-     * @brief deallocate memory
-     */
+    /// @brief deallocate memory
     virtual ~PriorityQueue() = default;
 
-    /**
-     * @brief resets priority queue to clean state
-     */
+    /// @brief resets priority queue to clean state
     virtual void resetPriorityQueue() { N_ = 0; }
 
-    /**
-     * @brief insert new element
-     * @param element: element to insert
-     */
+    /// @brief insert new element
+    /// @param element: element to insert
     virtual void push(const _Tp& element) override
     {
         if constexpr (std::is_copy_constructible_v<_Tp>)
@@ -72,10 +61,8 @@ class PriorityQueue : public QueueInterface<_Tp>
         }
     }
 
-    /**
-     * @brief insert new element into priority queue
-     * @param newElement: new element to insert
-     */
+    /// @brief insert new element into priority queue
+    /// @param newElement: new element to insert
     virtual void push(_Tp&& element) override
     {
         // if the heap_ is at capacity
@@ -94,9 +81,7 @@ class PriorityQueue : public QueueInterface<_Tp>
         swim(N_);
     }
 
-    /**
-     * @brief remove top (imum) element
-     */
+    /// @brief remove top (imum) element
     virtual void pop() override
     {
         // swap root element and last element
@@ -105,24 +90,18 @@ class PriorityQueue : public QueueInterface<_Tp>
         sink(1);
     }
 
-    /**
-     * @brief return the top (imum) element without deleting it
-     * @return const _Tp&: const reference to the imum element
-     */
+    /// @brief return the top (imum) element without deleting it
+    /// @return const _Tp&: const reference to the imum element
     virtual const _Tp& top() const override { return heap_[1]; }
 
     virtual _Tp& top() override { return heap_[1]; }
 
-    /**
-     * @brief return the number of elements in the queue
-     * @return size_t
-     */
+    /// @brief return the number of elements in the queue
+    /// @return size_t
     virtual size_t size() const override { return N_; }
 
-    /**
-     * @brief check if the queue is empty
-     * @return bool
-     */
+    /// @brief check if the queue is empty
+    /// @return bool
     virtual bool empty() const override { return N_ == 0; }
 
     // default/deleted
@@ -134,10 +113,8 @@ class PriorityQueue : public QueueInterface<_Tp>
   protected:
     _ComparatorType comparator;
 
-    /**
-     * @brief promote element k if less than its parent
-     * @param k: index of element to promote
-     */
+    /// @brief promote element k if less than its parent
+    /// @param k: index of element to promote
     virtual void swim(uint32_t k)
     {
         // check if we're not at root node and if child is less than parent
@@ -149,18 +126,16 @@ class PriorityQueue : public QueueInterface<_Tp>
         }
     }
 
-    /**
-     * @brief demote element k if greater than its parent
-     * @param k: index of element to demote
-     */
+    /// @brief demote element k if greater than its parent
+    /// @param k: index of element to demote
     virtual void sink(uint32_t k)
     {
         while (2 * k <= N_)
         {
             uint32_t j = 2 * k;
-            // check if left child is greater than right child
-            // if so, increment j to point to right child
-            if (j < N_ && comparator(heap_[j + 1], heap_[j]))
+                            // check if left child is greater than right child
+                            // if so, increment j to point to right child
+                if (j < N_ && comparator(heap_[j + 1], heap_[j]))
             {
                 j++;
             }
@@ -175,11 +150,9 @@ class PriorityQueue : public QueueInterface<_Tp>
         }
     }
 
-    /**
-     * @brief swap 2 elements
-     * @param j: index of the first element
-     * @param k: index of the second element
-     */
+    /// @brief swap 2 elements
+    /// @param j: index of the first element
+    /// @param k: index of the second element
     virtual void exch(uint32_t j, uint32_t k)
     {
         _Tp swap = std::move(heap_[j]);
@@ -195,5 +168,3 @@ class PriorityQueue : public QueueInterface<_Tp>
 };
 
 }  // namespace sc
-
-#endif
