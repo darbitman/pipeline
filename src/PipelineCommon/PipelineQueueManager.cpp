@@ -48,23 +48,19 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
         }
         break;
         default:
-            return -1;
+            throw std::invalid_argument(
+                "PipelineQueueManager::createNewQueue(): Invalid EPipelineQueueType");
             break;
     }
 
     return currentQueueId_;
 }
 
-bool PipelineQueueManager::deleteQueue(int32_t queueId)
+void PipelineQueueManager::deleteQueue(int32_t queueId)
 {
-    if (queueIdToQueueMap_.count(queueId) == 0)
+    if (queueIdToQueueMap_.erase(queueId) == 0)
     {
-        return false;
-    }
-    else
-    {
-        queueIdToQueueMap_.erase(queueId);
-        return true;
+        throw std::invalid_argument("PipelineQueueManager::deleteQueue(): Queue ID doesn't exist");
     }
 }
 
@@ -73,11 +69,11 @@ SharedContainer<PipelineQueueManager::value_type>* PipelineQueueManager::getQueu
 {
     unique_lock<mutex> mapLock(mapMutex_);
 
-    if (queueIdToQueueMap_.count(queueId) != 0)
+    try
     {
         return queueIdToQueueMap_.at(queueId).get();
     }
-    else
+    catch (std::out_of_range& e)
     {
         return nullptr;
     }

@@ -17,6 +17,7 @@ enum EPipelineStageId
 
 enum EPipelineQueueType
 {
+    QUEUE_TYPE_UNKNOWN,
     QUEUE_TYPE_FIFO,
     QUEUE_TYPE_MIN_PQ
 };

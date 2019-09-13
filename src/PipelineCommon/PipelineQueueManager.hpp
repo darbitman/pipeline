@@ -22,16 +22,18 @@ class PipelineQueueManager
 
     ~PipelineQueueManager() = default;
 
-    /// @brief creates a new queue and returns its queueId which the client should save to be able
-    /// to retrieve the actual queue
+    /// @brief creates a new queue and returns its queueId which the client can use to later
+    /// retrieve the queue
     /// @param newQueueType
-    /// @return int32_t a queueId
+    /// @return int32_t A non-negative queueId
+    /// @throw std::invalid_argument If newQueueType doesn't exist
     int32_t createNewQueue(EPipelineQueueType newQueueType);
 
     /// @brief deletes a queue
     /// @param queueId specifies which queue to delete
     /// @return bool indicates whether the queue was deleted or not
-    bool deleteQueue(int32_t queueId);
+    /// @throw std::invalid_argument If queueId doesn't exist
+    void deleteQueue(int32_t queueId);
 
     /// @brief retrieves a queue
     /// @param queueId specifies which queue to retrieve
@@ -43,7 +45,7 @@ class PipelineQueueManager
     /// @return size_t
     size_t getNumberOfQueues() const;
 
-    // deleted to prevent misuse
+    /// Deleted to prevent misuse
     PipelineQueueManager(const PipelineQueueManager&) = delete;
     PipelineQueueManager(const PipelineQueueManager&&) = delete;
     PipelineQueueManager& operator=(const PipelineQueueManager&) = delete;
