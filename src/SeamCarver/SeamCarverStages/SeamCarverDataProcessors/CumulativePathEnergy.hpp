@@ -15,6 +15,8 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
 
     virtual void runSeamCarverProcessor(BasePipelineData* pData) override;
 
+    static void calculateCumulativePathEnergy(VerticalSeamCarverData* pSeamCarverData);
+
     // deleted to prevent misuse
     CumulativePathEnergy(const CumulativePathEnergy&) = delete;
     CumulativePathEnergy(CumulativePathEnergy&&) = delete;
@@ -22,15 +24,6 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
     CumulativePathEnergy& operator=(CumulativePathEnergy&&) = delete;
 
   private:
-    // image dimensions
-    size_t numRows_;
-    size_t numColumns_;
-    size_t bottomRow_;
-    size_t rightColumn_;
-    size_t numColorChannels_;
-    double marginEnergy_;
-    double posInf_;
-
     inline static const bool bRegistered_ =
         SeamCarverProcessorFactory::registerNewStage(EPipelineStageId::STAGE_1, []() {
             std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =

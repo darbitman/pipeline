@@ -130,35 +130,14 @@ void VerticalSeamCarverData::separateChannels()
     }
 }
 
-bool VerticalSeamCarverData::areImageDimensionsVerified() const
-{
-    return ((size_t)savedImage_->rows == numRows_ && (size_t)savedImage_->cols == numColumns_);
-}
-
-void VerticalSeamCarverData::setFrameNumber(uint32_t newFrameNumber)
-{
-    frameNumber_ = newFrameNumber;
-}
-
-void VerticalSeamCarverData::incrementFrameNumber() { ++frameNumber_; }
-
-uint32_t VerticalSeamCarverData::getFrameNumber() const { return frameNumber_; }
-
-size_t VerticalSeamCarverData::getNumberOfRows() const { return numRows_; }
-
-size_t VerticalSeamCarverData::getNumberOfColumns() const { return numColumns_; }
-
-size_t VerticalSeamCarverData::getBottomRowIndex() const { return bottomRow_; }
-
-size_t VerticalSeamCarverData::getRightColumnIndex() const { return rightColumn_; }
-
-size_t VerticalSeamCarverData::getNumberOfColorChannels() const { return numColorChannels_; }
-
-double VerticalSeamCarverData::getEdgePixelEnergy() const { return marginEnergy_; }
-
 vector<vector<double>>& VerticalSeamCarverData::getPixelEnergy2DVector() { return pixelEnergy; }
 
 vector<vector<bool>>& VerticalSeamCarverData::getMarkedPixel2DVector() { return markedPixels; }
+
+vector<PriorityQueue<int32_t>>& VerticalSeamCarverData::getDiscoveredSeamsVectorOfPqs()
+{
+    return discoveredSeams;
+}
 
 vector<vector<int32_t>>& VerticalSeamCarverData::getPreviousColumnToCurrentPixel2DVector()
 {
@@ -169,5 +148,7 @@ vector<vector<double>>& VerticalSeamCarverData::getTotalEnergyToPixel2DVector()
 {
     return totalEnergyTo;
 }
+
+void VerticalSeamCarverData::mergeChannelsAndStoreToSavedImage() { cv::merge(bgr, *savedImage_); }
 
 }  // namespace sc

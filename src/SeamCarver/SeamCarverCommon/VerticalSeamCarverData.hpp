@@ -1,5 +1,4 @@
-#ifndef VERTICALSEAMCARVERDATA_HPP
-#define VERTICALSEAMCARVERDATA_HPP
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -18,93 +17,85 @@ class VerticalSeamCarverData : public BasePipelineData
 
     virtual ~VerticalSeamCarverData() = default;
 
-    /**
-     * @brief initialize internal data stores
-     */
-    virtual void initialize();
+    /// @brief initialize internal data stores
+    void initialize();
 
-    // virtual void setNeedToInitializeFlag();
+    //  void setNeedToInitializeFlag();
 
-    // virtual void resetNeedToInitializeFlag();
+    //  void resetNeedToInitializeFlag();
 
-    // virtual bool getNeedToInitializeFlag();
+    //  bool getNeedToInitializeFlag();
 
-    /**
-     * @brief save the image to internal data store
-     * @param image the image to store internally for processing
-     */
-    virtual void saveImage(std::unique_ptr<cv::Mat>& image);
+    /// @brief save the image to internal data store
+    /// @param image the image to store internally for processing
+    void saveImage(std::unique_ptr<cv::Mat>& image);
 
-    /**
-     * @brief returns the saved image
-     * @bool bReleaseOwnership indicates whether or not to release ownership of the image
-     * @return std::unique_ptr<cv::Mat>
-     */
-    virtual std::unique_ptr<cv::Mat> getSavedImage(bool bReleaseOwnership = true);
+    /// @brief returns the saved image
+    /// @bool bReleaseOwnership indicates whether or not to release ownership of the image
+    /// @return std::unique_ptr<cv::Mat>
+    std::unique_ptr<cv::Mat> getSavedImage(bool bReleaseOwnership = true);
 
-    /*
-     * @brief reset internal data structures to their clean state
-     */
-    virtual void resetData();
+    /// @brief reset internal data structures to their clean state
+    void resetData();
 
-    /**
-     * @brief separates individual color channels from the saved image
-     */
-    virtual void separateChannels();
+    /// @brief separates individual color channels from the saved image
+    void separateChannels();
 
-    /*
-     * @brief check if internal vector dimensions are the same as of the image
-     * @return bool returns true if internal data structures are of the same dimensions as the
-     * internal image
-     */
-    virtual bool areImageDimensionsVerified() const;
+    /// @brief check if internal vector dimensions are the same as of the image
+    /// @return bool returns true if internal data structures are of the same dimensions as the
+    /// internal image
+    bool areImageDimensionsVerified() const
+    {
+        return ((size_t)savedImage_->rows == numRows_ && (size_t)savedImage_->cols == numColumns_);
+    }
 
-    /**
-     * @brief set a new frame number for this frame
-     * @param newFrameNumber the value to set the frame number for this frame
-     */
-    virtual void setFrameNumber(uint32_t newFrameNumber);
+    /// @brief set a new frame number for this frame
+    /// @param newFrameNumber the value to set the frame number for this frame
+    void setFrameNumber(uint32_t newFrameNumber) noexcept { frameNumber_ = newFrameNumber; }
 
-    /**
-     * @brief increments the frame number by 1
-     */
-    virtual void incrementFrameNumber();
+    /// @brief increments the frame number by 1
+    void incrementFrameNumber() noexcept { ++frameNumber_; }
 
-    /**
-     * @brief returns the frame number of this frame
-     * @return uint32_t
-     */
-    virtual uint32_t getFrameNumber() const;
+    /// @brief returns the frame number of this frame
+    /// @return uint32_t
+    uint32_t getFrameNumber() const noexcept { return frameNumber_; }
 
-    virtual size_t getNumberOfRows() const;
+    size_t getNumberOfRows() const noexcept { return numRows_; }
 
-    virtual size_t getNumberOfColumns() const;
+    size_t getNumberOfColumns() const noexcept { return numColumns_; }
 
-    virtual size_t getBottomRowIndex() const;
+    size_t getBottomRowIndex() const noexcept { return bottomRow_; }
 
-    virtual size_t getRightColumnIndex() const;
+    size_t getRightColumnIndex() const noexcept { return rightColumn_; }
 
-    virtual size_t getNumberOfColorChannels() const;
+    size_t getNumberOfColorChannels() const noexcept { return numColorChannels_; }
 
-    // virtual void setSeamLength(size_t seamLength);
+    //  void setSeamLength(size_t seamLength);
 
-    // virtual size_t getSeamLength() const;
+    //  size_t getSeamLength() const noexcept;
 
-    // virtual void setNumberOfSeamsToRemove(size_t numberOfSeamsToRemove);
+    void setNumberOfSeamsToRemove(size_t numberOfSeamsToRemove) noexcept
+    {
+        numSeamsToRemove_ = numberOfSeamsToRemove;
+    }
 
-    // virtual size_t getNumberOfSeamsToRemove() const;
+    size_t getNumberOfSeamsToRemove() const noexcept { return numSeamsToRemove_; }
 
-    virtual double getEdgePixelEnergy() const;
+    double getEdgePixelEnergy() const noexcept { return marginEnergy_; }
 
-    virtual std::vector<std::vector<bool>>& getMarkedPixel2DVector();
+    std::vector<std::vector<bool>>& getMarkedPixel2DVector();
 
-    virtual std::vector<std::vector<double>>& getPixelEnergy2DVector();
+    std::vector<std::vector<double>>& getPixelEnergy2DVector();
 
-    // virtual std::vector<PriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs() const;
+    std::vector<PriorityQueue<int32_t>>& getDiscoveredSeamsVectorOfPqs();
 
-    virtual std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector();
+    std::vector<std::vector<double>>& getTotalEnergyToPixel2DVector();
 
-    virtual std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector();
+    std::vector<std::vector<int32_t>>& getPreviousColumnToCurrentPixel2DVector();
+
+    void mergeChannelsAndStoreToSavedImage();
+
+    double getPositiveInfinity() const noexcept { return posInf_; }
 
     /**********************************************************************************/
     // vector of min oriented priority queues that store the location of the pixels to remove
@@ -160,5 +151,3 @@ class VerticalSeamCarverData : public BasePipelineData
     std::vector<std::vector<int32_t>> columnTo;
 };
 }  // namespace sc
-
-#endif

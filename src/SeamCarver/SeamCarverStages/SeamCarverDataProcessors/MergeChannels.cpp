@@ -16,7 +16,7 @@ MergeChannels::~MergeChannels() {}
 
 void MergeChannels::runSeamCarverProcessor(BasePipelineData* pData)
 {
-    // TODO
+    static_cast<VerticalSeamCarverData*>(pData)->mergeChannelsAndStoreToSavedImage();
 }
 
 }  // namespace sc

@@ -13,6 +13,20 @@ namespace sc
 void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
     VerticalSeamCarverData* pSeamCarverData = static_cast<VerticalSeamCarverData*>(pData);
+    
+    CumulativePathEnergy::calculateCumulativePathEnergy(pSeamCarverData);
+}
+
+void CumulativePathEnergy::calculateCumulativePathEnergy(VerticalSeamCarverData* pSeamCarverData)
+{
+    // image dimensions
+    size_t numRows_{0};
+    size_t numColumns_{0};
+    size_t bottomRow_{0};
+    size_t rightColumn_{0};
+    size_t numColorChannels_{0};
+    double marginEnergy_{0.0};
+    double posInf_{0.0};
 
     numRows_ = pSeamCarverData->getNumberOfRows();
     numColumns_ = pSeamCarverData->getNumberOfColumns();
@@ -133,5 +147,4 @@ void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
         }
     }
 }
-
 }  // namespace sc
