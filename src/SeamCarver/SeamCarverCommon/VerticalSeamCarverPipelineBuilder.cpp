@@ -1,6 +1,7 @@
 #include "VerticalSeamCarverPipelineBuilder.hpp"
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "BaseSeamCarverInterface.hpp"
@@ -10,12 +11,14 @@
 #include "SeamCarverProcessorFactory.hpp"
 
 using std::dynamic_pointer_cast;
+using std::make_pair;
 using std::make_unique;
+using std::move;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
-{
+using namespace sc;
+
 VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
     PipelineSenderReceiver* pSenderReceiver)
     : bPipelineCreated_(false), pSenderReceiver_(pSenderReceiver)
@@ -45,13 +48,13 @@ unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelin
 vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages(
     EPipelineStageId stageId) const
 {
-    if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
-    {
-        return nullptr;
-    }
-    else
+    try
     {
         return stageIdToVectorOfPipelineStages_.at(stageId).get();
+    }
+    catch (std::out_of_range& e)
+    {
+        return nullptr;
     }
 }
 
@@ -61,13 +64,12 @@ void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
     // create a vector if it hasn't been used before
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
     {
-        stageIdToVectorOfPipelineStages_[stageId] =
-            make_unique<vector<unique_ptr<IPipelineStage>>>();
+        stageIdToVectorOfPipelineStages_.insert(
+            make_pair<EPipelineStageId, unique_ptr<vector<unique_ptr<IPipelineStage>>>>(
+                move(stageId), make_unique<vector<unique_ptr<IPipelineStage>>>()));
     }
 
-    auto pProcessor = SeamCarverProcessorFactory::createStage(stageId);
-
-    if (pProcessor != nullptr)
+    if (auto pProcessor = SeamCarverProcessorFactory::createStage(stageId); pProcessor != nullptr)
     {
         unique_ptr<IPipelineStage> pBaseStage =
             make_unique<SeamCarverBaseStage>(stageId, queueType, pSenderReceiver_, pProcessor);
@@ -75,5 +77,3 @@ void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
         stageIdToVectorOfPipelineStages_[stageId]->push_back(move(pBaseStage));
     }
 }
-
-}  // namespace sc
