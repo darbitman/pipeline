@@ -1,5 +1,4 @@
-#ifndef BASESEAMCARVERINTERFACE_HPP
-#define BASESEAMCARVERINTERFACE_HPP
+#pragma once
 
 #include <opencv2/opencv.hpp>
 
@@ -41,4 +40,3 @@ class BaseSeamCarverInterface : public IPipelineInterface
 };
 
 }  // namespace sc
-#endif

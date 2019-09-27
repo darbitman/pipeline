@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "BasePipelineData.hpp"
+#include "PipelineSenderReceiver.hpp"
 #include "ShutdownMessage.hpp"
 
 using std::make_unique;

@@ -1,9 +1,5 @@
 #pragma once
 
-#include <memory>
-
-#include "PipelineSenderReceiver.hpp"
-
 namespace sc
 {
 class IPipelineStage

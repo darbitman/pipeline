@@ -5,6 +5,7 @@
 
 #include "IPipelineInterface.hpp"
 #include "IPipelineStage.hpp"
+#include "PipelineCommon.hpp"
 
 namespace sc
 {
@@ -20,8 +21,7 @@ class IPipelineStageBuilder
 
     virtual std::unique_ptr<IPipelineInterface>& createPipelineInterface() = 0;
 
-    virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(
-        EComponentId stageId) const = 0;
+    virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(EComponentId stageId) const = 0;
 };
 
 }  // namespace sc

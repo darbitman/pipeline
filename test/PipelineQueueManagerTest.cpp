@@ -7,7 +7,6 @@
 #include "BasePipelineMessage.hpp"
 #include "PipelineCommon.hpp"
 #include "PipelineQueueManager.hpp"
-#include "VerticalSeamCarverData.hpp"
 
 using std::greater;
 using std::make_unique;

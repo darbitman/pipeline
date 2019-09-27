@@ -7,10 +7,14 @@
 
 #include "IPipelineStage.hpp"
 #include "PipelineCommon.hpp"
-#include "PipelineSenderReceiver.hpp"
 
 namespace sc
 {
+class PipelineSenderReceiver;
+class IMessageRouter;
+class BasePipelineMessage;
+class BasePipelineData;
+
 class BasePipelineStage : public IPipelineStage
 {
   public:
