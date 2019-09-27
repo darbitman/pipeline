@@ -4,7 +4,7 @@
 
 #include "BasePipelineStage.hpp"
 #include "ISeamCarverDataProcessor.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
 
 namespace sc
@@ -12,11 +12,11 @@ namespace sc
 class SeamCarverBaseStage : public BasePipelineStage
 {
   public:
-    SeamCarverBaseStage(EComponentId thisStageId, EComponentLinkType queueType,
+    SeamCarverBaseStage(uint32_t thisStageId, uint32_t queueType,
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor);
 
-    SeamCarverBaseStage(EComponentId thisStageId, EComponentLinkType queueType,
+    SeamCarverBaseStage(uint32_t thisStageId, uint32_t queueType,
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor);
 
@@ -26,7 +26,7 @@ class SeamCarverBaseStage : public BasePipelineStage
     using BasePipelineStage::isInitialized;
     using BasePipelineStage::isRunning;
     using BasePipelineStage::runStage;
-    using BasePipelineStage::stopStage;
+    using BasePipelineStage::stopComponent;
 
     // deleted to prevent misuse
     SeamCarverBaseStage(const SeamCarverBaseStage&) = delete;

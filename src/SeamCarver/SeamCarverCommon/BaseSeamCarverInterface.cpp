@@ -3,7 +3,7 @@
 #include <memory>
 #include <opencv2/opencv.hpp>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineDataMessage.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "SharedQueue.hpp"
@@ -17,9 +17,9 @@ using std::unique_ptr;
 
 namespace sc
 {
-BaseSeamCarverInterface::BaseSeamCarverInterface(EComponentLinkType queueType,
+BaseSeamCarverInterface::BaseSeamCarverInterface(uint32_t queueType,
                                                  PipelineSenderReceiver* pSenderReceiver)
-    : thisStageId_(EComponentId::INTERFACE_STAGE),
+    : thisStageId_(uint32_t::INTERFACE_STAGE),
       queueType_(queueType),
       totalDataObjectsInPipeline_(0),
       frameNumber_(0),
@@ -33,7 +33,7 @@ void BaseSeamCarverInterface::addNewDataToPipeline(unique_ptr<BasePipelineData>&
     {
         // create a new message to hold the BasePipelineData
         unique_ptr<BasePipelineMessage> pMessage = make_unique<PipelineDataMessage>(
-            thisStageId_, EComponentId::STAGE_0, frameNumber_++, pPipelineData);
+            thisStageId_, ComponentId::STAGE_0, frameNumber_++, pPipelineData);
 
         pSenderReceiver_->sendMessage(pMessage);
     }

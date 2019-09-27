@@ -6,7 +6,6 @@
 #include <mutex>
 
 #include "IMessageRouter.hpp"
-#include "PipelineCommon.hpp"
 #include "PipelineQueueManager.hpp"
 
 namespace sc
@@ -26,21 +25,21 @@ class PipelineSenderReceiver : public IMessageRouter
 
     bool isShutdown() const noexcept;
 
-    virtual void registerComponent(EComponentId componentId,
-                                   EComponentLinkType componentLinkType) noexcept override;
+    virtual void registerComponent(uint32_t componentId,
+                                   uint32_t componentLinkType) noexcept override;
 
-    virtual void unregisterComponent(EComponentId componentId) noexcept override;
+    virtual void unregisterComponent(uint32_t componentId) noexcept override;
 
-    virtual bool isComponentRegistered(EComponentId componentId) const noexcept override;
+    virtual bool isComponentRegistered(uint32_t componentId) const noexcept override;
 
     virtual void sendMessage(std::unique_ptr<BasePipelineMessage>& pMessage) noexcept override;
 
     virtual void sendMessage(std::unique_ptr<BasePipelineMessage>&& pMessage) noexcept override;
 
     virtual std::unique_ptr<BasePipelineMessage> receiveMessage(
-        EComponentId receivingComponentId) noexcept override;
+        uint32_t receivingComponentId) noexcept override;
 
-    virtual bool canReceive(EComponentId receivingComponentId) const noexcept override;
+    virtual bool canReceive(uint32_t receivingComponentId) const noexcept override;
 
     /// Deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
@@ -51,7 +50,7 @@ class PipelineSenderReceiver : public IMessageRouter
   private:
     bool bInitialized_;
 
-    EComponentId thisComponentId_;
+    uint32_t thisComponentId_;
 
     std::atomic<bool> bRunReceiverThread_;
 
@@ -59,7 +58,7 @@ class PipelineSenderReceiver : public IMessageRouter
 
     std::unique_ptr<PipelineQueueManager> pQueueManager_;
 
-    std::unordered_map<EComponentId, int32_t> stageIdToQueueIdMap_;
+    std::unordered_map<uint32_t, int32_t> stageIdToQueueIdMap_;
 
     mutable std::mutex mapMutex_;
 

@@ -6,7 +6,7 @@
 
 #include "BaseSeamCarverInterface.hpp"
 #include "IPipelineStage.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "SeamCarverBaseStage.hpp"
 #include "SeamCarverProcessorFactory.hpp"
 
@@ -27,11 +27,11 @@ VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
 
 void VerticalSeamCarverPipelineBuilder::createPipeline()
 {
-    createStage(EComponentId::STAGE_0, EComponentLinkType::QUEUE_TYPE_FIFO);
-    createStage(EComponentId::STAGE_1, EComponentLinkType::QUEUE_TYPE_FIFO);
-    createStage(EComponentId::STAGE_2, EComponentLinkType::QUEUE_TYPE_FIFO);
-    createStage(EComponentId::STAGE_3, EComponentLinkType::QUEUE_TYPE_FIFO);
-    createStage(EComponentId::STAGE_4, EComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(ComponentId::STAGE_0, ComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(ComponentId::STAGE_1, ComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(ComponentId::STAGE_2, ComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(ComponentId::STAGE_3, ComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(ComponentId::STAGE_4, ComponentLinkType::QUEUE_TYPE_FIFO);
 }
 
 unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelineInterface()
@@ -39,14 +39,14 @@ unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelin
     if (pPipelineInterface_ == nullptr)
     {
         pPipelineInterface_ = make_unique<BaseSeamCarverInterface>(
-            EComponentLinkType::QUEUE_TYPE_FIFO, pSenderReceiver_);
+            ComponentLinkType::QUEUE_TYPE_FIFO, pSenderReceiver_);
     }
 
     return pPipelineInterface_;
 }
 
 vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages(
-    EComponentId stageId) const
+    uint32_t stageId) const
 {
     try
     {
@@ -58,14 +58,14 @@ vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages
     }
 }
 
-void VerticalSeamCarverPipelineBuilder::createStage(EComponentId stageId,
-                                                    EComponentLinkType queueType)
+void VerticalSeamCarverPipelineBuilder::createStage(uint32_t stageId,
+                                                    uint32_t queueType)
 {
     // create a vector if it hasn't been used before
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
     {
         stageIdToVectorOfPipelineStages_.insert(
-            make_pair<EComponentId, unique_ptr<vector<unique_ptr<IPipelineStage>>>>(
+            make_pair<uint32_t, unique_ptr<vector<unique_ptr<IPipelineStage>>>>(
                 move(stageId), make_unique<vector<unique_ptr<IPipelineStage>>>()));
     }
 

@@ -1,10 +1,9 @@
-#ifndef BASEPIPELINEMESSAGE_HPP
-#define BASEPIPELINEMESSAGE_HPP
+#pragma once
 
 #include <cstdint>
 #include <memory>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 
 namespace sc
 {
@@ -18,22 +17,22 @@ class BasePipelineMessage
     /// @param source
     /// @param destination
     /// @param messageType
-    BasePipelineMessage(EComponentId source, EComponentId destination,
-                        EMessageType messageType, uint32_t messageNumber);
+    BasePipelineMessage(uint32_t source, uint32_t destination, uint32_t messageType,
+                        uint32_t messageNumber);
 
     /// @brief destructor
     virtual ~BasePipelineMessage() = 0;
 
-    inline virtual void setSource(EComponentId source) noexcept final { source_ = source; }
+    inline virtual void setSource(uint32_t source) noexcept final { source_ = source; }
 
-    inline virtual EComponentId getSource() const noexcept final { return source_; }
+    inline virtual uint32_t getSource() const noexcept final { return source_; }
 
-    inline virtual void setDestination(EComponentId destination) noexcept final
+    inline virtual void setDestination(uint32_t destination) noexcept final
     {
         destination_ = destination;
     }
 
-    inline virtual EComponentId getDestination() const noexcept final { return destination_; }
+    inline virtual uint32_t getDestination() const noexcept final { return destination_; }
 
     inline virtual void setMessageNumber(uint32_t messageNumber) noexcept final
     {
@@ -42,10 +41,7 @@ class BasePipelineMessage
 
     inline virtual uint32_t getMessageNumber() const noexcept final { return messageNumber_; }
 
-    inline virtual EMessageType getMessageType() const noexcept final
-    {
-        return messageType_;
-    }
+    inline virtual uint32_t getMessageType() const noexcept final { return messageType_; }
 
     /// @brief Set the owner of the data to this BasePipelineMessage
     /// @param pPipelineData
@@ -70,15 +66,13 @@ class BasePipelineMessage
     BasePipelineMessage& operator=(const BasePipelineMessage&&) = delete;
 
   private:
-    EComponentId source_;
+    uint32_t source_;
 
-    EComponentId destination_;
+    uint32_t destination_;
 
-    EMessageType messageType_;
+    uint32_t messageType_;
 
     uint32_t messageNumber_;
 };
 
 }  // namespace sc
-
-#endif

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "VerticalSeamCarverData.hpp"
 
@@ -13,7 +13,7 @@ using std::unique_ptr;
 namespace sc
 {
 SeamCarverBaseStage::SeamCarverBaseStage(
-    EComponentId thisStageId, EComponentLinkType queueType,
+    uint32_t thisStageId, uint32_t queueType,
     PipelineSenderReceiver* pSenderReceiver,
     unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),
@@ -22,7 +22,7 @@ SeamCarverBaseStage::SeamCarverBaseStage(
 }
 
 SeamCarverBaseStage::SeamCarverBaseStage(
-    EComponentId thisStageId, EComponentLinkType queueType,
+    uint32_t thisStageId, uint32_t queueType,
     PipelineSenderReceiver* pSenderReceiver,
     unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),

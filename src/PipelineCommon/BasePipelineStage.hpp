@@ -6,82 +6,74 @@
 #include <thread>
 
 #include "IPipelineStage.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 
 namespace sc
 {
 class PipelineSenderReceiver;
 class IMessageRouter;
+class IDataProcessor;
 class BasePipelineMessage;
 class BasePipelineData;
 
 class BasePipelineStage : public IPipelineStage
 {
   public:
-    explicit BasePipelineStage(EComponentId thisStageId, EComponentLinkType queueType,
-                               PipelineSenderReceiver* pSenderReceiver);
+    /// @brief Builds a component
+    /// @param thisComponentId Unique identifier for this component (akin to an IP)
+    /// @param componentLinkType What medium shall the messages be transported on
+    /// @param pDataProcessor Reference to an object that will process the data
+    /// @param pMessageRouter Reference to an implementation of an IMessageRouter that will be used
+    /// for sending and receiving messages between components.
+    explicit BasePipelineStage(uint32_t thisComponentId, uint32_t componentLinkType,
+                               IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter);
 
-    /// @brief Destructor will stop the thread if it needs to be stopped, and 'uninitialize'
+    /// @brief Destructor will stop the thread if it needs to be stopped and unregisters itself with
+    /// the IMessageRouter instance.
     virtual ~BasePipelineStage() override;
 
-    /// @brief This method initializes this stage so that it's ready to be started. This call will
-    /// fail if the constructor was passed a nullptr for pSenderReceiver.
-    virtual void initialize() override;
+    /// @brief This method start the thread that will receive incoming messages and pass them onto
+    /// their appropriate handlers. This method will fail to start the thread if the pDataProcessor
+    /// or pMessageRouter pointers are nullptr, since those are required components.
+    virtual void runComponent() override;
 
-    /// @brief This method start the thread that will read the input queue and process the message
-    /// and the data contained in the message. This call will not start the thread if this
-    /// BasePipelineStage was not initialized.
-    virtual void runStage() override;
-
-    /// @brief This method stops the thread that reads the input queue
-    virtual void stopStage() override;
-
-    /// @brief Returns the status of this stage
-    /// @return bool
-    virtual bool isInitialized() const override;
+    /// @brief This method stops the thread that receives incoming messages
+    virtual void stopComponent() override;
 
     /// @brief Returns the status of the thread
     /// @return bool
-    virtual bool isRunning() const override;
+    virtual bool isComponentRunning() const noexcept override;
 
-    // deleted to prevent misuse
+    /// Deleted to prevent misuse
     BasePipelineStage(const BasePipelineStage&) = delete;
     BasePipelineStage(BasePipelineStage&&) = delete;
     BasePipelineStage& operator=(const BasePipelineStage&) = delete;
     BasePipelineStage& operator=(BasePipelineStage&&) = delete;
 
-  protected:
-    /// @brief method that processes the incoming message
-    /// @param pMessage
-    virtual void processMessage(std::unique_ptr<BasePipelineMessage>& pMessage) = 0;
-
-    /// @brief method that does the actual data processing
-    /// @param pData
-    virtual void processData(std::unique_ptr<BasePipelineData>& pData) = 0;
-
   private:
-    void runThread();
+    void incomingMessageThread();
 
     void doStopStage();
 
-    const EComponentId thisStageId_;
+    const uint32_t thisComponentId_;
 
-    const EComponentLinkType queueType_;
+    const uint32_t componentLinkType_;
 
     /// Flag to start and stop the thread, and to keep track if it's running
     std::atomic<bool> bThreadIsRunning_;
 
-    /// Indicates if this stage is initialized
-    bool bIsInitialized_;
-
     /// Inidicates whether the thread has joined
     bool bThreadHasJoined_;
 
-    /// pointer to a PipelineSenderReceiver
-    /// This BasePipelineStage does not own this pointer so not responsible for deleting
-    PipelineSenderReceiver* pSenderReceiver_;
+    /// This BasePipelineStage does not own this pointer so it's not responsible for its deletion.
+    /// This is used for sending/receiving messages between components
+    IMessageRouter* pMessageRouter_{nullptr};
 
-    std::thread processingThread_;
+    /// This BasePipelineStage does not own this pointer so it's not responsible for its deletion.
+    /// A reference to the object that will process the data that comes in
+    IDataProcessor* pDataProcessor_{nullptr};
+
+    std::thread dataProcessorThread_;
 };
 
 }  // namespace sc

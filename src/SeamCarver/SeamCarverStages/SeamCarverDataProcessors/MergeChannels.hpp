@@ -24,7 +24,7 @@ class MergeChannels : public ISeamCarverDataProcessor
   private:
     inline static const bool bRegistered_ =
         SeamCarverProcessorFactory::registerComponent(
-            EComponentId::STAGE_4, []() {
+            ComponentId::STAGE_4, []() {
                 std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                     std::make_unique<MergeChannels>();
 

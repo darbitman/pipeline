@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "SeamCarverProcessorFactory.hpp"
 
 using std::dynamic_pointer_cast;
@@ -14,7 +14,7 @@ namespace sc
 TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
 {
     auto pStage =
-        SeamCarverProcessorFactory::createStage((EComponentId)(-1));
+        SeamCarverProcessorFactory::createStage((uint32_t)(-1));
 
     EXPECT_EQ(pStage, nullptr);
 }

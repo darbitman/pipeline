@@ -25,7 +25,7 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
 
   private:
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerComponent(EComponentId::STAGE_1, []() {
+        SeamCarverProcessorFactory::registerComponent(ComponentId::STAGE_1, []() {
             std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                 std::make_unique<CumulativePathEnergy>();
 

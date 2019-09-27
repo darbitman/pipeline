@@ -4,7 +4,8 @@
 #include <thread>
 
 #include "BasePipelineData.hpp"
-#include "PipelineSenderReceiver.hpp"
+#include "IDataProcessor.hpp"
+#include "IMessageRouter.hpp"
 #include "ShutdownMessage.hpp"
 
 using std::make_unique;
@@ -16,33 +17,29 @@ using std::this_thread::sleep_for;
 
 namespace sc
 {
-BasePipelineStage::BasePipelineStage(EComponentId thisStageId, EComponentLinkType queueType,
-                                     PipelineSenderReceiver* pSenderReceiver)
-    : thisStageId_(thisStageId),
-      queueType_(queueType),
+BasePipelineStage::BasePipelineStage(uint32_t thisComponentId, uint32_t componentLinkType,
+                                     IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter)
+    : thisComponentId_(thisComponentId),
+      componentLinkType_(componentLinkType),
       bThreadIsRunning_(false),
-      bIsInitialized_(false),
       bThreadHasJoined_(false),
-      pSenderReceiver_(pSenderReceiver)
+      pDataProcessor_(pDataProcessor),
+      pMessageRouter_(pMessageRouter)
 {
 }
 
-BasePipelineStage::~BasePipelineStage() {}
-
-void BasePipelineStage::initialize()
+BasePipelineStage::~BasePipelineStage()
 {
-    if (bIsInitialized_ == false && pSenderReceiver_ != nullptr)
-    {
-        pSenderReceiver_->registerComponent(thisStageId_, queueType_);
-        bIsInitialized_ = true;
-    }
+    // TODO
 }
 
-void BasePipelineStage::runStage()
+void BasePipelineStage::runComponent()
 {
-    if (bIsInitialized_ && !bThreadIsRunning_)
+    if (!bThreadIsRunning_ && pMessageRouter_ != nullptr)
     {
-        processingThread_ = thread(&BasePipelineStage::runThread, this);
+        pMessageRouter_->registerComponent(thisComponentId_, componentLinkType_);
+
+        dataProcessorThread_ = thread(&BasePipelineStage::incomingMessageThread, this);
 
         // wait for thread to start
         while (!bThreadIsRunning_)
@@ -50,36 +47,34 @@ void BasePipelineStage::runStage()
     }
 }
 
-void BasePipelineStage::stopStage() { doStopStage(); }
+void BasePipelineStage::stopComponent() { doStopStage(); }
 
-bool BasePipelineStage::isInitialized() const { return bIsInitialized_; }
+bool BasePipelineStage::isComponentRunning() const noexcept { return bThreadIsRunning_; }
 
-bool BasePipelineStage::isRunning() const { return bThreadIsRunning_; }
-
-void BasePipelineStage::runThread()
+void BasePipelineStage::incomingMessageThread()
 {
     bThreadIsRunning_ = true;
 
     while (bThreadIsRunning_)
     {
-        // don't need to check if pSenderReceiver_ is a nullptr since this method (thread) can't be
+        // don't need to check if pMessageRouter_ is a nullptr since this method (thread) can't be
         // called/started if it's a nullptr
-        auto pReceivedMessage = pSenderReceiver_->receiveMessage(thisStageId_);
+        auto pReceivedMessage = pMessageRouter_->receiveMessage(thisComponentId_);
 
         if (pReceivedMessage != nullptr)
         {
             // check if message is destined to this stage
             // if not, drop the message
-            if (pReceivedMessage->getDestination() == thisStageId_)
+            if (pReceivedMessage->getDestination() == thisComponentId_)
             {
                 switch (pReceivedMessage->getMessageType())
                 {
-                    case EMessageType::MESSAGE_TYPE_PIPELINE_DATA:
-                        processMessage(pReceivedMessage);
-                        pSenderReceiver_->sendMessage(pReceivedMessage);
+                    case MessageType::MESSAGE_TYPE_PIPELINE_DATA:
+                        pDataProcessor_->processMessage(pReceivedMessage);
+                        pMessageRouter_->sendMessage(pReceivedMessage);
                         break;
 
-                    case EMessageType::MESSAGE_TYPE_SHUTDOWN:
+                    case MessageType::MESSAGE_TYPE_SHUTDOWN:
                         bThreadIsRunning_ = false;
                         break;
 
@@ -95,12 +90,12 @@ void BasePipelineStage::runThread()
 
 void BasePipelineStage::doStopStage()
 {
-    if (pSenderReceiver_ != nullptr)
+    if (pMessageRouter_ != nullptr)
     {
         // create a ShutdownMessage and send to itself
         unique_ptr<BasePipelineMessage> pShutdownMessage =
-            make_unique<ShutdownMessage>(thisStageId_, thisStageId_, 0);
-        pSenderReceiver_->sendMessage(pShutdownMessage);
+            make_unique<ShutdownMessage>(thisComponentId_, thisComponentId_, 0);
+        pMessageRouter_->sendMessage(pShutdownMessage);
     }
     else
     {
@@ -109,17 +104,12 @@ void BasePipelineStage::doStopStage()
 
     if (!bThreadHasJoined_)
     {
-        while (!processingThread_.joinable())
+        while (!dataProcessorThread_.joinable())
             ;
 
-        processingThread_.join();
+        dataProcessorThread_.join();
 
         bThreadHasJoined_ = true;
-    }
-
-    if (bIsInitialized_)
-    {
-        bIsInitialized_ = false;
     }
 }
 

@@ -1,9 +1,10 @@
 #include "PipelineDataMessage.hpp"
 
+#include <cstdint>
 #include <memory>
 
 #include "BasePipelineData.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 
 using std::move;
 using std::unique_ptr;
@@ -11,15 +12,15 @@ using std::unique_ptr;
 namespace sc
 {
 PipelineDataMessage::PipelineDataMessage()
-    : BasePipelineMessage(EComponentId::UNKNOWN_STAGE, EComponentId::UNKNOWN_STAGE,
-                          EMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+    : BasePipelineMessage(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
+                          MessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
 {
 }
 
-PipelineDataMessage::PipelineDataMessage(EComponentId source, EComponentId destination,
+PipelineDataMessage::PipelineDataMessage(uint32_t source, uint32_t destination,
                                          uint32_t messageNumber,
                                          unique_ptr<BasePipelineData>& pPipelineData)
-    : BasePipelineMessage(source, destination, EMessageType::MESSAGE_TYPE_PIPELINE_DATA,
+    : BasePipelineMessage(source, destination, MessageType::MESSAGE_TYPE_PIPELINE_DATA,
                           messageNumber),
       pPipelineData_(move(pPipelineData))
 {

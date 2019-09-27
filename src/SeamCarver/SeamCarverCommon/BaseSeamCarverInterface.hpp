@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "IPipelineInterface.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "SharedContainer.hpp"
 
@@ -12,7 +12,7 @@ namespace sc
 class BaseSeamCarverInterface : public IPipelineInterface
 {
   public:
-    BaseSeamCarverInterface(EComponentLinkType queueType, PipelineSenderReceiver* pSenderReceiver);
+    BaseSeamCarverInterface(uint32_t queueType, PipelineSenderReceiver* pSenderReceiver);
 
     ~BaseSeamCarverInterface() = default;
 
@@ -28,9 +28,9 @@ class BaseSeamCarverInterface : public IPipelineInterface
     virtual size_t getNumberOfDataObjectsInPipeline() const;
 
   private:
-    const EComponentId thisStageId_;
+    const uint32_t thisStageId_;
 
-    const EComponentLinkType queueType_;
+    const uint32_t queueType_;
 
     size_t totalDataObjectsInPipeline_;
 

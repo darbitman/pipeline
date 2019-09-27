@@ -5,7 +5,7 @@
 #include <mutex>
 #include <vector>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineDataMessage.hpp"
 #include "PriorityQueue.hpp"
 #include "SharedPriorityQueueAdapter.hpp"
@@ -21,7 +21,7 @@ namespace sc
 {
 PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
 
-int32_t PipelineQueueManager::createNewQueue(EComponentLinkType newQueueType)
+int32_t PipelineQueueManager::createNewQueue(uint32_t newQueueType)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     // find an unused queue id
@@ -32,12 +32,12 @@ int32_t PipelineQueueManager::createNewQueue(EComponentLinkType newQueueType)
 
     switch (newQueueType)
     {
-        case EComponentLinkType::QUEUE_TYPE_FIFO:
+        case ComponentLinkType::QUEUE_TYPE_FIFO:
         {
             queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<value_type>>(true);
         }
         break;
-        case EComponentLinkType::QUEUE_TYPE_MIN_PQ:
+        case ComponentLinkType::QUEUE_TYPE_MIN_PQ:
         {
             using comparator_type = PipelineDataMessage::MessageNumberLessComparator;
 
@@ -49,7 +49,7 @@ int32_t PipelineQueueManager::createNewQueue(EComponentLinkType newQueueType)
         break;
         default:
             throw std::invalid_argument(
-                "PipelineQueueManager::createNewQueue(): Invalid EComponentLinkType");
+                "PipelineQueueManager::createNewQueue(): Invalid uint32_t");
             break;
     }
 

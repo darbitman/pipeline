@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PipelineDataMessage.hpp"
 #include "SharedContainer.hpp"
 
@@ -27,7 +27,7 @@ class PipelineQueueManager
     /// @param newQueueType
     /// @return int32_t A non-negative queueId
     /// @throw std::invalid_argument If newQueueType doesn't exist
-    int32_t createNewQueue(EComponentLinkType newQueueType);
+    int32_t createNewQueue(uint32_t newQueueType);
 
     /// @brief deletes a queue
     /// @param queueId specifies which queue to delete

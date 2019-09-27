@@ -1,12 +1,10 @@
-
-#ifndef SHUTDOWNMESSAGE_HPP
-#define SHUTDOWNMESSAGE_HPP
+#pragma once
 
 #include <memory>
 
 #include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 
 namespace sc
 {
@@ -15,7 +13,7 @@ class ShutdownMessage : public BasePipelineMessage
   public:
     ShutdownMessage();
 
-    ShutdownMessage(EComponentId source, EComponentId destination, uint32_t messageNumber);
+    ShutdownMessage(uint32_t source, uint32_t destination, uint32_t messageNumber);
 
     virtual ~ShutdownMessage();
 
@@ -41,5 +39,3 @@ class ShutdownMessage : public BasePipelineMessage
 };
 
 }  // namespace sc
-
-#endif

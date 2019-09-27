@@ -1,12 +1,11 @@
-#ifndef PIPELINEDATAMESSAGE_HPP
-#define PIPELINEDATAMESSAGE_HPP
+#pragma once
 
 #include <cstdint>
 #include <memory>
 
 #include "BasePipelineData.hpp"
 #include "BasePipelineMessage.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 
 namespace sc
 {
@@ -24,11 +23,10 @@ class PipelineDataMessage : public BasePipelineMessage
 
     PipelineDataMessage();
 
-    PipelineDataMessage(EComponentId source, EComponentId destination,
-                        uint32_t messageNumber);
+    PipelineDataMessage(uint32_t source, uint32_t destination, uint32_t messageNumber);
 
-    PipelineDataMessage(EComponentId source, EComponentId destination,
-                        uint32_t messageNumber, std::unique_ptr<BasePipelineData>& pPipelineData);
+    PipelineDataMessage(uint32_t source, uint32_t destination, uint32_t messageNumber,
+                        std::unique_ptr<BasePipelineData>& pPipelineData);
 
     virtual ~PipelineDataMessage() = default;
 
@@ -55,5 +53,3 @@ class PipelineDataMessage : public BasePipelineMessage
 };
 
 }  // namespace sc
-
-#endif

@@ -17,7 +17,7 @@ namespace sc
 {
 PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
-      thisComponentId_(EComponentId::MESSAGE_ROUTER),
+      thisComponentId_(ComponentId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true),
       pQueueManager_(make_unique<PipelineQueueManager>())
@@ -30,7 +30,7 @@ void PipelineSenderReceiver::initialize()
     {
         bInitialized_ = true;
 
-        registerComponent(thisComponentId_, EComponentLinkType::QUEUE_TYPE_FIFO);
+        registerComponent(thisComponentId_, ComponentLinkType::QUEUE_TYPE_FIFO);
 
         thread(&PipelineSenderReceiver::receiverThread, this).detach();
     }
@@ -40,8 +40,7 @@ bool PipelineSenderReceiver::isInitialized() const noexcept { return bInitialize
 
 bool PipelineSenderReceiver::isShutdown() const noexcept { return bReceiverThreadShutdown_; }
 
-void PipelineSenderReceiver::registerComponent(EComponentId stageId,
-                                               EComponentLinkType queueType) noexcept
+void PipelineSenderReceiver::registerComponent(uint32_t stageId, uint32_t queueType) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
@@ -53,7 +52,7 @@ void PipelineSenderReceiver::registerComponent(EComponentId stageId,
     }
 }
 
-void PipelineSenderReceiver::unregisterComponent(EComponentId stageId) noexcept
+void PipelineSenderReceiver::unregisterComponent(uint32_t stageId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -75,7 +74,7 @@ void PipelineSenderReceiver::unregisterComponent(EComponentId stageId) noexcept
     }
 }
 
-bool PipelineSenderReceiver::isComponentRegistered(EComponentId stageId) const noexcept
+bool PipelineSenderReceiver::isComponentRegistered(uint32_t stageId) const noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -128,7 +127,7 @@ void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>&& pMess
 }
 
 unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receiveMessage(
-    EComponentId receivingComponentId) noexcept
+    uint32_t receivingComponentId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -153,7 +152,7 @@ unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receiveMessage(
     }
 }
 
-bool PipelineSenderReceiver::canReceive(EComponentId receivingStageId) const noexcept
+bool PipelineSenderReceiver::canReceive(uint32_t receivingStageId) const noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -197,11 +196,11 @@ void PipelineSenderReceiver::receiverThread()
             }
             else
             {
-                if (receivedMessageType == EMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                if (receivedMessageType == MessageType::MESSAGE_TYPE_PIPELINE_DATA)
                 {
                     // TODO process data
                 }
-                else if (receivedMessageType == EMessageType::MESSAGE_TYPE_SHUTDOWN)
+                else if (receivedMessageType == MessageType::MESSAGE_TYPE_SHUTDOWN)
                 {
                     bRunReceiverThread_ = false;
                     // TODO process shutdown message

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ISeamCarverDataProcessor.hpp"
-#include "PipelineCommon.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "SeamCarverDataProcessors.hpp"
 
 using std::make_unique;
@@ -13,7 +13,7 @@ using std::vector;
 
 namespace sc
 {
-bool SeamCarverProcessorFactory::registerComponent(EComponentId stageId,
+bool SeamCarverProcessorFactory::registerComponent(uint32_t stageId,
                                                   createProcessorFunction function)
 {
     // check if map doesn't have the mapping already
@@ -25,13 +25,13 @@ bool SeamCarverProcessorFactory::registerComponent(EComponentId stageId,
     return false;
 }
 
-bool SeamCarverProcessorFactory::isComponentRegistered(EComponentId stageId)
+bool SeamCarverProcessorFactory::isComponentRegistered(uint32_t stageId)
 {
     return (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0);
 }
 
 unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
-    EComponentId stageId)
+    uint32_t stageId)
 {
     unique_ptr<ISeamCarverDataProcessor> p_new_stage(nullptr);
 
@@ -43,9 +43,9 @@ unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
     return p_new_stage;
 }
 
-unique_ptr<vector<EComponentId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages()
+unique_ptr<vector<uint32_t>> SeamCarverProcessorFactory::getVectorOfRegisteredStages()
 {
-    auto pStageIds = make_unique<vector<EComponentId>>();
+    auto pStageIds = make_unique<vector<uint32_t>>();
 
     for (auto& stageIdCreateProcessorPair : stageIdToCreateProcessorFunctionMap_)
     {
