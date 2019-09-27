@@ -20,7 +20,7 @@ class PipelineSenderReceiverTest : public ::testing::Test
         senderReceiver.initialize();
 
         senderReceiver.registerComponent(EComponentId::STAGE_0,
-                                        EComponentLinkType::QUEUE_TYPE_FIFO);
+                                         EComponentLinkType::QUEUE_TYPE_FIFO);
     }
 
     static PipelineSenderReceiver senderReceiver;
@@ -38,9 +38,7 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 
     const BasePipelineMessage* const savedPtr = pMessage.get();
 
-    ASSERT_EQ(senderReceiver.send(pMessage), true);
-
-    auto pReceivedMessage = senderReceiver.receive(EComponentId::STAGE_0);
+    auto pReceivedMessage = senderReceiver.receiveMessage(EComponentId::STAGE_0);
 
     EXPECT_EQ(savedPtr, pReceivedMessage.get());
 }
@@ -51,8 +49,6 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
 
     unique_ptr<BasePipelineMessage> pMessage =
         make_unique<ShutdownMessage>(EComponentId::MESSAGE_ROUTER, EComponentId::MESSAGE_ROUTER, 0);
-
-    ASSERT_EQ(senderReceiver.send(pMessage), true);
 
     while (senderReceiver.isShutdown() == false)
         ;
