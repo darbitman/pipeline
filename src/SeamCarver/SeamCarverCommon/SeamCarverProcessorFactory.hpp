@@ -15,13 +15,13 @@ class SeamCarverProcessorFactory
   public:
     using createProcessorFunction = std::unique_ptr<ISeamCarverDataProcessor> (*)();
 
-    static bool registerNewStage(EPipelineStageId stageId, createProcessorFunction function);
+    static bool registerNewStage(EComponentId stageId, createProcessorFunction function);
 
-    static bool isStageRegistered(EPipelineStageId stageId);
+    static bool isStageRegistered(EComponentId stageId);
 
-    static std::unique_ptr<ISeamCarverDataProcessor> createStage(EPipelineStageId stageId);
+    static std::unique_ptr<ISeamCarverDataProcessor> createStage(EComponentId stageId);
 
-    static std::unique_ptr<std::vector<EPipelineStageId>> getVectorOfRegisteredStages();
+    static std::unique_ptr<std::vector<EComponentId>> getVectorOfRegisteredStages();
 
     // deleted to prevent misuse
     SeamCarverProcessorFactory(const SeamCarverProcessorFactory&) = delete;
@@ -34,7 +34,7 @@ class SeamCarverProcessorFactory
 
     ~SeamCarverProcessorFactory() = default;
 
-    inline static std::unordered_map<EPipelineStageId, createProcessorFunction>
+    inline static std::unordered_map<EComponentId, createProcessorFunction>
         stageIdToCreateProcessorFunctionMap_;
 };
 }  // namespace sc

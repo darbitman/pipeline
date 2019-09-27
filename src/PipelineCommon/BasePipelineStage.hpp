@@ -14,7 +14,7 @@ namespace sc
 class BasePipelineStage : public IPipelineStage
 {
   public:
-    explicit BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    explicit BasePipelineStage(EComponentId thisStageId, EComponentLinkType queueType,
                                PipelineSenderReceiver* pSenderReceiver);
 
     /// @brief Destructor will stop the thread if it needs to be stopped, and 'uninitialize'
@@ -60,9 +60,9 @@ class BasePipelineStage : public IPipelineStage
 
     void doStopStage();
 
-    const EPipelineStageId thisStageId_;
+    const EComponentId thisStageId_;
 
-    const EPipelineQueueType queueType_;
+    const EComponentLinkType queueType_;
 
     /// Flag to start and stop the thread, and to keep track if it's running
     std::atomic<bool> bThreadIsRunning_;

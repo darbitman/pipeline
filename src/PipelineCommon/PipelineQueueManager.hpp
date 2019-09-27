@@ -27,7 +27,7 @@ class PipelineQueueManager
     /// @param newQueueType
     /// @return int32_t A non-negative queueId
     /// @throw std::invalid_argument If newQueueType doesn't exist
-    int32_t createNewQueue(EPipelineQueueType newQueueType);
+    int32_t createNewQueue(EComponentLinkType newQueueType);
 
     /// @brief deletes a queue
     /// @param queueId specifies which queue to delete

@@ -18,22 +18,22 @@ class BasePipelineMessage
     /// @param source
     /// @param destination
     /// @param messageType
-    BasePipelineMessage(EPipelineStageId source, EPipelineStageId destination,
-                        EPipelineMessageType messageType, uint32_t messageNumber);
+    BasePipelineMessage(EComponentId source, EComponentId destination,
+                        EMessageType messageType, uint32_t messageNumber);
 
     /// @brief destructor
     virtual ~BasePipelineMessage() = 0;
 
-    inline virtual void setSource(EPipelineStageId source) noexcept final { source_ = source; }
+    inline virtual void setSource(EComponentId source) noexcept final { source_ = source; }
 
-    inline virtual EPipelineStageId getSource() const noexcept final { return source_; }
+    inline virtual EComponentId getSource() const noexcept final { return source_; }
 
-    inline virtual void setDestination(EPipelineStageId destination) noexcept final
+    inline virtual void setDestination(EComponentId destination) noexcept final
     {
         destination_ = destination;
     }
 
-    inline virtual EPipelineStageId getDestination() const noexcept final { return destination_; }
+    inline virtual EComponentId getDestination() const noexcept final { return destination_; }
 
     inline virtual void setMessageNumber(uint32_t messageNumber) noexcept final
     {
@@ -42,7 +42,7 @@ class BasePipelineMessage
 
     inline virtual uint32_t getMessageNumber() const noexcept final { return messageNumber_; }
 
-    inline virtual EPipelineMessageType getMessageType() const noexcept final
+    inline virtual EMessageType getMessageType() const noexcept final
     {
         return messageType_;
     }
@@ -70,11 +70,11 @@ class BasePipelineMessage
     BasePipelineMessage& operator=(const BasePipelineMessage&&) = delete;
 
   private:
-    EPipelineStageId source_;
+    EComponentId source_;
 
-    EPipelineStageId destination_;
+    EComponentId destination_;
 
-    EPipelineMessageType messageType_;
+    EMessageType messageType_;
 
     uint32_t messageNumber_;
 };

@@ -11,15 +11,15 @@ using std::unique_ptr;
 namespace sc
 {
 PipelineDataMessage::PipelineDataMessage()
-    : BasePipelineMessage(EPipelineStageId::UNKNOWN_STAGE, EPipelineStageId::UNKNOWN_STAGE,
-                          EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+    : BasePipelineMessage(EComponentId::UNKNOWN_STAGE, EComponentId::UNKNOWN_STAGE,
+                          EMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
 {
 }
 
-PipelineDataMessage::PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
+PipelineDataMessage::PipelineDataMessage(EComponentId source, EComponentId destination,
                                          uint32_t messageNumber,
                                          unique_ptr<BasePipelineData>& pPipelineData)
-    : BasePipelineMessage(source, destination, EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA,
+    : BasePipelineMessage(source, destination, EMessageType::MESSAGE_TYPE_PIPELINE_DATA,
                           messageNumber),
       pPipelineData_(move(pPipelineData))
 {

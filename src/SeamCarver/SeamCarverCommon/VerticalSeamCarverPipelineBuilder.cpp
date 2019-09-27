@@ -27,11 +27,11 @@ VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
 
 void VerticalSeamCarverPipelineBuilder::createPipeline()
 {
-    createStage(EPipelineStageId::STAGE_0, EPipelineQueueType::QUEUE_TYPE_FIFO);
-    createStage(EPipelineStageId::STAGE_1, EPipelineQueueType::QUEUE_TYPE_FIFO);
-    createStage(EPipelineStageId::STAGE_2, EPipelineQueueType::QUEUE_TYPE_FIFO);
-    createStage(EPipelineStageId::STAGE_3, EPipelineQueueType::QUEUE_TYPE_FIFO);
-    createStage(EPipelineStageId::STAGE_4, EPipelineQueueType::QUEUE_TYPE_FIFO);
+    createStage(EComponentId::STAGE_0, EComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(EComponentId::STAGE_1, EComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(EComponentId::STAGE_2, EComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(EComponentId::STAGE_3, EComponentLinkType::QUEUE_TYPE_FIFO);
+    createStage(EComponentId::STAGE_4, EComponentLinkType::QUEUE_TYPE_FIFO);
 }
 
 unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelineInterface()
@@ -39,14 +39,14 @@ unique_ptr<IPipelineInterface>& VerticalSeamCarverPipelineBuilder::createPipelin
     if (pPipelineInterface_ == nullptr)
     {
         pPipelineInterface_ = make_unique<BaseSeamCarverInterface>(
-            EPipelineQueueType::QUEUE_TYPE_FIFO, pSenderReceiver_);
+            EComponentLinkType::QUEUE_TYPE_FIFO, pSenderReceiver_);
     }
 
     return pPipelineInterface_;
 }
 
 vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages(
-    EPipelineStageId stageId) const
+    EComponentId stageId) const
 {
     try
     {
@@ -58,14 +58,14 @@ vector<unique_ptr<IPipelineStage>>* VerticalSeamCarverPipelineBuilder::getStages
     }
 }
 
-void VerticalSeamCarverPipelineBuilder::createStage(EPipelineStageId stageId,
-                                                    EPipelineQueueType queueType)
+void VerticalSeamCarverPipelineBuilder::createStage(EComponentId stageId,
+                                                    EComponentLinkType queueType)
 {
     // create a vector if it hasn't been used before
     if (stageIdToVectorOfPipelineStages_.count(stageId) == 0)
     {
         stageIdToVectorOfPipelineStages_.insert(
-            make_pair<EPipelineStageId, unique_ptr<vector<unique_ptr<IPipelineStage>>>>(
+            make_pair<EComponentId, unique_ptr<vector<unique_ptr<IPipelineStage>>>>(
                 move(stageId), make_unique<vector<unique_ptr<IPipelineStage>>>()));
     }
 

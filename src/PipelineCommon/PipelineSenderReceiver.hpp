@@ -20,11 +20,11 @@ class PipelineSenderReceiver
 
     void initialize();
 
-    void registerNewStage(EPipelineStageId stageId, EPipelineQueueType queueType);
+    void registerNewStage(EComponentId stageId, EComponentLinkType queueType);
 
-    void unregisterStage(EPipelineStageId stageId);
+    void unregisterStage(EComponentId stageId);
 
-    bool isStageRegistered(EPipelineStageId stageId);
+    bool isStageRegistered(EComponentId stageId);
 
     bool isInitialized() const;
 
@@ -32,9 +32,9 @@ class PipelineSenderReceiver
 
     bool send(std::unique_ptr<BasePipelineMessage>& dataToSend);
 
-    std::unique_ptr<BasePipelineMessage> receive(EPipelineStageId receivingStageId);
+    std::unique_ptr<BasePipelineMessage> receive(EComponentId receivingStageId);
 
-    bool canReceive(EPipelineStageId receivingStageId) const;
+    bool canReceive(EComponentId receivingStageId) const;
 
     // deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
@@ -45,7 +45,7 @@ class PipelineSenderReceiver
   private:
     bool bInitialized_;
 
-    EPipelineStageId thisStageId_;
+    EComponentId thisStageId_;
 
     std::atomic<bool> bRunReceiverThread_;
 
@@ -53,7 +53,7 @@ class PipelineSenderReceiver
 
     std::unique_ptr<PipelineQueueManager> pQueueManager_;
 
-    std::unordered_map<EPipelineStageId, int32_t> stageIdToQueueIdMap_;
+    std::unordered_map<EComponentId, int32_t> stageIdToQueueIdMap_;
 
     mutable std::mutex mapMutex_;
 

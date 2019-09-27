@@ -12,11 +12,11 @@ namespace sc
 class SeamCarverBaseStage : public BasePipelineStage
 {
   public:
-    SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    SeamCarverBaseStage(EComponentId thisStageId, EComponentLinkType queueType,
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor);
 
-    SeamCarverBaseStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    SeamCarverBaseStage(EComponentId thisStageId, EComponentLinkType queueType,
                         PipelineSenderReceiver* pSenderReceiver,
                         std::unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor);
 

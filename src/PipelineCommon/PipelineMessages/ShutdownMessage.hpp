@@ -15,7 +15,7 @@ class ShutdownMessage : public BasePipelineMessage
   public:
     ShutdownMessage();
 
-    ShutdownMessage(EPipelineStageId source, EPipelineStageId destination, uint32_t messageNumber);
+    ShutdownMessage(EComponentId source, EComponentId destination, uint32_t messageNumber);
 
     virtual ~ShutdownMessage();
 

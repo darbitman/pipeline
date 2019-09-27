@@ -23,7 +23,7 @@ class SeamRemover : public ISeamCarverDataProcessor
 
   private:
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerNewStage(EPipelineStageId::STAGE_3, []() {
+        SeamCarverProcessorFactory::registerNewStage(EComponentId::STAGE_3, []() {
             std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                 std::make_unique<SeamRemover>();
 

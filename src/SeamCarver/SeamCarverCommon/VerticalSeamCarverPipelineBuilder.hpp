@@ -25,8 +25,8 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
     /// @param stageId
     /// @param queueType
     /// @return std::unique_ptr<IPipelineStage>
-    virtual std::unique_ptr<IPipelineStage> createNewStage(EPipelineStageId stageId,
-                                                           EPipelineQueueType queueType) override;
+    virtual std::unique_ptr<IPipelineStage> createNewStage(EComponentId stageId,
+                                                           EComponentLinkType queueType) override;
 
     /// @brief Creates the interface stage which feeds data into the pipeline
     /// @param std::unique_ptr<IPipelineInterface>&
@@ -37,12 +37,12 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
     /// @return std::vector<std::unique_ptr<IPipelineStage>>* If stage doesn't exist, nullptr will
     /// be returned
     virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(
-        EPipelineStageId stageId) const override;
+        EComponentId stageId) const override;
 
   private:
     bool bPipelineCreated_;
 
-    std::unordered_map<EPipelineStageId,
+    std::unordered_map<EComponentId,
                        std::unique_ptr<std::vector<std::unique_ptr<IPipelineStage>>>>
         stageIdToVectorOfPipelineStages_;
 
@@ -50,7 +50,7 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
 
     PipelineSenderReceiver* pSenderReceiver_;
 
-    void createStage(EPipelineStageId stageId, EPipelineQueueType queueType);
+    void createStage(EComponentId stageId, EComponentLinkType queueType);
 };
 
 }  // namespace sc

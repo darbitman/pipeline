@@ -13,7 +13,7 @@ using std::vector;
 
 namespace sc
 {
-bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
+bool SeamCarverProcessorFactory::registerNewStage(EComponentId stageId,
                                                   createProcessorFunction function)
 {
     // check if map doesn't have the mapping already
@@ -25,13 +25,13 @@ bool SeamCarverProcessorFactory::registerNewStage(EPipelineStageId stageId,
     return false;
 }
 
-bool SeamCarverProcessorFactory::isStageRegistered(EPipelineStageId stageId)
+bool SeamCarverProcessorFactory::isStageRegistered(EComponentId stageId)
 {
     return (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0);
 }
 
 unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
-    EPipelineStageId stageId)
+    EComponentId stageId)
 {
     unique_ptr<ISeamCarverDataProcessor> p_new_stage(nullptr);
 
@@ -43,9 +43,9 @@ unique_ptr<ISeamCarverDataProcessor> SeamCarverProcessorFactory::createStage(
     return p_new_stage;
 }
 
-unique_ptr<vector<EPipelineStageId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages()
+unique_ptr<vector<EComponentId>> SeamCarverProcessorFactory::getVectorOfRegisteredStages()
 {
-    auto pStageIds = make_unique<vector<EPipelineStageId>>();
+    auto pStageIds = make_unique<vector<EComponentId>>();
 
     for (auto& stageIdCreateProcessorPair : stageIdToCreateProcessorFunctionMap_)
     {

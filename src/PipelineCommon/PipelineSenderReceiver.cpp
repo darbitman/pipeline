@@ -17,7 +17,7 @@ namespace sc
 {
 PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
-      thisStageId_(EPipelineStageId::MESSAGE_ROUTER),
+      thisStageId_(EComponentId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true),
       pQueueManager_(make_unique<PipelineQueueManager>())
@@ -30,14 +30,14 @@ void PipelineSenderReceiver::initialize()
     {
         bInitialized_ = true;
 
-        registerNewStage(thisStageId_, EPipelineQueueType::QUEUE_TYPE_FIFO);
+        registerNewStage(thisStageId_, EComponentLinkType::QUEUE_TYPE_FIFO);
 
         thread(&PipelineSenderReceiver::receiverThread, this).detach();
     }
 }
 
-void PipelineSenderReceiver::registerNewStage(EPipelineStageId stageId,
-                                              EPipelineQueueType queueType)
+void PipelineSenderReceiver::registerNewStage(EComponentId stageId,
+                                              EComponentLinkType queueType)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
@@ -49,12 +49,12 @@ void PipelineSenderReceiver::registerNewStage(EPipelineStageId stageId,
     }
 }
 
-void PipelineSenderReceiver::unregisterStage(EPipelineStageId stageId)
+void PipelineSenderReceiver::unregisterStage(EComponentId stageId)
 {
     // TODO
 }
 
-bool PipelineSenderReceiver::isStageRegistered(EPipelineStageId stageId)
+bool PipelineSenderReceiver::isStageRegistered(EComponentId stageId)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     return (stageIdToQueueIdMap_.count(stageId) > 0);
@@ -89,7 +89,7 @@ bool PipelineSenderReceiver::send(unique_ptr<BasePipelineMessage>& dataToSend)
     }
 }
 
-unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId receivingStageId)
+unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EComponentId receivingStageId)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(receivingStageId) != 0)
@@ -116,7 +116,7 @@ unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EPipelineStageId
     }
 }
 
-bool PipelineSenderReceiver::canReceive(EPipelineStageId receivingStageId) const
+bool PipelineSenderReceiver::canReceive(EComponentId receivingStageId) const
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(receivingStageId) == 0)
@@ -157,11 +157,11 @@ void PipelineSenderReceiver::receiverThread()
             }
             else
             {
-                if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA)
+                if (receivedMessageType == EMessageType::MESSAGE_TYPE_PIPELINE_DATA)
                 {
                     // TODO process data
                 }
-                else if (receivedMessageType == EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN)
+                else if (receivedMessageType == EMessageType::MESSAGE_TYPE_SHUTDOWN)
                 {
                     bRunReceiverThread_ = false;
                     // TODO process shutdown message

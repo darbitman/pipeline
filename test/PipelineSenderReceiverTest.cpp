@@ -19,8 +19,8 @@ class PipelineSenderReceiverTest : public ::testing::Test
     {
         senderReceiver.initialize();
 
-        senderReceiver.registerNewStage(EPipelineStageId::STAGE_0,
-                                        EPipelineQueueType::QUEUE_TYPE_FIFO);
+        senderReceiver.registerNewStage(EComponentId::STAGE_0,
+                                        EComponentLinkType::QUEUE_TYPE_FIFO);
     }
 
     static PipelineSenderReceiver senderReceiver;
@@ -30,8 +30,8 @@ PipelineSenderReceiver PipelineSenderReceiverTest::senderReceiver;
 
 TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
-    auto source = EPipelineStageId::INTERFACE_STAGE;
-    auto destination = EPipelineStageId::STAGE_0;
+    auto source = EComponentId::INTERFACE_STAGE;
+    auto destination = EComponentId::STAGE_0;
     unique_ptr<BasePipelineData> pEmptyData;
     unique_ptr<BasePipelineMessage> pMessage =
         make_unique<PipelineDataMessage>(source, destination, 0, pEmptyData);
@@ -40,7 +40,7 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 
-    auto pReceivedMessage = senderReceiver.receive(EPipelineStageId::STAGE_0);
+    auto pReceivedMessage = senderReceiver.receive(EComponentId::STAGE_0);
 
     EXPECT_EQ(savedPtr, pReceivedMessage.get());
 }
@@ -50,7 +50,7 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
     unique_ptr<BasePipelineMessage> pMessage =
-        make_unique<ShutdownMessage>(EPipelineStageId::MESSAGE_ROUTER, EPipelineStageId::MESSAGE_ROUTER, 0);
+        make_unique<ShutdownMessage>(EComponentId::MESSAGE_ROUTER, EComponentId::MESSAGE_ROUTER, 0);
 
     ASSERT_EQ(senderReceiver.send(pMessage), true);
 

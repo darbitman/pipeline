@@ -13,7 +13,7 @@ namespace sc
 class BaseSeamCarverInterface : public IPipelineInterface
 {
   public:
-    BaseSeamCarverInterface(EPipelineQueueType queueType, PipelineSenderReceiver* pSenderReceiver);
+    BaseSeamCarverInterface(EComponentLinkType queueType, PipelineSenderReceiver* pSenderReceiver);
 
     ~BaseSeamCarverInterface() = default;
 
@@ -29,9 +29,9 @@ class BaseSeamCarverInterface : public IPipelineInterface
     virtual size_t getNumberOfDataObjectsInPipeline() const;
 
   private:
-    const EPipelineStageId thisStageId_;
+    const EComponentId thisStageId_;
 
-    const EPipelineQueueType queueType_;
+    const EComponentLinkType queueType_;
 
     size_t totalDataObjectsInPipeline_;
 

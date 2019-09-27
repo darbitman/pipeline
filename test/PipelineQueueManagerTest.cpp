@@ -28,7 +28,7 @@ TEST_F(PipelineQueueManagerTest, InvalidQueue)
 {
     try
     {
-        auto queueId = manager.createNewQueue(EPipelineQueueType::QUEUE_TYPE_UNKNOWN);
+        auto queueId = manager.createNewQueue(EComponentLinkType::QUEUE_TYPE_UNKNOWN);
     }
     catch (std::invalid_argument& e)
     {
@@ -40,7 +40,7 @@ TEST_F(PipelineQueueManagerTest, CreateFifoQueue)
 {
     try
     {
-        auto queueId = manager.createNewQueue(EPipelineQueueType::QUEUE_TYPE_FIFO);
+        auto queueId = manager.createNewQueue(EComponentLinkType::QUEUE_TYPE_FIFO);
 
         EXPECT_GE(queueId, 0);
 
@@ -86,7 +86,7 @@ TEST_F(PipelineQueueManagerTest, CreateMinPq)
 {
     try
     {
-        auto queueId = manager.createNewQueue(EPipelineQueueType::QUEUE_TYPE_MIN_PQ);
+        auto queueId = manager.createNewQueue(EComponentLinkType::QUEUE_TYPE_MIN_PQ);
 
         EXPECT_GE(queueId, 0);
 

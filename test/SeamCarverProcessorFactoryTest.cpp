@@ -14,7 +14,7 @@ namespace sc
 TEST(SeamCarverProcessorFactoryTest, CreateNullStage)
 {
     auto pStage =
-        SeamCarverProcessorFactory::createStage((EPipelineStageId)(-1));
+        SeamCarverProcessorFactory::createStage((EComponentId)(-1));
 
     EXPECT_EQ(pStage, nullptr);
 }

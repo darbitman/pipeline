@@ -3,7 +3,7 @@
 
 namespace sc
 {
-enum EPipelineStageId
+enum EComponentId
 {
     UNKNOWN_STAGE,
     MESSAGE_ROUTER,
@@ -15,14 +15,14 @@ enum EPipelineStageId
     STAGE_4
 };
 
-enum EPipelineQueueType
+enum EComponentLinkType
 {
     QUEUE_TYPE_UNKNOWN,
     QUEUE_TYPE_FIFO,
     QUEUE_TYPE_MIN_PQ
 };
 
-enum EPipelineMessageType
+enum EMessageType
 {
     MESSAGE_TYPE_UNKNOWN = 0,
     MESSAGE_TYPE_PIPELINE_DATA = 1,

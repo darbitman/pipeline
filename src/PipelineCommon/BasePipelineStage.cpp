@@ -15,7 +15,7 @@ using std::this_thread::sleep_for;
 
 namespace sc
 {
-BasePipelineStage::BasePipelineStage(EPipelineStageId thisStageId, EPipelineQueueType queueType,
+BasePipelineStage::BasePipelineStage(EComponentId thisStageId, EComponentLinkType queueType,
                                      PipelineSenderReceiver* pSenderReceiver)
     : thisStageId_(thisStageId),
       queueType_(queueType),
@@ -73,12 +73,12 @@ void BasePipelineStage::runThread()
             {
                 switch (pReceivedMessage->getMessageType())
                 {
-                    case EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA:
+                    case EMessageType::MESSAGE_TYPE_PIPELINE_DATA:
                         processMessage(pReceivedMessage);
                         pSenderReceiver_->send(pReceivedMessage);
                         break;
 
-                    case EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN:
+                    case EMessageType::MESSAGE_TYPE_SHUTDOWN:
                         bThreadIsRunning_ = false;
                         break;
 

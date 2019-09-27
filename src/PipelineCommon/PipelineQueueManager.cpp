@@ -21,7 +21,7 @@ namespace sc
 {
 PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
 
-int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
+int32_t PipelineQueueManager::createNewQueue(EComponentLinkType newQueueType)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     // find an unused queue id
@@ -32,12 +32,12 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
 
     switch (newQueueType)
     {
-        case EPipelineQueueType::QUEUE_TYPE_FIFO:
+        case EComponentLinkType::QUEUE_TYPE_FIFO:
         {
             queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<value_type>>(true);
         }
         break;
-        case EPipelineQueueType::QUEUE_TYPE_MIN_PQ:
+        case EComponentLinkType::QUEUE_TYPE_MIN_PQ:
         {
             using comparator_type = PipelineDataMessage::MessageNumberLessComparator;
 
@@ -49,7 +49,7 @@ int32_t PipelineQueueManager::createNewQueue(EPipelineQueueType newQueueType)
         break;
         default:
             throw std::invalid_argument(
-                "PipelineQueueManager::createNewQueue(): Invalid EPipelineQueueType");
+                "PipelineQueueManager::createNewQueue(): Invalid EComponentLinkType");
             break;
     }
 

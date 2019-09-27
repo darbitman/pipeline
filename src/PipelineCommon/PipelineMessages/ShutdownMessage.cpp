@@ -9,14 +9,14 @@ using std::unique_ptr;
 namespace sc
 {
 ShutdownMessage::ShutdownMessage()
-    : BasePipelineMessage(EPipelineStageId::UNKNOWN_STAGE, EPipelineStageId::UNKNOWN_STAGE,
-                          EPipelineMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+    : BasePipelineMessage(EComponentId::UNKNOWN_STAGE, EComponentId::UNKNOWN_STAGE,
+                          EMessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
 {
 }
 
-ShutdownMessage::ShutdownMessage(EPipelineStageId source, EPipelineStageId destination,
+ShutdownMessage::ShutdownMessage(EComponentId source, EComponentId destination,
                                  uint32_t messageNumber)
-    : BasePipelineMessage(source, destination, EPipelineMessageType::MESSAGE_TYPE_SHUTDOWN,
+    : BasePipelineMessage(source, destination, EMessageType::MESSAGE_TYPE_SHUTDOWN,
                           messageNumber)
 {
 }

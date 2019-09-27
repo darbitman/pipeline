@@ -13,7 +13,7 @@ using std::unique_ptr;
 namespace sc
 {
 SeamCarverBaseStage::SeamCarverBaseStage(
-    EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    EComponentId thisStageId, EComponentLinkType queueType,
     PipelineSenderReceiver* pSenderReceiver,
     unique_ptr<ISeamCarverDataProcessor>& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),
@@ -22,7 +22,7 @@ SeamCarverBaseStage::SeamCarverBaseStage(
 }
 
 SeamCarverBaseStage::SeamCarverBaseStage(
-    EPipelineStageId thisStageId, EPipelineQueueType queueType,
+    EComponentId thisStageId, EComponentLinkType queueType,
     PipelineSenderReceiver* pSenderReceiver,
     unique_ptr<ISeamCarverDataProcessor>&& pSeamCarverDataProcessor)
     : BasePipelineStage(thisStageId, queueType, pSenderReceiver),

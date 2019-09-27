@@ -24,10 +24,10 @@ class PipelineDataMessage : public BasePipelineMessage
 
     PipelineDataMessage();
 
-    PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
+    PipelineDataMessage(EComponentId source, EComponentId destination,
                         uint32_t messageNumber);
 
-    PipelineDataMessage(EPipelineStageId source, EPipelineStageId destination,
+    PipelineDataMessage(EComponentId source, EComponentId destination,
                         uint32_t messageNumber, std::unique_ptr<BasePipelineData>& pPipelineData);
 
     virtual ~PipelineDataMessage() = default;
