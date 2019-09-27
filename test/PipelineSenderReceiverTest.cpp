@@ -19,7 +19,7 @@ class PipelineSenderReceiverTest : public ::testing::Test
     {
         senderReceiver.initialize();
 
-        senderReceiver.registerNewStage(EComponentId::STAGE_0,
+        senderReceiver.registerComponent(EComponentId::STAGE_0,
                                         EComponentLinkType::QUEUE_TYPE_FIFO);
     }
 

@@ -5,13 +5,15 @@
 #include <memory>
 #include <mutex>
 
-#include "BasePipelineMessage.hpp"
+#include "IMessageRouter.hpp"
 #include "PipelineCommon.hpp"
 #include "PipelineQueueManager.hpp"
 
 namespace sc
 {
-class PipelineSenderReceiver
+class BasePipelineMessage;
+
+class PipelineSenderReceiver : public IMessageRouter
 {
   public:
     PipelineSenderReceiver();
@@ -20,23 +22,27 @@ class PipelineSenderReceiver
 
     void initialize();
 
-    void registerNewStage(EComponentId stageId, EComponentLinkType queueType);
+    bool isInitialized() const noexcept;
 
-    void unregisterStage(EComponentId stageId);
+    bool isShutdown() const noexcept;
 
-    bool isStageRegistered(EComponentId stageId);
+    virtual void registerComponent(EComponentId componentId,
+                                   EComponentLinkType componentLinkType) noexcept override;
 
-    bool isInitialized() const;
+    virtual void unregisterComponent(EComponentId componentId) noexcept override;
 
-    bool isShutdown() const;
+    virtual bool isComponentRegistered(EComponentId componentId) const noexcept override;
 
-    bool send(std::unique_ptr<BasePipelineMessage>& dataToSend);
+    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>& pMessage) noexcept override;
 
-    std::unique_ptr<BasePipelineMessage> receive(EComponentId receivingStageId);
+    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>&& pMessage) noexcept override;
 
-    bool canReceive(EComponentId receivingStageId) const;
+    virtual std::unique_ptr<BasePipelineMessage> receiveMessage(
+        EComponentId receivingComponentId) noexcept override;
 
-    // deleted to prevent misuse
+    virtual bool canReceive(EComponentId receivingComponentId) const noexcept override;
+
+    /// Deleted to prevent misuse
     PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
     PipelineSenderReceiver(PipelineSenderReceiver&&) = delete;
     PipelineSenderReceiver& operator=(const PipelineSenderReceiver&) = delete;
@@ -45,7 +51,7 @@ class PipelineSenderReceiver
   private:
     bool bInitialized_;
 
-    EComponentId thisStageId_;
+    EComponentId thisComponentId_;
 
     std::atomic<bool> bRunReceiverThread_;
 

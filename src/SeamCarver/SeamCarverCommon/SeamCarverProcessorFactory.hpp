@@ -15,9 +15,9 @@ class SeamCarverProcessorFactory
   public:
     using createProcessorFunction = std::unique_ptr<ISeamCarverDataProcessor> (*)();
 
-    static bool registerNewStage(EComponentId stageId, createProcessorFunction function);
+    static bool registerComponent(EComponentId stageId, createProcessorFunction function);
 
-    static bool isStageRegistered(EComponentId stageId);
+    static bool isComponentRegistered(EComponentId stageId);
 
     static std::unique_ptr<ISeamCarverDataProcessor> createStage(EComponentId stageId);
 

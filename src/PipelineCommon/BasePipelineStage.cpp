@@ -32,7 +32,7 @@ void BasePipelineStage::initialize()
 {
     if (bIsInitialized_ == false && pSenderReceiver_ != nullptr)
     {
-        pSenderReceiver_->registerNewStage(thisStageId_, queueType_);
+        pSenderReceiver_->registerComponent(thisStageId_, queueType_);
         bIsInitialized_ = true;
     }
 }
@@ -63,7 +63,7 @@ void BasePipelineStage::runThread()
     {
         // don't need to check if pSenderReceiver_ is a nullptr since this method (thread) can't be
         // called/started if it's a nullptr
-        auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
+        auto pReceivedMessage = pSenderReceiver_->receiveMessage(thisStageId_);
 
         if (pReceivedMessage != nullptr)
         {
@@ -75,7 +75,7 @@ void BasePipelineStage::runThread()
                 {
                     case EMessageType::MESSAGE_TYPE_PIPELINE_DATA:
                         processMessage(pReceivedMessage);
-                        pSenderReceiver_->send(pReceivedMessage);
+                        pSenderReceiver_->sendMessage(pReceivedMessage);
                         break;
 
                     case EMessageType::MESSAGE_TYPE_SHUTDOWN:
@@ -99,7 +99,7 @@ void BasePipelineStage::doStopStage()
         // create a ShutdownMessage and send to itself
         unique_ptr<BasePipelineMessage> pShutdownMessage =
             make_unique<ShutdownMessage>(thisStageId_, thisStageId_, 0);
-        pSenderReceiver_->send(pShutdownMessage);
+        pSenderReceiver_->sendMessage(pShutdownMessage);
     }
     else
     {

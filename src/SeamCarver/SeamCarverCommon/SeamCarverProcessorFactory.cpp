@@ -13,7 +13,7 @@ using std::vector;
 
 namespace sc
 {
-bool SeamCarverProcessorFactory::registerNewStage(EComponentId stageId,
+bool SeamCarverProcessorFactory::registerComponent(EComponentId stageId,
                                                   createProcessorFunction function)
 {
     // check if map doesn't have the mapping already
@@ -25,7 +25,7 @@ bool SeamCarverProcessorFactory::registerNewStage(EComponentId stageId,
     return false;
 }
 
-bool SeamCarverProcessorFactory::isStageRegistered(EComponentId stageId)
+bool SeamCarverProcessorFactory::isComponentRegistered(EComponentId stageId)
 {
     return (stageIdToCreateProcessorFunctionMap_.count(stageId) > 0);
 }

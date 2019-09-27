@@ -46,7 +46,7 @@ class ComputeEnergy : public ISeamCarverDataProcessor
     double marginEnergy_;
 
     inline static const bool bRegistered_ =
-        SeamCarverProcessorFactory::registerNewStage(EComponentId::STAGE_0, []() {
+        SeamCarverProcessorFactory::registerComponent(EComponentId::STAGE_0, []() {
             std::unique_ptr<ISeamCarverDataProcessor> pNewSeamCarverDataProcessor =
                 std::make_unique<ComputeEnergy>();
 

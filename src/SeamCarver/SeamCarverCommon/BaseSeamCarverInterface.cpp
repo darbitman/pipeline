@@ -35,7 +35,7 @@ void BaseSeamCarverInterface::addNewDataToPipeline(unique_ptr<BasePipelineData>&
         unique_ptr<BasePipelineMessage> pMessage = make_unique<PipelineDataMessage>(
             thisStageId_, EComponentId::STAGE_0, frameNumber_++, pPipelineData);
 
-        pSenderReceiver_->send(pMessage);
+        pSenderReceiver_->sendMessage(pMessage);
     }
 }
 
@@ -43,7 +43,7 @@ unique_ptr<BasePipelineData> BaseSeamCarverInterface::getOutputFromPipeline()
 {
     if (doesNewResultExist())
     {
-        auto pReceivedMessage = pSenderReceiver_->receive(thisStageId_);
+        auto pReceivedMessage = pSenderReceiver_->receiveMessage(thisStageId_);
         return unique_ptr<BasePipelineData>(pReceivedMessage->releaseOwnedData());
     }
     else

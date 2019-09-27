@@ -26,7 +26,7 @@ TEST(SeamCarverProcessorFactoryTest, CreateValidStages)
 
     for (size_t i = 0; i < pRegisteredStages->size(); ++i)
     {
-        EXPECT_EQ(SeamCarverProcessorFactory::isStageRegistered(
+        EXPECT_EQ(SeamCarverProcessorFactory::isComponentRegistered(
                       (*pRegisteredStages)[i]),
                   true);
 

@@ -17,7 +17,7 @@ namespace sc
 {
 PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
-      thisStageId_(EComponentId::MESSAGE_ROUTER),
+      thisComponentId_(EComponentId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
       bReceiverThreadShutdown_(true),
       pQueueManager_(make_unique<PipelineQueueManager>())
@@ -30,14 +30,18 @@ void PipelineSenderReceiver::initialize()
     {
         bInitialized_ = true;
 
-        registerNewStage(thisStageId_, EComponentLinkType::QUEUE_TYPE_FIFO);
+        registerComponent(thisComponentId_, EComponentLinkType::QUEUE_TYPE_FIFO);
 
         thread(&PipelineSenderReceiver::receiverThread, this).detach();
     }
 }
 
-void PipelineSenderReceiver::registerNewStage(EComponentId stageId,
-                                              EComponentLinkType queueType)
+bool PipelineSenderReceiver::isInitialized() const noexcept { return bInitialized_; }
+
+bool PipelineSenderReceiver::isShutdown() const noexcept { return bReceiverThreadShutdown_; }
+
+void PipelineSenderReceiver::registerComponent(EComponentId stageId,
+                                               EComponentLinkType queueType) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
@@ -49,57 +53,90 @@ void PipelineSenderReceiver::registerNewStage(EComponentId stageId,
     }
 }
 
-void PipelineSenderReceiver::unregisterStage(EComponentId stageId)
-{
-    // TODO
-}
-
-bool PipelineSenderReceiver::isStageRegistered(EComponentId stageId)
+void PipelineSenderReceiver::unregisterComponent(EComponentId stageId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
-    return (stageIdToQueueIdMap_.count(stageId) > 0);
-}
-
-bool PipelineSenderReceiver::isInitialized() const { return bInitialized_; }
-
-bool PipelineSenderReceiver::isShutdown() const { return bReceiverThreadShutdown_; }
-
-bool PipelineSenderReceiver::send(unique_ptr<BasePipelineMessage>& dataToSend)
-{
-    unique_lock<mutex> mapLock(mapMutex_);
-    if (stageIdToQueueIdMap_.count(thisStageId_) != 0)
+    try
     {
-        auto queueId = stageIdToQueueIdMap_.at(thisStageId_);
-        mapLock.unlock();
+        auto queueId = stageIdToQueueIdMap_.at(stageId);
 
-        auto pQueue = pQueueManager_->getQueue(queueId);
-        if (pQueue != nullptr)
+        try
         {
-            pQueue->push(move(dataToSend));
-            return true;
+            pQueueManager_->deleteQueue(queueId);
         }
-        else
+        catch (const std::invalid_argument& e)
         {
-            return false;
+            // queueId doesn't exist
         }
     }
-    else
+    catch (const std::out_of_range& e)
+    {
+        // stageId has no queueId associated with it
+    }
+}
+
+bool PipelineSenderReceiver::isComponentRegistered(EComponentId stageId) const noexcept
+{
+    unique_lock<mutex> mapLock(mapMutex_);
+    try
+    {
+        stageIdToQueueIdMap_.at(stageId);
+        return true;
+    }
+    catch (const std::out_of_range& e)
     {
         return false;
     }
 }
 
-unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EComponentId receivingStageId)
+void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>& pMessage) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
-    if (stageIdToQueueIdMap_.count(receivingStageId) != 0)
+    try
     {
-        auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
+        auto queueId = stageIdToQueueIdMap_.at(thisComponentId_);
         mapLock.unlock();
 
-        auto pQueue = pQueueManager_->getQueue(queueId);
+        if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue != nullptr)
+        {
+            pQueue->push(move(pMessage));
+        }
+    }
+    catch (const std::out_of_range& e)
+    {
+        // drop the message
+    }
+}
 
-        if (pQueue != nullptr)
+void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>&& pMessage) noexcept
+{
+    unique_lock<mutex> mapLock(mapMutex_);
+    try
+    {
+        auto queueId = stageIdToQueueIdMap_.at(thisComponentId_);
+        mapLock.unlock();
+
+        if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue != nullptr)
+        {
+            pQueue->push(move(pMessage));
+        }
+    }
+    catch (const std::out_of_range& e)
+    {
+        // drop the message
+    }
+}
+
+unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receiveMessage(
+    EComponentId receivingComponentId) noexcept
+{
+    unique_lock<mutex> mapLock(mapMutex_);
+    try
+    {
+        auto queueId = stageIdToQueueIdMap_.at(receivingComponentId);
+        mapLock.unlock();
+
+        if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue != nullptr)
         {
             unique_ptr<BasePipelineMessage> pReceivedMessage = move(pQueue->front());
             pQueue->pop();
@@ -107,32 +144,35 @@ unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receive(EComponentId rec
         }
         else
         {
-            return nullptr;
+            return unique_ptr<BasePipelineMessage>();
         }
     }
-    else
+    catch (const std::out_of_range& e)
     {
-        return nullptr;
+        return unique_ptr<BasePipelineMessage>();
     }
 }
 
-bool PipelineSenderReceiver::canReceive(EComponentId receivingStageId) const
+bool PipelineSenderReceiver::canReceive(EComponentId receivingStageId) const noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
-    if (stageIdToQueueIdMap_.count(receivingStageId) == 0)
+    try
     {
-        return false;
-    }
-    auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
-    mapLock.unlock();
+        auto queueId = stageIdToQueueIdMap_.at(receivingStageId);
+        mapLock.unlock();
 
-    if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue == nullptr)
+        if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue != nullptr)
+        {
+            return !pQueue->empty();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch (const std::exception& e)
     {
         return false;
-    }
-    else
-    {
-        return !pQueue->empty();
     }
 }
 
@@ -143,7 +183,7 @@ void PipelineSenderReceiver::receiverThread()
 
     while (bRunReceiverThread_)
     {
-        auto pReceivedMessage = receive(thisStageId_);
+        auto pReceivedMessage = receiveMessage(thisComponentId_);
 
         if (pReceivedMessage != nullptr)
         {
@@ -151,7 +191,7 @@ void PipelineSenderReceiver::receiverThread()
 
             auto messageDestination = pReceivedMessage->getDestination();
 
-            if (messageDestination != thisStageId_)
+            if (messageDestination != thisComponentId_)
             {
                 forwardMessage(pReceivedMessage);
             }
