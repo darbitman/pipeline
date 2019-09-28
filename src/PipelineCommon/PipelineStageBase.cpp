@@ -3,9 +3,9 @@
 #include <chrono>
 #include <thread>
 
-#include "PipelineDataBase.hpp"
 #include "IDataProcessor.hpp"
 #include "IMessageRouter.hpp"
+#include "PipelineDataBase.hpp"
 #include "PipelineShutdownMessage.hpp"
 
 using std::make_unique;
@@ -30,7 +30,8 @@ PipelineStageBase::PipelineStageBase(uint32_t thisComponentId, uint32_t componen
 
 PipelineStageBase::~PipelineStageBase()
 {
-    // TODO
+    sendShutdownmessageToSelf();
+    waitForThreadShutdown();
 }
 
 void PipelineStageBase::runComponent()
@@ -47,7 +48,11 @@ void PipelineStageBase::runComponent()
     }
 }
 
-void PipelineStageBase::stopComponent() { doStopStage(); }
+void PipelineStageBase::stopComponent()
+{
+    sendShutdownmessageToSelf();
+    waitForThreadShutdown();
+}
 
 bool PipelineStageBase::isComponentRunning() const noexcept { return bThreadIsRunning_; }
 
@@ -88,20 +93,18 @@ void PipelineStageBase::incomingMessageThread()
     bThreadIsRunning_ = false;
 }
 
-void PipelineStageBase::doStopStage()
+void PipelineStageBase::sendShutdownmessageToSelf()
 {
-    if (pMessageRouter_ != nullptr)
-    {
-        // create a PipelineShutdownMessage and send to itself
-        unique_ptr<PipelineMessageBase> pPipelineShutdownMessage =
-            make_unique<PipelineShutdownMessage>(thisComponentId_, thisComponentId_, 0);
-        pMessageRouter_->sendMessage(pPipelineShutdownMessage);
-    }
-    else
-    {
-        bThreadIsRunning_ = false;
-    }
+    // thread can't be started if pMessageRouter_ is nullptr
+    // no need to check for nullptr
+    // create a PipelineShutdownMessage and send to itself
+    unique_ptr<PipelineMessageBase> pPipelineShutdownMessage =
+        make_unique<PipelineShutdownMessage>(thisComponentId_, thisComponentId_, 0);
+    pMessageRouter_->sendMessage(pPipelineShutdownMessage);
+}
 
+void PipelineStageBase::waitForThreadShutdown()
+{
     if (!bThreadHasJoined_)
     {
         while (!dataProcessorThread_.joinable())

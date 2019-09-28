@@ -53,7 +53,9 @@ class PipelineStageBase : public IPipelineStage
   private:
     void incomingMessageThread();
 
-    void doStopStage();
+    void sendShutdownmessageToSelf();
+
+    void waitForThreadShutdown();
 
     const uint32_t thisComponentId_;
 
@@ -67,11 +69,11 @@ class PipelineStageBase : public IPipelineStage
 
     /// This PipelineStageBase does not own this pointer so it's not responsible for its deletion.
     /// This is used for sending/receiving messages between components
-    IMessageRouter* pMessageRouter_{nullptr};
+    IMessageRouter* pMessageRouter_;
 
     /// This PipelineStageBase does not own this pointer so it's not responsible for its deletion.
     /// A reference to the object that will process the data that comes in
-    IDataProcessor* pDataProcessor_{nullptr};
+    IDataProcessor* pDataProcessor_;
 
     std::thread dataProcessorThread_;
 };
