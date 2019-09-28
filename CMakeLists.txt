@@ -49,4 +49,4 @@ find_package(OpenCV)
 
 add_subdirectory(src)
 
-add_subdirectory(test)
+option(BUILD_UNIT_TESTS "" ON)

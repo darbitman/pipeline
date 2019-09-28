@@ -17,3 +17,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineMessages
     ${PROJECT_SOURCE_DIR}/src/Common
 )
+
+if(BUILD_UNIT_TESTS)
+    add_subdirectory(_test)
+endif(BUILD_UNIT_TESTS)
