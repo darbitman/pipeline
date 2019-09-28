@@ -32,8 +32,14 @@ class PipelineSenderReceiver : public IMessageRouter
 
     virtual bool isComponentRegistered(uint32_t componentId) const noexcept override;
 
+    /// @brief Send a BasePipelineMessage
+    /// @param pMessage This will transfer ownership of the pointer. Upon a successful send, when
+    /// this method returns, the pointer shall be nullptr.
     virtual void sendMessage(std::unique_ptr<BasePipelineMessage>& pMessage) noexcept override;
 
+    /// @brief Send a BasePipelineMessage
+    /// @param pMessage This will transfer ownership of the pointer. Upon a successful send, when
+    /// this method returns, the pointer shall be nullptr.
     virtual void sendMessage(std::unique_ptr<BasePipelineMessage>&& pMessage) noexcept override;
 
     virtual std::unique_ptr<BasePipelineMessage> receiveMessage(
