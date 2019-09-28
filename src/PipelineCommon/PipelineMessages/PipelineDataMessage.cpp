@@ -13,7 +13,7 @@ namespace sc
 {
 PipelineDataMessage::PipelineDataMessage()
     : BasePipelineMessage(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
-                          MessageType::MESSAGE_TYPE_PIPELINE_DATA, 0)
+                          MessageType::MESSAGE_TYPE_PIPELINE_DATA, STARTING_MESSAGE_NUMBER)
 {
 }
 
@@ -26,15 +26,21 @@ PipelineDataMessage::PipelineDataMessage(uint32_t source, uint32_t destination,
 {
 }
 
-void PipelineDataMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData)
+void PipelineDataMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept
 {
     pPipelineData_.reset(nullptr);
     pPipelineData_.swap(pPipelineData);
 }
 
-unique_ptr<BasePipelineData>& PipelineDataMessage::getOwnedData() { return pPipelineData_; }
+unique_ptr<BasePipelineData>& PipelineDataMessage::getOwnedData() noexcept
+{
+    return pPipelineData_;
+}
 
-BasePipelineData* PipelineDataMessage::releaseOwnedData() noexcept { return pPipelineData_.release(); }
+BasePipelineData* PipelineDataMessage::releaseOwnedData() noexcept
+{
+    return pPipelineData_.release();
+}
 
 void PipelineDataMessage::deleteOwnedData() noexcept { pPipelineData_.reset(nullptr); }
 

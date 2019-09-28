@@ -14,21 +14,23 @@ ShutdownMessage::ShutdownMessage()
 {
 }
 
-ShutdownMessage::ShutdownMessage(uint32_t source, uint32_t destination,
-                                 uint32_t messageNumber)
-    : BasePipelineMessage(source, destination, MessageType::MESSAGE_TYPE_SHUTDOWN,
-                          messageNumber)
+ShutdownMessage::ShutdownMessage(uint32_t source, uint32_t destination, uint32_t messageNumber)
+    : BasePipelineMessage(source, destination, MessageType::MESSAGE_TYPE_SHUTDOWN, messageNumber)
 {
 }
 
-ShutdownMessage::~ShutdownMessage() {}
+void ShutdownMessage::setOwnedData([
+    [maybe_unused]] std::unique_ptr<BasePipelineData>& pPipelineData) noexcept
+{
+}
 
-unique_ptr<BasePipelineData>& ShutdownMessage::getOwnedData() { return pNullPipelineData_; }
+unique_ptr<BasePipelineData>& ShutdownMessage::getOwnedData() noexcept
+{
+    return pNullPipelineData_;
+}
 
 BasePipelineData* ShutdownMessage::releaseOwnedData() noexcept { return nullptr; }
 
 void ShutdownMessage::deleteOwnedData() noexcept {}
-
-void ShutdownMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept {}
 
 }  // namespace sc

@@ -34,9 +34,9 @@ class PipelineDataMessage : public BasePipelineMessage
     /// @param pPipelineData
     /// Ownership will be released from the unique_ptr passed in, and will be transferred to this
     /// PipelineDataMessage. If this message owns data already, that data will be deleted.
-    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) override;
+    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept override;
 
-    virtual std::unique_ptr<BasePipelineData>& getOwnedData() override;
+    virtual std::unique_ptr<BasePipelineData>& getOwnedData() noexcept override;
 
     virtual BasePipelineData* releaseOwnedData() noexcept override;
 
@@ -50,6 +50,8 @@ class PipelineDataMessage : public BasePipelineMessage
 
   private:
     std::unique_ptr<BasePipelineData> pPipelineData_;
+
+    static constexpr uint32_t STARTING_MESSAGE_NUMBER{0};
 };
 
 }  // namespace sc
