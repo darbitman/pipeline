@@ -4,7 +4,9 @@
 #include <mutex>
 #include <thread>
 
+#include "BasePipelineMessage.hpp"
 #include "PipelineQueueManager.hpp"
+#include "SharedContainer.hpp"
 
 using std::make_unique;
 using std::move;

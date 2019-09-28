@@ -5,6 +5,7 @@
 #include "PipelineDataMessage.hpp"
 #include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
+#include "SharedContainer.hpp"
 #include "ShutdownMessage.hpp"
 
 using std::make_unique;

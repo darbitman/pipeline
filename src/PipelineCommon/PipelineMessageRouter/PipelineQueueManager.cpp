@@ -5,8 +5,8 @@
 #include <mutex>
 #include <vector>
 
-#include "PipelineIdentifiers.hpp"
 #include "PipelineDataMessage.hpp"
+#include "PipelineIdentifiers.hpp"
 #include "PriorityQueue.hpp"
 #include "SharedPriorityQueueAdapter.hpp"
 #include "SharedQueue.hpp"
@@ -19,9 +19,9 @@ using std::vector;
 
 namespace sc
 {
-PipelineQueueManager::PipelineQueueManager() : currentQueueId_(1) {}
+PipelineQueueManager::PipelineQueueManager() : currentQueueId_(STARTING_QUEUE_ID) {}
 
-int32_t PipelineQueueManager::createNewQueue(uint32_t newQueueType)
+int32_t PipelineQueueManager::createNewQueue(uint32_t componentLinkType)
 {
     unique_lock<mutex> mapLock(mapMutex_);
     // find an unused queue id
@@ -30,26 +30,33 @@ int32_t PipelineQueueManager::createNewQueue(uint32_t newQueueType)
         currentQueueId_++;
     }
 
-    switch (newQueueType)
+    switch (componentLinkType)
     {
         case ComponentLinkType::QUEUE_TYPE_FIFO:
         {
-            queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<value_type>>(true);
+            // create a thread safe blocking FIFO queue
+            queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<stored_data_type>>(true);
         }
         break;
+
         case ComponentLinkType::QUEUE_TYPE_MIN_PQ:
         {
             using comparator_type = PipelineDataMessage::MessageNumberLessComparator;
 
-            auto pNewPQ = make_unique<PriorityQueue<value_type, comparator_type>>(1000);
+            // create a min-oriented priority queue which uses the message number as its 'priority'
+            auto pNewPQ = make_unique<PriorityQueue<stored_data_type, comparator_type>>(1000);
 
+            // create an adapter ("wrapper" around the PQ just created). This also blocks and is
+            // thread safe
             queueIdToQueueMap_[currentQueueId_] =
-                make_unique<SharedPriorityQueueAdapter<value_type, comparator_type>>(pNewPQ, true);
+                make_unique<SharedPriorityQueueAdapter<stored_data_type, comparator_type>>(pNewPQ,
+                                                                                           true);
         }
         break;
+
         default:
             throw std::invalid_argument(
-                "PipelineQueueManager::createNewQueue(): Invalid uint32_t");
+                "PipelineQueueManager::createNewQueue(): Invalid ComponentLinkType");
             break;
     }
 
@@ -64,7 +71,7 @@ void PipelineQueueManager::deleteQueue(int32_t queueId)
     }
 }
 
-SharedContainer<PipelineQueueManager::value_type>* PipelineQueueManager::getQueue(
+SharedContainer<PipelineQueueManager::stored_data_type>* PipelineQueueManager::getQueue(
     int32_t queueId) const
 {
     unique_lock<mutex> mapLock(mapMutex_);

@@ -7,15 +7,18 @@
 #include <vector>
 
 #include "PipelineIdentifiers.hpp"
-#include "PipelineDataMessage.hpp"
-#include "SharedContainer.hpp"
 
 namespace sc
 {
+template <typename T>
+class SharedContainer;
+
+class BasePipelineMessage;
+
 class PipelineQueueManager
 {
   private:
-    using value_type = std::unique_ptr<BasePipelineMessage>;
+    using stored_data_type = std::unique_ptr<BasePipelineMessage>;
 
   public:
     PipelineQueueManager();
@@ -24,10 +27,10 @@ class PipelineQueueManager
 
     /// @brief creates a new queue and returns its queueId which the client can use to later
     /// retrieve the queue
-    /// @param newQueueType
-    /// @return int32_t A non-negative queueId
-    /// @throw std::invalid_argument If newQueueType doesn't exist
-    int32_t createNewQueue(uint32_t newQueueType);
+    /// @param componentLinkType
+    /// @return int32_t A unique identifier for the queue created
+    /// @throw std::invalid_argument If componentLinkType doesn't exist
+    int32_t createNewQueue(uint32_t componentLinkType);
 
     /// @brief deletes a queue
     /// @param queueId specifies which queue to delete
@@ -37,9 +40,9 @@ class PipelineQueueManager
 
     /// @brief retrieves a queue
     /// @param queueId specifies which queue to retrieve
-    /// @return SharedContainer<value_type>* Returns a nullptr if queue doesn't exist
+    /// @return SharedContainer<stored_data_type>* Returns a nullptr if queue doesn't exist
     /// The client should not nor is responsible for deleting the pointer
-    SharedContainer<value_type>* getQueue(int32_t queueId) const;
+    SharedContainer<stored_data_type>* getQueue(int32_t queueId) const;
 
     /// @brief returns the number of queues managed by this PipelineQueueManager
     /// @return size_t
@@ -52,9 +55,11 @@ class PipelineQueueManager
     PipelineQueueManager& operator=(const PipelineQueueManager&&) = delete;
 
   private:
+    static constexpr uint32_t STARTING_QUEUE_ID{1};
+
     int32_t currentQueueId_;
 
-    std::unordered_map<int32_t, std::unique_ptr<sc::SharedContainer<value_type>>>
+    std::unordered_map<int32_t, std::unique_ptr<SharedContainer<stored_data_type>>>
         queueIdToQueueMap_;
 
     mutable std::mutex mapMutex_;

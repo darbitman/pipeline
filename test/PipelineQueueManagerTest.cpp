@@ -7,6 +7,7 @@
 #include "BasePipelineMessage.hpp"
 #include "PipelineIdentifiers.hpp"
 #include "PipelineQueueManager.hpp"
+#include "SharedContainer.hpp"
 
 using std::greater;
 using std::make_unique;
