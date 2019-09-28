@@ -13,7 +13,7 @@ namespace pipeline
 class PipelineSenderReceiver;
 class IMessageRouter;
 class IDataProcessor;
-class BasePipelineMessage;
+class PipelineMessageBase;
 class BasePipelineData;
 
 class BasePipelineStage : public IPipelineStage

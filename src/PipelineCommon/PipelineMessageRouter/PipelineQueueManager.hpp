@@ -13,12 +13,12 @@ namespace pipeline
 template <typename T>
 class SharedContainer;
 
-class BasePipelineMessage;
+class PipelineMessageBase;
 
 class PipelineQueueManager
 {
   private:
-    using stored_data_type = std::unique_ptr<BasePipelineMessage>;
+    using stored_data_type = std::unique_ptr<PipelineMessageBase>;
 
   public:
     PipelineQueueManager();

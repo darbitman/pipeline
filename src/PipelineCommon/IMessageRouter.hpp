@@ -5,7 +5,7 @@
 
 namespace pipeline
 {
-class BasePipelineMessage;
+class PipelineMessageBase;
 
 class IMessageRouter
 {
@@ -18,11 +18,11 @@ class IMessageRouter
 
     virtual bool isComponentRegistered(uint32_t componentId) const noexcept = 0;
 
-    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>& pMessage) noexcept = 0;
+    virtual void sendMessage(std::unique_ptr<PipelineMessageBase>& pMessage) noexcept = 0;
 
-    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>&& pMessage) noexcept = 0;
+    virtual void sendMessage(std::unique_ptr<PipelineMessageBase>&& pMessage) noexcept = 0;
 
-    virtual std::unique_ptr<BasePipelineMessage> receiveMessage(
+    virtual std::unique_ptr<PipelineMessageBase> receiveMessage(
         uint32_t receivingComponentId) noexcept = 0;
 
     virtual bool canReceive(uint32_t receivingComponentId) const noexcept = 0;

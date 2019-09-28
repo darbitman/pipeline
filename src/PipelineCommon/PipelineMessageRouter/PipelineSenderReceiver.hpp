@@ -10,7 +10,7 @@
 
 namespace pipeline
 {
-class BasePipelineMessage;
+class PipelineMessageBase;
 
 class PipelineSenderReceiver : public IMessageRouter
 {
@@ -32,17 +32,17 @@ class PipelineSenderReceiver : public IMessageRouter
 
     virtual bool isComponentRegistered(uint32_t componentId) const noexcept override;
 
-    /// @brief Send a BasePipelineMessage
+    /// @brief Send a PipelineMessageBase
     /// @param pMessage This will transfer ownership of the pointer. Upon a successful send, when
     /// this method returns, the pointer shall be nullptr.
-    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>& pMessage) noexcept override;
+    virtual void sendMessage(std::unique_ptr<PipelineMessageBase>& pMessage) noexcept override;
 
-    /// @brief Send a BasePipelineMessage
+    /// @brief Send a PipelineMessageBase
     /// @param pMessage This will transfer ownership of the pointer. Upon a successful send, when
     /// this method returns, the pointer shall be nullptr.
-    virtual void sendMessage(std::unique_ptr<BasePipelineMessage>&& pMessage) noexcept override;
+    virtual void sendMessage(std::unique_ptr<PipelineMessageBase>&& pMessage) noexcept override;
 
-    virtual std::unique_ptr<BasePipelineMessage> receiveMessage(
+    virtual std::unique_ptr<PipelineMessageBase> receiveMessage(
         uint32_t receivingComponentId) noexcept override;
 
     virtual bool canReceive(uint32_t receivingComponentId) const noexcept override;
@@ -70,7 +70,7 @@ class PipelineSenderReceiver : public IMessageRouter
 
     void receiverThread();
 
-    void forwardMessage(std::unique_ptr<BasePipelineMessage>& pMessage);
+    void forwardMessage(std::unique_ptr<PipelineMessageBase>& pMessage);
 };
 
 }  // namespace pipeline

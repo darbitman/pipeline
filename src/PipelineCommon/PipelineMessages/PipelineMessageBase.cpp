@@ -1,8 +1,8 @@
-#include "BasePipelineMessage.hpp"
+#include "PipelineMessageBase.hpp"
 
 namespace pipeline
 {
-BasePipelineMessage::BasePipelineMessage(uint32_t source, uint32_t destination,
+PipelineMessageBase::PipelineMessageBase(uint32_t source, uint32_t destination,
                                          uint32_t messageType, uint32_t messageNumber)
     : source_(source),
       destination_(destination),

@@ -6,7 +6,7 @@
 #include "BasePipelineData.hpp"
 #include "IDataProcessor.hpp"
 #include "IMessageRouter.hpp"
-#include "ShutdownMessage.hpp"
+#include "PipelineShutdownMessage.hpp"
 
 using std::make_unique;
 using std::thread;
@@ -92,10 +92,10 @@ void BasePipelineStage::doStopStage()
 {
     if (pMessageRouter_ != nullptr)
     {
-        // create a ShutdownMessage and send to itself
-        unique_ptr<BasePipelineMessage> pShutdownMessage =
-            make_unique<ShutdownMessage>(thisComponentId_, thisComponentId_, 0);
-        pMessageRouter_->sendMessage(pShutdownMessage);
+        // create a PipelineShutdownMessage and send to itself
+        unique_ptr<PipelineMessageBase> pPipelineShutdownMessage =
+            make_unique<PipelineShutdownMessage>(thisComponentId_, thisComponentId_, 0);
+        pMessageRouter_->sendMessage(pPipelineShutdownMessage);
     }
     else
     {

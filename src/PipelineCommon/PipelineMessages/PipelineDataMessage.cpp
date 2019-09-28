@@ -12,7 +12,7 @@ using std::unique_ptr;
 namespace pipeline
 {
 PipelineDataMessage::PipelineDataMessage()
-    : BasePipelineMessage(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
+    : PipelineMessageBase(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
                           MessageType::MESSAGE_TYPE_PIPELINE_DATA, STARTING_MESSAGE_NUMBER)
 {
 }
@@ -20,7 +20,7 @@ PipelineDataMessage::PipelineDataMessage()
 PipelineDataMessage::PipelineDataMessage(uint32_t source, uint32_t destination,
                                          uint32_t messageNumber,
                                          unique_ptr<BasePipelineData>& pPipelineData)
-    : BasePipelineMessage(source, destination, MessageType::MESSAGE_TYPE_PIPELINE_DATA,
+    : PipelineMessageBase(source, destination, MessageType::MESSAGE_TYPE_PIPELINE_DATA,
                           messageNumber),
       pPipelineData_(move(pPipelineData))
 {

@@ -4,7 +4,7 @@
 #include <queue>
 #include <vector>
 
-#include "BasePipelineMessage.hpp"
+#include "PipelineMessageBase.hpp"
 #include "PipelineIdentifiers.hpp"
 #include "PipelineQueueManager.hpp"
 #include "SharedContainer.hpp"

@@ -4,18 +4,18 @@
 #include <memory>
 
 #include "BasePipelineData.hpp"
-#include "BasePipelineMessage.hpp"
+#include "PipelineMessageBase.hpp"
 #include "PipelineIdentifiers.hpp"
 
 namespace pipeline
 {
-class PipelineDataMessage : public BasePipelineMessage
+class PipelineDataMessage : public PipelineMessageBase
 {
   public:
     struct MessageNumberLessComparator
     {
-        bool operator()(std::unique_ptr<BasePipelineMessage>& pM1,
-                        std::unique_ptr<BasePipelineMessage>& pM2)
+        bool operator()(std::unique_ptr<PipelineMessageBase>& pM1,
+                        std::unique_ptr<PipelineMessageBase>& pM2)
         {
             return (pM1->getMessageNumber() < pM2->getMessageNumber());
         }

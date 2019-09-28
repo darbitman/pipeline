@@ -6,7 +6,7 @@
 #include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
 #include "SharedContainer.hpp"
-#include "ShutdownMessage.hpp"
+#include "PipelineShutdownMessage.hpp"
 
 using std::make_unique;
 using std::unique_ptr;
@@ -33,10 +33,10 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
     auto source = ComponentId::INTERFACE_STAGE;
     auto destination = ComponentId::STAGE_0;
     unique_ptr<BasePipelineData> pEmptyData;
-    unique_ptr<BasePipelineMessage> pMessage =
+    unique_ptr<PipelineMessageBase> pMessage =
         make_unique<PipelineDataMessage>(source, destination, 0, pEmptyData);
 
-    const BasePipelineMessage* const savedPtr = pMessage.get();
+    const PipelineMessageBase* const savedPtr = pMessage.get();
 
     auto pReceivedMessage = senderReceiver.receiveMessage(ComponentId::STAGE_0);
 
@@ -47,8 +47,8 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
 {
     EXPECT_EQ(senderReceiver.isShutdown(), false);
 
-    unique_ptr<BasePipelineMessage> pMessage =
-        make_unique<ShutdownMessage>(ComponentId::MESSAGE_ROUTER, ComponentId::MESSAGE_ROUTER, 0);
+    unique_ptr<PipelineMessageBase> pMessage =
+        make_unique<PipelineShutdownMessage>(ComponentId::MESSAGE_ROUTER, ComponentId::MESSAGE_ROUTER, 0);
 
     while (senderReceiver.isShutdown() == false)
         ;

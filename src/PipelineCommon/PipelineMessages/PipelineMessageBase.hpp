@@ -10,18 +10,18 @@ namespace pipeline
 /// Forward Declarations
 class BasePipelineData;
 
-class BasePipelineMessage
+class PipelineMessageBase
 {
   public:
     /// @brief constructor
     /// @param source
     /// @param destination
     /// @param messageType
-    BasePipelineMessage(uint32_t source, uint32_t destination, uint32_t messageType,
+    PipelineMessageBase(uint32_t source, uint32_t destination, uint32_t messageType,
                         uint32_t messageNumber);
 
     /// @brief destructor
-    virtual ~BasePipelineMessage() = default;
+    virtual ~PipelineMessageBase() = default;
 
     inline virtual void setSource(uint32_t source) noexcept final { source_ = source; }
 
@@ -43,7 +43,7 @@ class BasePipelineMessage
 
     inline virtual uint32_t getMessageType() const noexcept final { return messageType_; }
 
-    /// @brief Set the owner of the data to this BasePipelineMessage
+    /// @brief Set the owner of the data to this PipelineMessageBase
     /// @param pPipelineData
     /// Since the argument is passed by reference, the original unique_ptr will be nullptr since
     virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept = 0;
@@ -60,10 +60,10 @@ class BasePipelineMessage
     virtual void deleteOwnedData() noexcept = 0;
 
     /// Deleted to prevent misuse
-    BasePipelineMessage(const BasePipelineMessage&) = delete;
-    BasePipelineMessage(const BasePipelineMessage&&) = delete;
-    BasePipelineMessage& operator=(const BasePipelineMessage&) = delete;
-    BasePipelineMessage& operator=(const BasePipelineMessage&&) = delete;
+    PipelineMessageBase(const PipelineMessageBase&) = delete;
+    PipelineMessageBase(const PipelineMessageBase&&) = delete;
+    PipelineMessageBase& operator=(const PipelineMessageBase&) = delete;
+    PipelineMessageBase& operator=(const PipelineMessageBase&&) = delete;
 
   private:
     uint32_t source_;

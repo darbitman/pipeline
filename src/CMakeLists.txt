@@ -2,7 +2,6 @@ SET(
     Subdirs
     Common
     PipelineCommon
-    #SeamCarver
 )
 
 foreach(Subdir ${Subdirs})

@@ -4,7 +4,7 @@
 #include <mutex>
 #include <thread>
 
-#include "BasePipelineMessage.hpp"
+#include "PipelineMessageBase.hpp"
 #include "PipelineQueueManager.hpp"
 #include "SharedContainer.hpp"
 
@@ -91,7 +91,7 @@ bool PipelineSenderReceiver::isComponentRegistered(uint32_t stageId) const noexc
     }
 }
 
-void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>& pMessage) noexcept
+void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>& pMessage) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -110,7 +110,7 @@ void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>& pMessa
     }
 }
 
-void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>&& pMessage) noexcept
+void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>&& pMessage) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -129,7 +129,7 @@ void PipelineSenderReceiver::sendMessage(unique_ptr<BasePipelineMessage>&& pMess
     }
 }
 
-unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receiveMessage(
+unique_ptr<PipelineMessageBase> PipelineSenderReceiver::receiveMessage(
     uint32_t receivingComponentId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
@@ -140,18 +140,18 @@ unique_ptr<BasePipelineMessage> PipelineSenderReceiver::receiveMessage(
 
         if (auto pQueue = pQueueManager_->getQueue(queueId); pQueue != nullptr)
         {
-            unique_ptr<BasePipelineMessage> pReceivedMessage = move(pQueue->front());
+            unique_ptr<PipelineMessageBase> pReceivedMessage = move(pQueue->front());
             pQueue->pop();
             return pReceivedMessage;
         }
         else
         {
-            return unique_ptr<BasePipelineMessage>();
+            return unique_ptr<PipelineMessageBase>();
         }
     }
     catch (const std::out_of_range& e)
     {
-        return unique_ptr<BasePipelineMessage>();
+        return unique_ptr<PipelineMessageBase>();
     }
 }
 
@@ -221,7 +221,7 @@ void PipelineSenderReceiver::receiverThread()
     bReceiverThreadShutdown_ = true;
 }
 
-void PipelineSenderReceiver::forwardMessage(unique_ptr<BasePipelineMessage>& pMessage)
+void PipelineSenderReceiver::forwardMessage(unique_ptr<PipelineMessageBase>& pMessage)
 {
     auto destinationId = pMessage->getDestination();
 
