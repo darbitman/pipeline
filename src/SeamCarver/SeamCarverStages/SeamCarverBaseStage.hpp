@@ -7,7 +7,7 @@
 #include "PipelineIdentifiers.hpp"
 #include "PipelineSenderReceiver.hpp"
 
-namespace sc
+namespace pipeline
 {
 class SeamCarverBaseStage : public BasePipelineStage
 {
@@ -42,4 +42,4 @@ class SeamCarverBaseStage : public BasePipelineStage
   private:
     std::unique_ptr<ISeamCarverDataProcessor> pSeamCarverDataProcessor_;
 };
-}  // namespace sc
+}  // namespace pipeline

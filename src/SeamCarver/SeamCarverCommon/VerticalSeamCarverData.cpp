@@ -9,7 +9,7 @@ using std::numeric_limits;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 VerticalSeamCarverData::VerticalSeamCarverData(double marginEnergy)
     : bNeedToInitializeLocalData(true),
@@ -151,4 +151,4 @@ vector<vector<double>>& VerticalSeamCarverData::getTotalEnergyToPixel2DVector()
 
 void VerticalSeamCarverData::mergeChannelsAndStoreToSavedImage() { cv::merge(bgr, *savedImage_); }
 
-}  // namespace sc
+}  // namespace pipeline

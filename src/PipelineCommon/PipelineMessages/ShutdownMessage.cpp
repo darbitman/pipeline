@@ -6,7 +6,7 @@
 
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 ShutdownMessage::ShutdownMessage()
     : BasePipelineMessage(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
@@ -33,4 +33,4 @@ BasePipelineData* ShutdownMessage::releaseOwnedData() noexcept { return nullptr;
 
 void ShutdownMessage::deleteOwnedData() noexcept {}
 
-}  // namespace sc
+}  // namespace pipeline

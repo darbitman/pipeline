@@ -8,7 +8,7 @@
 #include "BasePipelineData.hpp"
 #include "PriorityQueue.hpp"
 
-namespace sc
+namespace pipeline
 {
 class VerticalSeamCarverData : public BasePipelineData
 {
@@ -150,4 +150,4 @@ class VerticalSeamCarverData : public BasePipelineData
     // store the column of the pixel in the "previous" row to get to the current pixel
     std::vector<std::vector<int32_t>> columnTo;
 };
-}  // namespace sc
+}  // namespace pipeline

@@ -11,17 +11,17 @@ using std::greater;
 using std::priority_queue;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 class PriorityQueueTest : public ::testing::Test
 {
   protected:
     constexpr static size_t initial_capacity_ = 100;
 
-    static sc::PriorityQueue<int32_t> pq;
+    static PriorityQueue<int32_t> pq;
 };
 
-sc::PriorityQueue<int32_t> PriorityQueueTest::pq(PriorityQueueTest::initial_capacity_);
+PriorityQueue<int32_t> PriorityQueueTest::pq(PriorityQueueTest::initial_capacity_);
 
 constexpr size_t PriorityQueueTest::initial_capacity_;
 
@@ -76,4 +76,4 @@ TEST_F(PriorityQueueTest, ResetAndMinOrientedPriorityQueue)
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

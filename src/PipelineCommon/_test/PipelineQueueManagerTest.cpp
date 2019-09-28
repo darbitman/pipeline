@@ -16,7 +16,7 @@ using std::priority_queue;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 class PipelineQueueManagerTest : public ::testing::Test
 {
@@ -128,4 +128,4 @@ TEST_F(PipelineQueueManagerTest, CreateMinPq)
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

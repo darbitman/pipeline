@@ -8,7 +8,7 @@
 
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 template <typename T>
 class SharedContainer;
@@ -64,4 +64,4 @@ class PipelineQueueManager
 
     mutable std::mutex mapMutex_;
 };
-}  // namespace sc
+}  // namespace pipeline

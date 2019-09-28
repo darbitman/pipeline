@@ -15,7 +15,7 @@ using std::make_unique;
 using std::move;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 BaseSeamCarverInterface::BaseSeamCarverInterface(uint32_t queueType,
                                                  PipelineSenderReceiver* pSenderReceiver)
@@ -62,4 +62,4 @@ size_t BaseSeamCarverInterface::getNumberOfDataObjectsInPipeline() const
     return totalDataObjectsInPipeline_;
 }
 
-}  // namespace sc
+}  // namespace pipeline

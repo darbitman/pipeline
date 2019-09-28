@@ -7,7 +7,7 @@
 #include "BasePipelineMessage.hpp"
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 class PipelineDataMessage : public BasePipelineMessage
 {
@@ -54,4 +54,4 @@ class PipelineDataMessage : public BasePipelineMessage
     static constexpr uint32_t STARTING_MESSAGE_NUMBER{0};
 };
 
-}  // namespace sc
+}  // namespace pipeline

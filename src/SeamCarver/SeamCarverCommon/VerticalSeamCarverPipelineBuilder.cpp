@@ -17,7 +17,7 @@ using std::move;
 using std::unique_ptr;
 using std::vector;
 
-using namespace sc;
+using namespace pipeline;
 
 VerticalSeamCarverPipelineBuilder::VerticalSeamCarverPipelineBuilder(
     PipelineSenderReceiver* pSenderReceiver)

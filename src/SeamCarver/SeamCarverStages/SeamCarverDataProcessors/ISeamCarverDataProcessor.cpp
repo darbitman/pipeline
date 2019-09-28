@@ -1,7 +1,7 @@
 #include "ISeamCarverDataProcessor.hpp"
 
-namespace sc
+namespace pipeline
 {
 ISeamCarverDataProcessor::~ISeamCarverDataProcessor() {}
 
-}  // namespace sc
+}  // namespace pipeline

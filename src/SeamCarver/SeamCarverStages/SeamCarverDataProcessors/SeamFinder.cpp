@@ -9,7 +9,7 @@ using std::dynamic_pointer_cast;
 using std::make_unique;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 SeamFinder::SeamFinder() {}
 
@@ -131,4 +131,4 @@ void SeamFinder::runSeamCarverProcessor(BasePipelineData* pData)
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

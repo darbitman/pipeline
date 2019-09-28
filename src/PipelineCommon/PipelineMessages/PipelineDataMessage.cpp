@@ -9,7 +9,7 @@
 using std::move;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 PipelineDataMessage::PipelineDataMessage()
     : BasePipelineMessage(ComponentId::UNKNOWN_COMPONENT, ComponentId::UNKNOWN_COMPONENT,
@@ -44,4 +44,4 @@ BasePipelineData* PipelineDataMessage::releaseOwnedData() noexcept
 
 void PipelineDataMessage::deleteOwnedData() noexcept { pPipelineData_.reset(nullptr); }
 
-}  // namespace sc
+}  // namespace pipeline

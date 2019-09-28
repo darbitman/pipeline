@@ -4,7 +4,7 @@
 
 #include "BasePipelineData.hpp"
 
-namespace sc
+namespace pipeline
 {
 class IPipelineInterface
 {
@@ -20,4 +20,4 @@ class IPipelineInterface
     virtual size_t getNumberOfDataObjectsInPipeline() const = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

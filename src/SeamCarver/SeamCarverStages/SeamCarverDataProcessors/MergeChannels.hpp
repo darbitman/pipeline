@@ -4,7 +4,7 @@
 #include "SeamCarverProcessorFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
-namespace sc
+namespace pipeline
 {
 class MergeChannels : public ISeamCarverDataProcessor
 {
@@ -32,4 +32,4 @@ class MergeChannels : public ISeamCarverDataProcessor
             });
 };
 
-}  // namespace sc
+}  // namespace pipeline

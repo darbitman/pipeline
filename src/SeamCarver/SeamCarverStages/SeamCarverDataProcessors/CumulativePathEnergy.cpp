@@ -8,7 +8,7 @@ using std::dynamic_pointer_cast;
 using std::make_unique;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 void CumulativePathEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
@@ -147,4 +147,4 @@ void CumulativePathEnergy::calculateCumulativePathEnergy(VerticalSeamCarverData*
         }
     }
 }
-}  // namespace sc
+}  // namespace pipeline

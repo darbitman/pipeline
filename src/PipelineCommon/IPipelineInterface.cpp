@@ -1,7 +1,7 @@
 #include "IPipelineInterface.hpp"
 
-namespace sc
+namespace pipeline
 {
 IPipelineInterface::~IPipelineInterface() {}
 
-}  // namespace sc
+}  // namespace pipeline

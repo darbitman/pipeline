@@ -4,7 +4,7 @@
 #include "SeamCarverProcessorFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
-namespace sc
+namespace pipeline
 {
 class CumulativePathEnergy : public ISeamCarverDataProcessor
 {
@@ -33,4 +33,4 @@ class CumulativePathEnergy : public ISeamCarverDataProcessor
         });
 };
 
-}  // namespace sc
+}  // namespace pipeline

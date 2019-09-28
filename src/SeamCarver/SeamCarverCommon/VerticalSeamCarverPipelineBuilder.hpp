@@ -8,7 +8,7 @@
 #include "IPipelineStageBuilder.hpp"
 #include "PipelineSenderReceiver.hpp"
 
-namespace sc
+namespace pipeline
 {
 class IPipelineInterface;
 class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
@@ -53,4 +53,4 @@ class VerticalSeamCarverPipelineBuilder : public IPipelineStageBuilder
     void createStage(uint32_t stageId, uint32_t queueType);
 };
 
-}  // namespace sc
+}  // namespace pipeline

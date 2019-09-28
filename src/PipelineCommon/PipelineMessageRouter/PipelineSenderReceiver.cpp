@@ -15,7 +15,7 @@ using std::thread;
 using std::unique_lock;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 PipelineSenderReceiver::PipelineSenderReceiver()
     : bInitialized_(false),
@@ -240,4 +240,4 @@ void PipelineSenderReceiver::forwardMessage(unique_ptr<BasePipelineMessage>& pMe
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

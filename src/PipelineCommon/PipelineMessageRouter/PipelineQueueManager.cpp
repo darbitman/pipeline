@@ -17,7 +17,7 @@ using std::unique_lock;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 PipelineQueueManager::PipelineQueueManager() : currentQueueId_(STARTING_QUEUE_ID) {}
 
@@ -92,4 +92,4 @@ size_t PipelineQueueManager::getNumberOfQueues() const
     return queueIdToQueueMap_.size();
 }
 
-}  // namespace sc
+}  // namespace pipeline

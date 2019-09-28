@@ -8,7 +8,7 @@
 #include "IPipelineStage.hpp"
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 class PipelineSenderReceiver;
 class IMessageRouter;
@@ -76,4 +76,4 @@ class BasePipelineStage : public IPipelineStage
     std::thread dataProcessorThread_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

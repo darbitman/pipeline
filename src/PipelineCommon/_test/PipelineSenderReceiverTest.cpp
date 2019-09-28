@@ -11,7 +11,7 @@
 using std::make_unique;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 class PipelineSenderReceiverTest : public ::testing::Test
 {
@@ -56,4 +56,4 @@ TEST_F(PipelineSenderReceiverTest, ShutdownThread)
     EXPECT_EQ(senderReceiver.isShutdown(), true);
 }
 
-}  // namespace sc
+}  // namespace pipeline

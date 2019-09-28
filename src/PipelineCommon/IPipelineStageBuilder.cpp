@@ -1,7 +1,7 @@
 #include "IPipelineStageBuilder.hpp"
 
-namespace sc
+namespace pipeline
 {
 IPipelineStageBuilder::~IPipelineStageBuilder() {}
 
-}  // namespace sc
+}  // namespace pipeline

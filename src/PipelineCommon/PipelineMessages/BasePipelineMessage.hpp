@@ -5,7 +5,7 @@
 
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 /// Forward Declarations
 class BasePipelineData;
@@ -75,4 +75,4 @@ class BasePipelineMessage
     uint32_t messageNumber_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

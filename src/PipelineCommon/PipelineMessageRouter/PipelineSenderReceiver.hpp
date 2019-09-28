@@ -8,7 +8,7 @@
 #include "IMessageRouter.hpp"
 #include "PipelineQueueManager.hpp"
 
-namespace sc
+namespace pipeline
 {
 class BasePipelineMessage;
 
@@ -73,4 +73,4 @@ class PipelineSenderReceiver : public IMessageRouter
     void forwardMessage(std::unique_ptr<BasePipelineMessage>& pMessage);
 };
 
-}  // namespace sc
+}  // namespace pipeline

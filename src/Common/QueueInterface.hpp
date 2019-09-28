@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace sc
+namespace pipeline
 {
 template <typename _Tp>
 class QueueInterface
@@ -40,4 +40,4 @@ class QueueInterface
     virtual bool empty() const = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

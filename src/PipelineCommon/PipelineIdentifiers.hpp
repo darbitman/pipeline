@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sc
+namespace pipeline
 {
 class ComponentId
 {
@@ -33,4 +33,4 @@ class MessageType
     static constexpr uint32_t MESSAGE_TYPE_UNREGISTER_WITH_ROUTER{4};
 };
 
-}  // namespace sc
+}  // namespace pipeline

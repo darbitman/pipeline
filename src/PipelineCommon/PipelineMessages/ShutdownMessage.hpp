@@ -6,7 +6,7 @@
 #include "BasePipelineMessage.hpp"
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 class ShutdownMessage : public BasePipelineMessage
 {
@@ -39,4 +39,4 @@ class ShutdownMessage : public BasePipelineMessage
     std::unique_ptr<BasePipelineData> pNullPipelineData_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

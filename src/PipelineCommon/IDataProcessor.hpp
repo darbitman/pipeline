@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace sc
+namespace pipeline
 {
 class BasePipelineMessage;
 class BasePipelineData;
@@ -18,4 +18,4 @@ class IDataProcessor
     virtual void processData(BasePipelineData* pData) = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

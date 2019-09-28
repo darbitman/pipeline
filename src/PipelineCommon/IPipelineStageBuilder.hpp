@@ -7,7 +7,7 @@
 #include "IPipelineStage.hpp"
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 class IPipelineStageBuilder
 {
@@ -24,4 +24,4 @@ class IPipelineStageBuilder
     virtual std::vector<std::unique_ptr<IPipelineStage>>* getStages(uint32_t stageId) const = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

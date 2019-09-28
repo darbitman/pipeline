@@ -1,10 +1,10 @@
 #pragma once
 
-namespace sc
+namespace pipeline
 {
 class BasePipelineData
 {
   public:
     virtual ~BasePipelineData() = 0;
 };
-}  // namespace sc
+}  // namespace pipeline

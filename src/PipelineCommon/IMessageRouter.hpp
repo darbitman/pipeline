@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace sc
+namespace pipeline
 {
 class BasePipelineMessage;
 
@@ -28,4 +28,4 @@ class IMessageRouter
     virtual bool canReceive(uint32_t receivingComponentId) const noexcept = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

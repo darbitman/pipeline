@@ -8,7 +8,7 @@
 #include "PriorityQueue.hpp"
 #include "SharedContainer.hpp"
 
-namespace sc
+namespace pipeline
 {
 template <typename _Tp, typename _ComparatorType = std::less<_Tp>>
 class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
@@ -131,4 +131,4 @@ class SharedPriorityQueueAdapter : public SharedContainer<_Tp>
     std::unique_ptr<PriorityQueue<_Tp, _ComparatorType>> pConstSizeMinPQ_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

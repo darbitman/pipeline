@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sc
+namespace pipeline
 {
 template <typename _Tp>
 class SharedContainer
@@ -23,4 +23,4 @@ class SharedContainer
     virtual void pop() = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

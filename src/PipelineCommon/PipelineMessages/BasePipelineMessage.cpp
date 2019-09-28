@@ -1,6 +1,6 @@
 #include "BasePipelineMessage.hpp"
 
-namespace sc
+namespace pipeline
 {
 BasePipelineMessage::BasePipelineMessage(uint32_t source, uint32_t destination,
                                          uint32_t messageType, uint32_t messageNumber)
@@ -11,4 +11,4 @@ BasePipelineMessage::BasePipelineMessage(uint32_t source, uint32_t destination,
 {
 }
 
-}  // namespace sc
+}  // namespace pipeline

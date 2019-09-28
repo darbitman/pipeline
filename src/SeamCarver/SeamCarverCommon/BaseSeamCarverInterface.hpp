@@ -7,7 +7,7 @@
 #include "PipelineSenderReceiver.hpp"
 #include "SharedContainer.hpp"
 
-namespace sc
+namespace pipeline
 {
 class BaseSeamCarverInterface : public IPipelineInterface
 {
@@ -39,4 +39,4 @@ class BaseSeamCarverInterface : public IPipelineInterface
     PipelineSenderReceiver* pSenderReceiver_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

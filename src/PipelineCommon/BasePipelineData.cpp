@@ -1,6 +1,6 @@
 #include "BasePipelineData.hpp"
 
-namespace sc
+namespace pipeline
 {
 BasePipelineData::~BasePipelineData() {}
-}  // namespace sc
+}  // namespace pipeline

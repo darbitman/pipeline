@@ -4,7 +4,7 @@
 #include "SeamCarverProcessorFactory.hpp"
 #include "VerticalSeamCarverData.hpp"
 
-namespace sc
+namespace pipeline
 {
 class SeamRemover : public ISeamCarverDataProcessor
 {
@@ -31,4 +31,4 @@ class SeamRemover : public ISeamCarverDataProcessor
         });
 };
 
-}  // namespace sc
+}  // namespace pipeline

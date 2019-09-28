@@ -8,7 +8,7 @@
 #include "ISeamCarverDataProcessor.hpp"
 #include "PipelineIdentifiers.hpp"
 
-namespace sc
+namespace pipeline
 {
 class SeamCarverProcessorFactory
 {
@@ -37,6 +37,6 @@ class SeamCarverProcessorFactory
     inline static std::unordered_map<uint32_t, createProcessorFunction>
         stageIdToCreateProcessorFunctionMap_;
 };
-}  // namespace sc
+}  // namespace pipeline
 
 #endif

@@ -10,7 +10,7 @@ using std::dynamic_pointer_cast;
 using std::move;
 using std::unique_ptr;
 
-namespace sc
+namespace pipeline
 {
 SeamCarverBaseStage::SeamCarverBaseStage(
     uint32_t thisStageId, uint32_t queueType,
@@ -46,4 +46,4 @@ void SeamCarverBaseStage::processMessage(unique_ptr<BasePipelineMessage>& pMessa
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

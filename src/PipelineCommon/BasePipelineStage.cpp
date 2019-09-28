@@ -15,7 +15,7 @@ using std::unique_ptr;
 using std::chrono::seconds;
 using std::this_thread::sleep_for;
 
-namespace sc
+namespace pipeline
 {
 BasePipelineStage::BasePipelineStage(uint32_t thisComponentId, uint32_t componentLinkType,
                                      IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter)
@@ -113,4 +113,4 @@ void BasePipelineStage::doStopStage()
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

@@ -7,7 +7,7 @@
 
 #include "SharedContainer.hpp"
 
-namespace sc
+namespace pipeline
 {
 template <typename _Tp>
 class SharedQueue : public SharedContainer<_Tp>
@@ -140,4 +140,4 @@ class SharedQueue : public SharedContainer<_Tp>
     std::queue<_Tp> queue_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

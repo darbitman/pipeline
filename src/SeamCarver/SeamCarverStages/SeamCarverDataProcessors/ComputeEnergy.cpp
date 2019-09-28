@@ -15,7 +15,7 @@ using std::thread;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 void ComputeEnergy::runSeamCarverProcessor(BasePipelineData* pData)
 {
@@ -366,4 +366,4 @@ void ComputeEnergy::calculatePixelEnergyForEveryColumn(const unique_ptr<const Ma
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

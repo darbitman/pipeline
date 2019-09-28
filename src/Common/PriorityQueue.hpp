@@ -5,7 +5,7 @@
 #include <functional>
 #include <vector>
 
-namespace sc
+namespace pipeline
 {
 template <typename _Tp, typename _ComparatorType = std::less<_Tp>>
 class PriorityQueue : public QueueInterface<_Tp>
@@ -167,4 +167,4 @@ class PriorityQueue : public QueueInterface<_Tp>
     std::vector<_Tp> heap_;
 };
 
-}  // namespace sc
+}  // namespace pipeline

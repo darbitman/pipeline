@@ -15,9 +15,9 @@ using std::make_unique;
 using std::priority_queue;
 using std::unique_ptr;
 using std::vector;
-using namespace sc;
+using namespace pipeline;
 
-namespace sc
+namespace pipeline
 {
 class PqAdapterTest : public ::testing::Test
 {
@@ -66,4 +66,4 @@ TEST_F(PqAdapterTest, MinOrientedPq)
     }
 }
 
-}  // namespace sc
+}  // namespace pipeline

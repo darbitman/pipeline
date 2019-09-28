@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sc
+namespace pipeline
 {
 class IPipelineStage
 {
@@ -14,4 +14,4 @@ class IPipelineStage
     virtual bool isComponentRunning() const noexcept = 0;
 };
 
-}  // namespace sc
+}  // namespace pipeline

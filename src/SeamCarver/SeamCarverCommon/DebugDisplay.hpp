@@ -4,7 +4,7 @@
 #include <opencv2/core.hpp>
 #include <vector>
 
-namespace sc
+namespace pipeline
 {
 class DebugDisplay
 {
@@ -36,7 +36,7 @@ public:
 private:
     void WaitForEscKey() const;
 };
-}  // namespace sc
+}  // namespace pipeline
 
 sc::DebugDisplay::DebugDisplay() {}
 

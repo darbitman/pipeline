@@ -11,7 +11,7 @@ using std::make_unique;
 using std::unique_ptr;
 using std::vector;
 
-namespace sc
+namespace pipeline
 {
 bool SeamCarverProcessorFactory::registerComponent(uint32_t stageId,
                                                   createProcessorFunction function)
@@ -55,4 +55,4 @@ unique_ptr<vector<uint32_t>> SeamCarverProcessorFactory::getVectorOfRegisteredSt
     return pStageIds;
 }
 
-}  // namespace sc
+}  // namespace pipeline
