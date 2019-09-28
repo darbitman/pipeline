@@ -42,14 +42,15 @@ bool PipelineSenderReceiver::isInitialized() const noexcept { return bInitialize
 
 bool PipelineSenderReceiver::isShutdown() const noexcept { return bReceiverThreadShutdown_; }
 
-void PipelineSenderReceiver::registerComponent(uint32_t stageId, uint32_t queueType) noexcept
+void PipelineSenderReceiver::registerComponent(uint32_t stageId,
+                                               uint32_t componentLinkType) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
     {
         if (pQueueManager_ != nullptr)
         {
-            stageIdToQueueIdMap_[stageId] = pQueueManager_->createNewQueue(queueType);
+            stageIdToQueueIdMap_[stageId] = pQueueManager_->createNewQueue(componentLinkType);
         }
     }
 }
