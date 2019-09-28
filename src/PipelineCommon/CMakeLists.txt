@@ -12,8 +12,8 @@ add_library(
 target_include_directories(
     PipelineCommon
     PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineMessageRouter
+    ${CMAKE_CURRENT_SOURCE_DIR}/PipelineMessages
     ${PROJECT_SOURCE_DIR}/src/Common
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon
-    ${PROJECT_SOURCE_DIR}/src/PipelineCommon/PipelineMessages
 )
