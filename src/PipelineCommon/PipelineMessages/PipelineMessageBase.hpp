@@ -8,7 +8,7 @@
 namespace pipeline
 {
 /// Forward Declarations
-class BasePipelineData;
+class PipelineDataBase;
 
 class PipelineMessageBase
 {
@@ -46,15 +46,15 @@ class PipelineMessageBase
     /// @brief Set the owner of the data to this PipelineMessageBase
     /// @param pPipelineData
     /// Since the argument is passed by reference, the original unique_ptr will be nullptr since
-    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept = 0;
+    virtual void setOwnedData(std::unique_ptr<PipelineDataBase>& pPipelineData) noexcept = 0;
 
     /// @brief Returns a reference to the data this message owns
-    /// @return std::unique_ptr<BasePipelineData>&
-    virtual std::unique_ptr<BasePipelineData>& getOwnedData() noexcept = 0;
+    /// @return std::unique_ptr<PipelineDataBase>&
+    virtual std::unique_ptr<PipelineDataBase>& getOwnedData() noexcept = 0;
 
     /// @brief Releases ownership of the data this message owns and return a pointer to it
-    /// @return BasePipelineData* This can return a nullptr
-    virtual BasePipelineData* releaseOwnedData() noexcept = 0;
+    /// @return PipelineDataBase* This can return a nullptr
+    virtual PipelineDataBase* releaseOwnedData() noexcept = 0;
 
     /// @brief Deletes the data this message owns
     virtual void deleteOwnedData() noexcept = 0;

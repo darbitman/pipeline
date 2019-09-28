@@ -14,9 +14,9 @@ class PipelineSenderReceiver;
 class IMessageRouter;
 class IDataProcessor;
 class PipelineMessageBase;
-class BasePipelineData;
+class PipelineDataBase;
 
-class BasePipelineStage : public IPipelineStage
+class PipelineStageBase : public IPipelineStage
 {
   public:
     /// @brief Builds a component
@@ -25,12 +25,12 @@ class BasePipelineStage : public IPipelineStage
     /// @param pDataProcessor Reference to an object that will process the data
     /// @param pMessageRouter Reference to an implementation of an IMessageRouter that will be used
     /// for sending and receiving messages between components.
-    explicit BasePipelineStage(uint32_t thisComponentId, uint32_t componentLinkType,
+    explicit PipelineStageBase(uint32_t thisComponentId, uint32_t componentLinkType,
                                IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter);
 
     /// @brief Destructor will stop the thread if it needs to be stopped and unregisters itself with
     /// the IMessageRouter instance.
-    virtual ~BasePipelineStage() override;
+    virtual ~PipelineStageBase() override;
 
     /// @brief This method start the thread that will receive incoming messages and pass them onto
     /// their appropriate handlers. This method will fail to start the thread if the pDataProcessor
@@ -45,10 +45,10 @@ class BasePipelineStage : public IPipelineStage
     virtual bool isComponentRunning() const noexcept override;
 
     /// Deleted to prevent misuse
-    BasePipelineStage(const BasePipelineStage&) = delete;
-    BasePipelineStage(BasePipelineStage&&) = delete;
-    BasePipelineStage& operator=(const BasePipelineStage&) = delete;
-    BasePipelineStage& operator=(BasePipelineStage&&) = delete;
+    PipelineStageBase(const PipelineStageBase&) = delete;
+    PipelineStageBase(PipelineStageBase&&) = delete;
+    PipelineStageBase& operator=(const PipelineStageBase&) = delete;
+    PipelineStageBase& operator=(PipelineStageBase&&) = delete;
 
   private:
     void incomingMessageThread();
@@ -65,11 +65,11 @@ class BasePipelineStage : public IPipelineStage
     /// Inidicates whether the thread has joined
     bool bThreadHasJoined_;
 
-    /// This BasePipelineStage does not own this pointer so it's not responsible for its deletion.
+    /// This PipelineStageBase does not own this pointer so it's not responsible for its deletion.
     /// This is used for sending/receiving messages between components
     IMessageRouter* pMessageRouter_{nullptr};
 
-    /// This BasePipelineStage does not own this pointer so it's not responsible for its deletion.
+    /// This PipelineStageBase does not own this pointer so it's not responsible for its deletion.
     /// A reference to the object that will process the data that comes in
     IDataProcessor* pDataProcessor_{nullptr};
 

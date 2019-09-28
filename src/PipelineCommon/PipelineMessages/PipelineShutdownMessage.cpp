@@ -20,16 +20,16 @@ PipelineShutdownMessage::PipelineShutdownMessage(uint32_t source, uint32_t desti
 }
 
 void PipelineShutdownMessage::setOwnedData([
-    [maybe_unused]] std::unique_ptr<BasePipelineData>& pPipelineData) noexcept
+    [maybe_unused]] std::unique_ptr<PipelineDataBase>& pPipelineData) noexcept
 {
 }
 
-unique_ptr<BasePipelineData>& PipelineShutdownMessage::getOwnedData() noexcept
+unique_ptr<PipelineDataBase>& PipelineShutdownMessage::getOwnedData() noexcept
 {
     return pNullPipelineData_;
 }
 
-BasePipelineData* PipelineShutdownMessage::releaseOwnedData() noexcept { return nullptr; }
+PipelineDataBase* PipelineShutdownMessage::releaseOwnedData() noexcept { return nullptr; }
 
 void PipelineShutdownMessage::deleteOwnedData() noexcept {}
 

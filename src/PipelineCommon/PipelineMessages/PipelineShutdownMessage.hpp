@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataBase.hpp"
 #include "PipelineMessageBase.hpp"
 #include "PipelineIdentifiers.hpp"
 
@@ -18,13 +18,13 @@ class PipelineShutdownMessage : public PipelineMessageBase
     virtual ~PipelineShutdownMessage() = default;
 
     /// @brief This method does nothing for PipelineShutdownMessage
-    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept override;
+    virtual void setOwnedData(std::unique_ptr<PipelineDataBase>& pPipelineData) noexcept override;
 
     /// @brief This method does nothing for PipelineShutdownMessage
-    virtual std::unique_ptr<BasePipelineData>& getOwnedData() noexcept override;
+    virtual std::unique_ptr<PipelineDataBase>& getOwnedData() noexcept override;
 
     /// @brief This method returns a nullptr
-    virtual BasePipelineData* releaseOwnedData() noexcept override;
+    virtual PipelineDataBase* releaseOwnedData() noexcept override;
 
     /// @brief This method does nothing for PipelineShutdownMessage
     virtual void deleteOwnedData() noexcept override;
@@ -36,7 +36,7 @@ class PipelineShutdownMessage : public PipelineMessageBase
     PipelineShutdownMessage& operator=(const PipelineShutdownMessage&&) = delete;
 
   private:
-    std::unique_ptr<BasePipelineData> pNullPipelineData_;
+    std::unique_ptr<PipelineDataBase> pNullPipelineData_;
 };
 
 }  // namespace pipeline

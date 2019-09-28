@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataBase.hpp"
 
 namespace pipeline
 {
@@ -11,9 +11,9 @@ class IPipelineInterface
   public:
     virtual ~IPipelineInterface() = 0;
 
-    virtual void addNewDataToPipeline(std::unique_ptr<BasePipelineData>& pPipelineData) = 0;
+    virtual void addNewDataToPipeline(std::unique_ptr<PipelineDataBase>& pPipelineData) = 0;
 
-    virtual std::unique_ptr<BasePipelineData> getOutputFromPipeline() = 0;
+    virtual std::unique_ptr<PipelineDataBase> getOutputFromPipeline() = 0;
 
     virtual bool doesNewResultExist() const = 0;
 

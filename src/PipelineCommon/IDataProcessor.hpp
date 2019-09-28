@@ -5,7 +5,7 @@
 namespace pipeline
 {
 class PipelineMessageBase;
-class BasePipelineData;
+class PipelineDataBase;
 
 class IDataProcessor
 {
@@ -15,7 +15,7 @@ class IDataProcessor
     virtual void processMessage(std::unique_ptr<PipelineMessageBase>& pMessage) = 0;
 
   protected:
-    virtual void processData(BasePipelineData* pData) = 0;
+    virtual void processData(PipelineDataBase* pData) = 0;
 };
 
 }  // namespace pipeline

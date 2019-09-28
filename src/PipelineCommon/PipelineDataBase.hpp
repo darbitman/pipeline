@@ -2,9 +2,9 @@
 
 namespace pipeline
 {
-class BasePipelineData
+class PipelineDataBase
 {
   public:
-    virtual ~BasePipelineData() = 0;
+    virtual ~PipelineDataBase() = 0;
 };
 }  // namespace pipeline

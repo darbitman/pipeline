@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataBase.hpp"
 #include "PipelineMessageBase.hpp"
 #include "PipelineIdentifiers.hpp"
 
@@ -26,7 +26,7 @@ class PipelineDataMessage : public PipelineMessageBase
     PipelineDataMessage(uint32_t source, uint32_t destination, uint32_t messageNumber);
 
     PipelineDataMessage(uint32_t source, uint32_t destination, uint32_t messageNumber,
-                        std::unique_ptr<BasePipelineData>& pPipelineData);
+                        std::unique_ptr<PipelineDataBase>& pPipelineData);
 
     virtual ~PipelineDataMessage() = default;
 
@@ -34,11 +34,11 @@ class PipelineDataMessage : public PipelineMessageBase
     /// @param pPipelineData
     /// Ownership will be released from the unique_ptr passed in, and will be transferred to this
     /// PipelineDataMessage. If this message owns data already, that data will be deleted.
-    virtual void setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept override;
+    virtual void setOwnedData(std::unique_ptr<PipelineDataBase>& pPipelineData) noexcept override;
 
-    virtual std::unique_ptr<BasePipelineData>& getOwnedData() noexcept override;
+    virtual std::unique_ptr<PipelineDataBase>& getOwnedData() noexcept override;
 
-    virtual BasePipelineData* releaseOwnedData() noexcept override;
+    virtual PipelineDataBase* releaseOwnedData() noexcept override;
 
     virtual void deleteOwnedData() noexcept override;
 
@@ -49,7 +49,7 @@ class PipelineDataMessage : public PipelineMessageBase
     PipelineDataMessage& operator=(const PipelineDataMessage&&) = delete;
 
   private:
-    std::unique_ptr<BasePipelineData> pPipelineData_;
+    std::unique_ptr<PipelineDataBase> pPipelineData_;
 
     static constexpr uint32_t STARTING_MESSAGE_NUMBER{0};
 };

@@ -32,7 +32,7 @@ TEST_F(PipelineSenderReceiverTest, CheckSendAndReceive)
 {
     auto source = ComponentId::INTERFACE_STAGE;
     auto destination = ComponentId::STAGE_0;
-    unique_ptr<BasePipelineData> pEmptyData;
+    unique_ptr<PipelineDataBase> pEmptyData;
     unique_ptr<PipelineMessageBase> pMessage =
         make_unique<PipelineDataMessage>(source, destination, 0, pEmptyData);
 

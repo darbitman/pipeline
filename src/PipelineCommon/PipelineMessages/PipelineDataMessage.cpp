@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataBase.hpp"
 #include "PipelineIdentifiers.hpp"
 
 using std::move;
@@ -19,25 +19,25 @@ PipelineDataMessage::PipelineDataMessage()
 
 PipelineDataMessage::PipelineDataMessage(uint32_t source, uint32_t destination,
                                          uint32_t messageNumber,
-                                         unique_ptr<BasePipelineData>& pPipelineData)
+                                         unique_ptr<PipelineDataBase>& pPipelineData)
     : PipelineMessageBase(source, destination, MessageType::MESSAGE_TYPE_PIPELINE_DATA,
                           messageNumber),
       pPipelineData_(move(pPipelineData))
 {
 }
 
-void PipelineDataMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept
+void PipelineDataMessage::setOwnedData(std::unique_ptr<PipelineDataBase>& pPipelineData) noexcept
 {
     pPipelineData_.reset(nullptr);
     pPipelineData_.swap(pPipelineData);
 }
 
-unique_ptr<BasePipelineData>& PipelineDataMessage::getOwnedData() noexcept
+unique_ptr<PipelineDataBase>& PipelineDataMessage::getOwnedData() noexcept
 {
     return pPipelineData_;
 }
 
-BasePipelineData* PipelineDataMessage::releaseOwnedData() noexcept
+PipelineDataBase* PipelineDataMessage::releaseOwnedData() noexcept
 {
     return pPipelineData_.release();
 }

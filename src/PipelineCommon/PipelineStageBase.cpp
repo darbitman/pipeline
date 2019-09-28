@@ -1,9 +1,9 @@
-#include "BasePipelineStage.hpp"
+#include "PipelineStageBase.hpp"
 
 #include <chrono>
 #include <thread>
 
-#include "BasePipelineData.hpp"
+#include "PipelineDataBase.hpp"
 #include "IDataProcessor.hpp"
 #include "IMessageRouter.hpp"
 #include "PipelineShutdownMessage.hpp"
@@ -17,7 +17,7 @@ using std::this_thread::sleep_for;
 
 namespace pipeline
 {
-BasePipelineStage::BasePipelineStage(uint32_t thisComponentId, uint32_t componentLinkType,
+PipelineStageBase::PipelineStageBase(uint32_t thisComponentId, uint32_t componentLinkType,
                                      IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter)
     : thisComponentId_(thisComponentId),
       componentLinkType_(componentLinkType),
@@ -28,18 +28,18 @@ BasePipelineStage::BasePipelineStage(uint32_t thisComponentId, uint32_t componen
 {
 }
 
-BasePipelineStage::~BasePipelineStage()
+PipelineStageBase::~PipelineStageBase()
 {
     // TODO
 }
 
-void BasePipelineStage::runComponent()
+void PipelineStageBase::runComponent()
 {
     if (!bThreadIsRunning_ && pMessageRouter_ != nullptr)
     {
         pMessageRouter_->registerComponent(thisComponentId_, componentLinkType_);
 
-        dataProcessorThread_ = thread(&BasePipelineStage::incomingMessageThread, this);
+        dataProcessorThread_ = thread(&PipelineStageBase::incomingMessageThread, this);
 
         // wait for thread to start
         while (!bThreadIsRunning_)
@@ -47,11 +47,11 @@ void BasePipelineStage::runComponent()
     }
 }
 
-void BasePipelineStage::stopComponent() { doStopStage(); }
+void PipelineStageBase::stopComponent() { doStopStage(); }
 
-bool BasePipelineStage::isComponentRunning() const noexcept { return bThreadIsRunning_; }
+bool PipelineStageBase::isComponentRunning() const noexcept { return bThreadIsRunning_; }
 
-void BasePipelineStage::incomingMessageThread()
+void PipelineStageBase::incomingMessageThread()
 {
     bThreadIsRunning_ = true;
 
@@ -88,7 +88,7 @@ void BasePipelineStage::incomingMessageThread()
     bThreadIsRunning_ = false;
 }
 
-void BasePipelineStage::doStopStage()
+void PipelineStageBase::doStopStage()
 {
     if (pMessageRouter_ != nullptr)
     {
