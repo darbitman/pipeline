@@ -2,7 +2,6 @@
 
 namespace sc
 {
-
 BasePipelineMessage::BasePipelineMessage(uint32_t source, uint32_t destination,
                                          uint32_t messageType, uint32_t messageNumber)
     : source_(source),
@@ -11,7 +10,5 @@ BasePipelineMessage::BasePipelineMessage(uint32_t source, uint32_t destination,
       messageNumber_(messageNumber)
 {
 }
-
-BasePipelineMessage::~BasePipelineMessage() {}
 
 }  // namespace sc

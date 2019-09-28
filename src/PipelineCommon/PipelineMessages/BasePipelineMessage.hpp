@@ -21,7 +21,7 @@ class BasePipelineMessage
                         uint32_t messageNumber);
 
     /// @brief destructor
-    virtual ~BasePipelineMessage() = 0;
+    virtual ~BasePipelineMessage() = default;
 
     inline virtual void setSource(uint32_t source) noexcept final { source_ = source; }
 
@@ -53,11 +53,11 @@ class BasePipelineMessage
     virtual std::unique_ptr<BasePipelineData>& getOwnedData() = 0;
 
     /// @brief Releases ownership of the data this message owns and return a pointer to it
-    /// @return BasePipelineData*
-    virtual BasePipelineData* releaseOwnedData() = 0;
+    /// @return BasePipelineData* This can be nullptr
+    virtual BasePipelineData* releaseOwnedData() noexcept = 0;
 
     /// @brief Deletes the data this message owns
-    virtual void deleteOwnedData() = 0;
+    virtual void deleteOwnedData() noexcept = 0;
 
     /// Deleted to prevent misuse
     BasePipelineMessage(const BasePipelineMessage&) = delete;

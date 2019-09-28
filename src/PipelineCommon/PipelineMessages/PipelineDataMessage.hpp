@@ -38,9 +38,9 @@ class PipelineDataMessage : public BasePipelineMessage
 
     virtual std::unique_ptr<BasePipelineData>& getOwnedData() override;
 
-    virtual BasePipelineData* releaseOwnedData() override;
+    virtual BasePipelineData* releaseOwnedData() noexcept override;
 
-    virtual void deleteOwnedData() override;
+    virtual void deleteOwnedData() noexcept override;
 
     /// Deleted to prevent misuse
     PipelineDataMessage(const PipelineDataMessage&) = delete;

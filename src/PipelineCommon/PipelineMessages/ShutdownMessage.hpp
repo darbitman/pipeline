@@ -19,14 +19,14 @@ class ShutdownMessage : public BasePipelineMessage
 
     /// @brief This call does nothing for ShutdownMessage
     virtual void setOwnedData([
-        [maybe_unused]] std::unique_ptr<BasePipelineData>& pPipelineData) override;
+        [maybe_unused]] std::unique_ptr<BasePipelineData>& pPipelineData) noexcept override;
 
     /// @brief this call does nothing for ShutdownMessage
     virtual std::unique_ptr<BasePipelineData>& getOwnedData() override;
 
-    virtual BasePipelineData* releaseOwnedData() override;
+    virtual BasePipelineData* releaseOwnedData() noexcept override;
 
-    virtual void deleteOwnedData() override;
+    virtual void deleteOwnedData() noexcept override;
 
     /// Deleted to prevent misuse
     ShutdownMessage(const ShutdownMessage&) = delete;

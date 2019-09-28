@@ -34,8 +34,8 @@ void PipelineDataMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipel
 
 unique_ptr<BasePipelineData>& PipelineDataMessage::getOwnedData() { return pPipelineData_; }
 
-BasePipelineData* PipelineDataMessage::releaseOwnedData() { return pPipelineData_.release(); }
+BasePipelineData* PipelineDataMessage::releaseOwnedData() noexcept { return pPipelineData_.release(); }
 
-void PipelineDataMessage::deleteOwnedData() { pPipelineData_.reset(nullptr); }
+void PipelineDataMessage::deleteOwnedData() noexcept { pPipelineData_.reset(nullptr); }
 
 }  // namespace sc

@@ -25,10 +25,10 @@ ShutdownMessage::~ShutdownMessage() {}
 
 unique_ptr<BasePipelineData>& ShutdownMessage::getOwnedData() { return pNullPipelineData_; }
 
-BasePipelineData* ShutdownMessage::releaseOwnedData() { return nullptr; }
+BasePipelineData* ShutdownMessage::releaseOwnedData() noexcept { return nullptr; }
 
-void ShutdownMessage::deleteOwnedData() {}
+void ShutdownMessage::deleteOwnedData() noexcept {}
 
-void ShutdownMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) {}
+void ShutdownMessage::setOwnedData(std::unique_ptr<BasePipelineData>& pPipelineData) noexcept {}
 
 }  // namespace sc
