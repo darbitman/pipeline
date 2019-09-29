@@ -78,7 +78,9 @@ void PipelineStageBase::incomingMessageThread()
                 switch (pReceivedMessage->getMessageType())
                 {
                     case MessageType::MESSAGE_TYPE_PIPELINE_DATA:
-                        pDataProcessor_->processMessage(pReceivedMessage);
+                        pDataProcessor_->processData(pReceivedMessage->getOwnedData().get());
+                        pReceivedMessage->setSource(thisComponentId_);
+                        pReceivedMessage->setDestination(nextComponentId_);
                         pMessageRouter_->sendMessage(pReceivedMessage);
                         break;
 

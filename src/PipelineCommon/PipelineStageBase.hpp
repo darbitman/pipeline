@@ -22,6 +22,7 @@ class PipelineStageBase : public IPipelineStage
     /// @brief Constructor that builds a specific component that invokes the pDataProcessor to
     /// process data.
     /// @param thisComponentId Unique identifier for this component (akin to an IP)
+    /// @param nextComponentId Unique identifier for the next component in the pipeline
     /// @param componentLinkType What medium shall the messages be transported on
     /// @param pDataProcessor Reference to an object that will process the data
     /// @param pMessageRouter Reference to an implementation of an IMessageRouter that will be used

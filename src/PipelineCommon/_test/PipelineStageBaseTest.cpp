@@ -38,10 +38,9 @@ class MockDataProcessor : public IDataProcessor
   public:
     virtual ~MockDataProcessor() = default;
 
-    virtual void processMessage(unique_ptr<PipelineMessageBase>& pMessage) override
+    virtual void processData(PipelineDataBase* pData) override
     {
-        pMessage->setSource(Id::COMPONENT_UNDER_TEST);
-        pMessage->setDestination(Id::COMPONENT_THAT_RECEIVES);
+        // Do no processing
     }
 };
 
