@@ -26,8 +26,9 @@ class PipelineStageBase : public IPipelineStage
     /// @param pDataProcessor Reference to an object that will process the data
     /// @param pMessageRouter Reference to an implementation of an IMessageRouter that will be used
     /// for sending and receiving messages between components.
-    explicit PipelineStageBase(uint32_t thisComponentId, uint32_t componentLinkType,
-                               IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter);
+    explicit PipelineStageBase(uint32_t thisComponentId, uint32_t nextComponentId,
+                               uint32_t componentLinkType, IDataProcessor* pDataProcessor,
+                               IMessageRouter* pMessageRouter);
 
     /// @brief Destructor will stop the thread if it needs to be stopped and unregisters itself with
     /// the IMessageRouter instance.
@@ -60,7 +61,11 @@ class PipelineStageBase : public IPipelineStage
 
     const uint32_t thisComponentId_;
 
+    const uint32_t nextComponentId_;
+
     const uint32_t componentLinkType_;
+
+    std::thread dataProcessorThread_;
 
     /// Flag to start and stop the thread, and to keep track if it's running
     std::atomic<bool> bThreadIsRunning_;
@@ -75,8 +80,6 @@ class PipelineStageBase : public IPipelineStage
     /// This PipelineStageBase does not own this pointer so it's not responsible for its deletion.
     /// A reference to the object that will process the data that comes in
     IDataProcessor* pDataProcessor_;
-
-    std::thread dataProcessorThread_;
 };
 
 }  // namespace pipeline

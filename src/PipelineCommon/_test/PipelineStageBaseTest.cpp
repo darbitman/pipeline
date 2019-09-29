@@ -165,8 +165,8 @@ class PipelineStageBaseTest : public ::testing::Test
     PipelineStageBaseTest()
         : messageRouter_(),
           dataProcessor_(),
-          stage_(Id::COMPONENT_UNDER_TEST, LinkType::DEFAULT_LINK_TYPE, &dataProcessor_,
-                 &messageRouter_)
+          stage_(Id::COMPONENT_UNDER_TEST, Id::COMPONENT_THAT_RECEIVES, LinkType::DEFAULT_LINK_TYPE,
+                 &dataProcessor_, &messageRouter_)
     {
     }
 

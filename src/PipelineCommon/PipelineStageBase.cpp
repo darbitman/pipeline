@@ -17,9 +17,11 @@ using std::this_thread::sleep_for;
 
 namespace pipeline
 {
-PipelineStageBase::PipelineStageBase(uint32_t thisComponentId, uint32_t componentLinkType,
-                                     IDataProcessor* pDataProcessor, IMessageRouter* pMessageRouter)
+PipelineStageBase::PipelineStageBase(uint32_t thisComponentId, uint32_t nextComponentId,
+                                     uint32_t componentLinkType, IDataProcessor* pDataProcessor,
+                                     IMessageRouter* pMessageRouter)
     : thisComponentId_(thisComponentId),
+      nextComponentId_(nextComponentId),
       componentLinkType_(componentLinkType),
       bThreadIsRunning_(false),
       bThreadHasJoined_(false),
