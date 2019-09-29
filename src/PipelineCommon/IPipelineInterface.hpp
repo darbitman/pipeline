@@ -12,7 +12,8 @@ class IPipelineInterface
     virtual ~IPipelineInterface() = default;
 
     /// @brief This injects/sends data into the pipeline
-    /// @param pPipelineData
+    /// @param pPipelineData Since this is passed by reference, when this method completes
+    /// successfuly, the original pointer will be set to nullptr. (ie ownership is transferred)
     virtual void addNewDataToPipeline(std::unique_ptr<PipelineDataBase>& pPipelineData) const
         noexcept = 0;
 
