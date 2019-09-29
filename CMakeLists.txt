@@ -45,7 +45,7 @@ add_subdirectory(
     ${PROJECT_SOURCE_DIR}/googletest-build
 )
 
-find_package(OpenCV)
+#find_package(OpenCV)
 
 add_subdirectory(src)
 
