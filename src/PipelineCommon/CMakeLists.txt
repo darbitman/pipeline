@@ -20,4 +20,5 @@ target_include_directories(
 
 if(BUILD_UNIT_TESTS)
     add_subdirectory(_test)
-endif(BUILD_UNIT_TESTS)
+    set(AllUnitTests_SRC ${AllUnitTests_SRC} PARENT_SCOPE)
+endif()

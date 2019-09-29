@@ -1,5 +1,7 @@
 file(GLOB TestFiles_SRC CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
+set(AllUnitTests_SRC ${AllUnitTests_SRC} ${TestFiles_SRC} PARENT_SCOPE)
+
 foreach(TestFile ${TestFiles_SRC})
     get_filename_component(TestName ${TestFile} NAME_WE)
 

@@ -58,6 +58,7 @@ bool PipelineStageBase::isComponentRunning() const noexcept { return bThreadIsRu
 
 void PipelineStageBase::incomingMessageThread()
 {
+    bThreadIsRunning_ = false;
     bThreadIsRunning_ = true;
 
     while (bThreadIsRunning_)
@@ -97,10 +98,13 @@ void PipelineStageBase::sendShutdownmessageToSelf()
 {
     // thread can't be started if pMessageRouter_ is nullptr
     // no need to check for nullptr
-    // create a PipelineShutdownMessage and send to itself
-    unique_ptr<PipelineMessageBase> pPipelineShutdownMessage =
-        make_unique<PipelineShutdownMessage>(thisComponentId_, thisComponentId_, 0);
-    pMessageRouter_->sendMessage(pPipelineShutdownMessage);
+    // create a PipelineShutdownMessage and send to itself, but only if the thread is running
+    if (bThreadIsRunning_)
+    {
+        unique_ptr<PipelineMessageBase> pPipelineShutdownMessage =
+            make_unique<PipelineShutdownMessage>(thisComponentId_, thisComponentId_, 0);
+        pMessageRouter_->sendMessage(pPipelineShutdownMessage);
+    }
 }
 
 void PipelineStageBase::waitForThreadShutdown()
