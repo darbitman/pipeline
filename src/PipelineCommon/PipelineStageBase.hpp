@@ -19,7 +19,8 @@ class PipelineDataBase;
 class PipelineStageBase : public IPipelineStage
 {
   public:
-    /// @brief Builds a component
+    /// @brief Constructor that builds a specific component that invokes the pDataProcessor to
+    /// process data.
     /// @param thisComponentId Unique identifier for this component (akin to an IP)
     /// @param componentLinkType What medium shall the messages be transported on
     /// @param pDataProcessor Reference to an object that will process the data
