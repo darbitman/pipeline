@@ -26,15 +26,7 @@ void DefaultPipelineBuilder::addNewComponent(uint32_t stageNumber) noexcept
         stageNumber, stageNumber + 1, ComponentLinkType::QUEUE_TYPE_FIFO,
         pDataProcessorManager_->getDataProcessor(stageNumber), pMessageRouter_);
 
-    try
-    {
-        addTheNewComponent(stageNumber, pNewComponent);
-    }
-    catch (const std::out_of_range& e)
-    {
-        // resize pipeline_
-        // retry addTheNewComponent
-    }
+    addTheNewComponent(stageNumber, pNewComponent);
 }
 
 const std::vector<std::vector<std::unique_ptr<IPipelineStage>>>& DefaultPipelineBuilder::getStages()
@@ -71,15 +63,18 @@ size_t DefaultPipelineBuilder::getNumberOfParallelComponents(uint32_t stageNumbe
 }
 
 void DefaultPipelineBuilder::addTheNewComponent(uint32_t stageNumber,
-                                                unique_ptr<IPipelineStage>& pStageToAdd)
+                                                unique_ptr<IPipelineStage>& pStageToAdd) noexcept
 {
     try
     {
+        // attempt to move
         pipeline_.at(stageNumber).push_back(move(pStageToAdd));
     }
     catch (const std::out_of_range& e)
     {
-        throw;
+        // vector doesn't have the correct capacity
+        pipeline_.resize(stageNumber + 1);
+        pipeline_.at(stageNumber).push_back(move(pStageToAdd));
     }
 }
 

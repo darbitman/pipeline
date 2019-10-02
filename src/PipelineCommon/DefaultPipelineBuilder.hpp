@@ -41,7 +41,7 @@ class DefaultPipelineBuilder : public IPipelineBuilder
 
   private:
     /// @throw std::out_of_range If need to add a vector for the parallel stages
-    void addTheNewComponent(uint32_t stageNumber, std::unique_ptr<IPipelineStage>& pStageToAdd);
+    void addTheNewComponent(uint32_t stageNumber, std::unique_ptr<IPipelineStage>& pStageToAdd) noexcept;
 
     std::vector<std::vector<std::unique_ptr<IPipelineStage>>> pipeline_;
 
