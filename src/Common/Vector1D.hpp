@@ -124,13 +124,13 @@ class Vector1D
 
     T& at(size_t index)
     {
-        VerifyAcces(index);
+        VerifyDimensionAccess(index);
         return pArray_[index];
     }
 
     const T& at(size_t index) const
     {
-        VerifyAcces(index);
+        VerifyDimensionAccess(index);
         return pArray_[index];
     }
 
@@ -151,7 +151,7 @@ class Vector1D
     void push_back(T&& object) { emplace_back(std::move(object)); }
 
   private:
-    void VerifyAcces(size_t index)
+    void VerifyDimensionAccess(size_t index)
     {
         if (index >= currentIndex_)
         {
