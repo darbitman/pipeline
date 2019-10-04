@@ -16,14 +16,14 @@ class Vector1DTest : public ::testing::Test
     {
         Data(uint32_t a, uint32_t b, uint32_t c) noexcept : a_(a), b_(b), c_(c)
         {
-            cout << "Calling constructor @ " << this << '\n';
-            cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
+            // cout << "Calling constructor @ " << this << '\n';
+            // cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
         }
 
         ~Data()
         {
-            cout << "Calling destructor @ " << this << '\n';
-            cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
+            // cout << "Calling destructor @ " << this << '\n';
+            // cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
         }
 
         Data(const Data& other) noexcept
@@ -31,8 +31,8 @@ class Vector1DTest : public ::testing::Test
             a_ = other.a_;
             b_ = other.b_;
             c_ = other.c_;
-            cout << "Calling copy constructor @ " << this << '\n';
-            cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
+            // cout << "Calling copy constructor @ " << this << '\n';
+            // cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
         }
 
         Data(Data&& other) noexcept
@@ -40,8 +40,8 @@ class Vector1DTest : public ::testing::Test
             a_ = other.a_;
             b_ = other.b_;
             c_ = other.c_;
-            cout << "Calling move constructor @ " << this << '\n';
-            cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
+            // cout << "Calling move constructor @ " << this << '\n';
+            // cout << "a_ = " << a_ << " b_ = " << b_ << " c_ = " << c_ << '\n';
         }
 
         uint32_t a_;
