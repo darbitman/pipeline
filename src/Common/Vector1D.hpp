@@ -120,6 +120,8 @@ class Vector1D
 
     size_t size() const noexcept { return currentIndex_; }
 
+    bool empty() const noexcept { return currentIndex_ == (size_t)0; }
+
     T& at(size_t index)
     {
         VerifyAcces(index);

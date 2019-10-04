@@ -53,6 +53,9 @@ class Vector1DTest : public ::testing::Test
 TEST_F(Vector1DTest, DefaultConstructor)
 {
     Vector1D<Data> vec;
+
+    EXPECT_EQ(vec.empty(), true);
+
     vec.emplace_back(1, 2, 3);
     vec.emplace_back(4, 5, 6);
     vec.emplace_back(7, 8, 9);
@@ -71,6 +74,9 @@ TEST_F(Vector1DTest, PredefinedSizeConstructor)
 {
     constexpr size_t startingCapacity = 10;
     Vector1D<Data> vec(startingCapacity);
+
+    EXPECT_EQ(vec.empty(), true);
+
     vec.emplace_back(1, 2, 3);
     vec.emplace_back(4, 5, 6);
     vec.emplace_back(7, 8, 9);
@@ -88,6 +94,9 @@ TEST_F(Vector1DTest, Iterator)
 {
     {
         Vector1D<uint32_t> vec;
+
+        EXPECT_EQ(vec.empty(), true);
+
         vec.emplace_back(10);
         vec.emplace_back(20);
         vec.emplace_back(30);
