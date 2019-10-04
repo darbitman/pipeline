@@ -27,7 +27,7 @@ class Vector1D
         //
     }
 
-    Vector1D(size_t capacity, size_t currentIndex, T* pArray) : ownsPointer_(false)
+    Vector1D(size_t capacity, size_t size, T* pArray) : ownsPointer_(false)
     {
         //
     }
@@ -38,22 +38,55 @@ class Vector1D
     {
         if (ownsPointer_)
         {
-            for (size_t i = 0; i < currentIndex_; ++i)
-            {
-                (pArray_ + i)->~T();
-            }
-
-            ::operator delete(pArray_);
+            DestructAndFreeCurrentMemory();
         }
     }
+
+    class iterator
+    {
+      public:
+        iterator() noexcept : pObject_(nullptr) {}
+
+        iterator(T* pObject) noexcept : pObject_(pObject) {}
+
+        iterator(const iterator& other) noexcept : pObject_(other.pObject_) {}
+
+        ~iterator() = default;
+
+        T& operator*() const noexcept { return *pObject_; }
+
+        iterator& operator++() noexcept
+        {
+            ++pObject_;
+            return *this;
+        }
+
+        iterator operator++(int) noexcept
+        {
+            iterator oldIteratorToReturn(*this);
+            ++pObject_;
+            return oldIteratorToReturn;
+        }
+
+        bool operator!=(const iterator& other) const noexcept { return pObject_ != other.pObject_; }
+
+      private:
+        T* pObject_;
+    };
+
+    iterator begin() const noexcept { return iterator(pArray_); }
+
+    iterator end() const noexcept { return iterator(pArray_ + currentIndex_); }
+
+    size_t capacity() const noexcept { return capacity_; }
+
+    size_t size() const noexcept { return currentIndex_; }
 
     T& at(size_t index)
     {
         VerifyAcces(index);
         return pArray_[index];
     }
-
-    size_t capacity() const noexcept { return capacity_; }
 
     const T& at(size_t index) const
     {
@@ -64,7 +97,7 @@ class Vector1D
     template <typename... _Args>
     void emplace_back(_Args&&... __args)
     {
-        // check for capacity
+        // check if at capacity
         if (currentIndex_ == capacity_)
         {
             EnlargeArray();
@@ -96,17 +129,25 @@ class Vector1D
         for (size_t i = 0; i < currentIndex_; ++i)
         {
             new (pNewArray + i) T(std::move(*(pArray_ + i)));
+        }
 
+        DestructAndFreeCurrentMemory();
+
+        // update pointer and capacity
+        pArray_ = pNewArray;
+        capacity_ = newCapacity;
+    }
+
+    void DestructAndFreeCurrentMemory()
+    {
+        for (size_t i = 0; i < currentIndex_; ++i)
+        {
             // explicitly need to call destructor since placement new was used
             (pArray_ + i)->~T();
         }
 
         // free the memory
         ::operator delete(pArray_);
-
-        // update pointer and capacity
-        pArray_ = pNewArray;
-        capacity_ = newCapacity;
     }
 
     size_t capacity_;
