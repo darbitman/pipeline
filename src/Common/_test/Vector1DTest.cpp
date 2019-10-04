@@ -86,13 +86,13 @@ TEST_F(Vector1DTest, PredefinedSizeConstructor)
 
 TEST_F(Vector1DTest, Iterator)
 {
-    Vector1D<uint32_t> vec;
-    vec.emplace_back(10);
-    vec.emplace_back(20);
-    vec.emplace_back(30);
-    vec.emplace_back(40);
-
     {
+        Vector1D<uint32_t> vec;
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+
         size_t i = 0;
         for (Vector1D<uint32_t>::iterator iter = vec.begin(), iter_end = vec.end();
              iter != iter_end; ++iter)

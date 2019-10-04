@@ -74,9 +74,47 @@ class Vector1D
         T* pObject_;
     };
 
-    iterator begin() const noexcept { return iterator(pArray_); }
+    class const_iterator
+    {
+      public:
+        const_iterator() noexcept : pObject_(nullptr) {}
 
-    iterator end() const noexcept { return iterator(pArray_ + currentIndex_); }
+        const_iterator(T* pObject) noexcept : pObject_(pObject) {}
+
+        const_iterator(const const_iterator& other) noexcept : pObject_(other.pObject_) {}
+
+        ~const_iterator() = default;
+
+        const T& operator*() const noexcept { return *pObject_; }
+
+        const_iterator& operator++() noexcept
+        {
+            ++pObject_;
+            return *this;
+        }
+
+        const_iterator operator++(int) noexcept
+        {
+            const_iterator oldIteratorToReturn(*this);
+            ++pObject_;
+            return oldIteratorToReturn;
+        }
+
+        bool operator!=(const const_iterator& other) const noexcept
+        {
+            return pObject_ != other.pObject_;
+        }
+
+      private:
+        T* pObject_;
+    };
+
+    iterator begin() noexcept { return iterator(pArray_); }
+    const_iterator begin() const noexcept { return const_iterator(pArray_); }
+    const_iterator cbegin() const noexcept { return const_iterator(pArray_); }
+    iterator end() noexcept { return iterator(pArray_ + currentIndex_); }
+    const_iterator end() const noexcept { return iterator(pArray_ + currentIndex_); }
+    const_iterator cend() const noexcept { return iterator(pArray_ + currentIndex_); }
 
     size_t capacity() const noexcept { return capacity_; }
 
