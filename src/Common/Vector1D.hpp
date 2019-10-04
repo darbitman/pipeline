@@ -134,12 +134,6 @@ class Vector1D
         return pArray_[index];
     }
 
-    const T& at(size_t index) const
-    {
-        VerifyAcces(index);
-        return pArray_[index];
-    }
-
     template <typename... _Args>
     void emplace_back(_Args&&... __args)
     {
