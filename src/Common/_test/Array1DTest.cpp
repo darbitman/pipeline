@@ -3,13 +3,13 @@
 #include <cstdint>
 #include <iostream>
 
-#include "Vector1D.hpp"
+#include "Array1D.hpp"
 
 using std::cout;
 
 namespace pipeline
 {
-class Vector1DTest : public ::testing::Test
+class Array1DTest : public ::testing::Test
 {
   public:
     struct Data
@@ -50,9 +50,9 @@ class Vector1DTest : public ::testing::Test
     };
 };
 
-TEST_F(Vector1DTest, DefaultConstructor)
+TEST_F(Array1DTest, DefaultConstructor)
 {
-    Vector1D<Data> vec;
+    Array1D<Data> vec;
 
     EXPECT_EQ(vec.empty(), true);
 
@@ -70,10 +70,10 @@ TEST_F(Vector1DTest, DefaultConstructor)
     vec.push_back(newData);
 }
 
-TEST_F(Vector1DTest, PredefinedSizeConstructor)
+TEST_F(Array1DTest, PredefinedSizeConstructor)
 {
     constexpr size_t startingCapacity = 10;
-    Vector1D<Data> vec(startingCapacity);
+    Array1D<Data> vec(startingCapacity);
 
     EXPECT_EQ(vec.empty(), true);
 
@@ -90,10 +90,10 @@ TEST_F(Vector1DTest, PredefinedSizeConstructor)
     EXPECT_GE(vec.capacity(), startingCapacity);
 }
 
-TEST_F(Vector1DTest, Iterator)
+TEST_F(Array1DTest, Iterator)
 {
     {
-        Vector1D<uint32_t> vec;
+        Array1D<uint32_t> vec;
 
         EXPECT_EQ(vec.empty(), true);
 
@@ -103,7 +103,7 @@ TEST_F(Vector1DTest, Iterator)
         vec.emplace_back(40);
 
         size_t i = 0;
-        for (Vector1D<uint32_t>::iterator iter = vec.begin(), iter_end = vec.end();
+        for (Array1D<uint32_t>::iterator iter = vec.begin(), iter_end = vec.end();
              iter != iter_end; ++iter)
         {
             ASSERT_NE(i, vec.size());

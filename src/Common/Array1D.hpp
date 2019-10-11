@@ -5,36 +5,36 @@
 namespace pipeline
 {
 template <typename T>
-class Vector1D
+class Array1D
 {
   public:
-    Vector1D()
+    Array1D()
         : capacity_(1),
           currentIndex_(0),
           pArray_(reinterpret_cast<T*>(::operator new(sizeof(T) * capacity_)))
     {
     }
 
-    Vector1D(size_t n)
+    Array1D(size_t n)
         : capacity_(n),
           currentIndex_(0),
           pArray_(reinterpret_cast<T*>(::operator new(sizeof(T) * capacity_)))
     {
     }
 
-    Vector1D(size_t n, const T& initValue) : capacity_(n), currentIndex_(0), pArray_(nullptr)
+    Array1D(size_t n, const T& initValue) : capacity_(n), currentIndex_(0), pArray_(nullptr)
     {
         //
     }
 
-    Vector1D(size_t capacity, size_t size, T* pArray) : ownsPointer_(false)
+    Array1D(size_t capacity, size_t size, T* pArray) : ownsPointer_(false)
     {
         //
     }
 
-    Vector1D(Vector1D&& other) = default;
+    Array1D(Array1D&& other) = default;
 
-    ~Vector1D()
+    ~Array1D()
     {
         if (ownsPointer_)
         {
@@ -142,7 +142,9 @@ class Vector1D
         {
             EnlargeArray();
         }
-        auto pObject = &pArray_[currentIndex_++];
+        T* pObject = &pArray_[currentIndex_++];
+
+        // placement new. Construct T at memory pointed to by pObject
         new (pObject) T(std::forward<_Args>(__args)...);
     }
 
