@@ -4,11 +4,9 @@ template <typename T>
 class ArrayAccessor1D
 {
   public:
-    ArrayAccessor1D(T* pArray, size_t size) : pArray_(pArray), size_(size) {}
+    ArrayAccessor1D(T* pArray, size_t size) noexcept : pArray_(pArray), size_(size) {}
 
     ~ArrayAccessor1D() = default;
-
-    void setBasePointer(T* pArray) { pArray_ = pArray_; }
 
     T& operator()(size_t index);
 

@@ -69,7 +69,9 @@ TEST_F(Array2DTest, AccessArray)
     constexpr size_t height{25};
     Array2D<Data> vec(width, height);
 
-    vec.at(0).at(0).~Data();
+    vec.at(3).at(3).a_ = 12;
+
+    ASSERT_EQ(vec.at(3).at(3).a_, 12);
 }
 
 }  // namespace pipeline

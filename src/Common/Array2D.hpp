@@ -27,17 +27,23 @@ class Array2D
 
     ArrayAccessor1D<T> operator[](size_t yPos) const
     {
-        return ArrayAccessor1D<T>(pArray_ + (yPos * maxWidth_), maxWidth_);
+        VerifyHeight(yPos);
+        T* pArray = CalculateRowPointer(yPos);
+        return ArrayAccessor1D<T>(pArray, maxWidth_);
     }
 
     ArrayAccessor1D<T> at(size_t yPos) const
     {
-        return ArrayAccessor1D<T>(pArray_ + (yPos * maxWidth_), maxWidth_);
+        VerifyHeight(yPos);
+        T* pArray = CalculateRowPointer(yPos);
+        return ArrayAccessor1D<T>(pArray, maxWidth_);
     }
 
     ArrayAccessor1D<T> at(size_t yPos)
     {
-        return ArrayAccessor1D<T>(pArray_ + (yPos * maxWidth_), maxWidth_);
+        VerifyHeight(yPos);
+        T* pArray = CalculateRowPointer(yPos);
+        return ArrayAccessor1D<T>(pArray, maxWidth_);
     }
 
     T& at(size_t xPos, size_t yPos)
@@ -88,6 +94,8 @@ class Array2D
         // free the memory
         ::operator delete(pArray_);
     }
+
+    T* CalculateRowPointer(size_t yPos) { return pArray_ + (yPos * maxWidth_); }
 
     size_t maxWidth_;
     size_t maxHeight_;
