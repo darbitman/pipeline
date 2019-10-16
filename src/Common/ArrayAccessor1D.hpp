@@ -26,6 +26,11 @@ class ArrayAccessor1D
         return pArray_[index];
     }
 
+    ArrayAccessor1D(const ArrayAccessor1D&) = delete;
+    ArrayAccessor1D(ArrayAccessor1D&&) = delete;
+    ArrayAccessor1D& operator=(const ArrayAccessor1D&) = delete;
+    ArrayAccessor1D& operator=(ArrayAccessor1D&&) = delete;
+
   private:
     void VerifyDimensionAccess(size_t index)
     {
