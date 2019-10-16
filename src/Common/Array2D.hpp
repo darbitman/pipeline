@@ -32,6 +32,13 @@ class Array2D
         return ArrayAccessor1D<T>(pArray, maxWidth_);
     }
 
+    ArrayAccessor1D<T> operator[](size_t yPos)
+    {
+        VerifyHeight(yPos);
+        T* pArray = CalculateRowPointer(yPos);
+        return ArrayAccessor1D<T>(pArray, maxWidth_);
+    }
+
     ArrayAccessor1D<T> at(size_t yPos) const
     {
         VerifyHeight(yPos);
