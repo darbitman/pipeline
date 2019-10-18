@@ -107,17 +107,16 @@ class Matrix : public IArray2D<T>
   private:
     bool VerifyDimensionAccess(const size_t row, const size_t column) const noexcept
     {
-        // TODO
-        return true;
+        return (VerifyRowAccess(row) && VerifyColumnAccess(column));
     }
 
-    bool VerifyWidth(const size_t column) const noexcept
+    bool VerifyRowAccess(const size_t column) const noexcept
     {
         // TODO
         return true;
     }
 
-    bool VerifyHeight(const size_t row) const noexcept
+    bool VerifyColumnAccess(const size_t row) const noexcept
     {
         // TODO
         return true;
