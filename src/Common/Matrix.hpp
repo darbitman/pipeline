@@ -110,17 +110,9 @@ class Matrix : public IArray2D<T>
         return (VerifyRowAccess(row) && VerifyColumnAccess(column));
     }
 
-    bool VerifyRowAccess(const size_t column) const noexcept
-    {
-        // TODO
-        return true;
-    }
+    bool VerifyRowAccess(const size_t row) const noexcept { return row < numRows_; }
 
-    bool VerifyColumnAccess(const size_t row) const noexcept
-    {
-        // TODO
-        return true;
-    }
+    bool VerifyColumnAccess(const size_t column) const noexcept { return column < numColumns_; }
 
     void DestructAndFreeCurrentMemory()
     {
