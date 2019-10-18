@@ -36,7 +36,7 @@ int64_t TimeInMicroseconds(Matrix<uint32_t>& arr, size_t width, size_t height)
     {
         for (size_t col = 0; col < width; ++col)
         {
-            arr.at(col, row) = rand();
+            arr.at(row, col) = rand();
         }
     }
 

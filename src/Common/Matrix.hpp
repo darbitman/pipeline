@@ -36,10 +36,10 @@ class Matrix : public IArray2D<T>
 
     virtual T& at(size_t row, size_t column) override
     {
-        // if (!VerifyDimensionAccess(row, column))
-        // {
-        //     throw std::out_of_range("");
-        // }
+        if (!VerifyDimensionAccess(row, column))
+        {
+            throw std::out_of_range("");
+        }
 
         return pArray_[row][column];
     }
