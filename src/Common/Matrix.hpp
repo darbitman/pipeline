@@ -23,10 +23,35 @@ class Matrix : public IArray2D<T>
 
     virtual ~Matrix() { DestructAndFreeCurrentMemory(); }
 
-    virtual bool resize(size_t numRows, size_t numColumns) const noexcept override
+    virtual bool resize(size_t numRows, size_t numColumns) noexcept override
     {
-        // TODO
-        return true;
+        // if numRows/numColumns are both less than the current maxRows/maxColumns, just change the
+        // dimensions of the data
+        if (numRows <= maxRows_ && numColumns <= maxColumns_)
+        {
+            numRows_ = numRows;
+            numColumns_ = numColumns;
+            numElements_ = numRows * numColumns;
+
+            return true;
+        }
+
+        // otherwise need to free the current memory and reallocate
+        else
+        {
+            DestructAndFreeCurrentMemory();
+            pArray_ = AllocateMatrix(numRows, numColumns);
+
+            maxRows_ = numRows;
+            maxColumns_ = numColumns;
+            maxElements_ = numRows * numColumns;
+
+            numRows_ = numRows;
+            numColumns_ = numColumns;
+            numElements_ = maxElements_;
+
+            return true;
+        }
     }
 
     virtual std::pair<size_t, size_t> size() const noexcept override

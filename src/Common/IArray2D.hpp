@@ -14,7 +14,7 @@ class IArray2D
     /// @param numRows
     /// @param numColumns
     /// @return bool Returns true if the method succeeds, otherwise false.
-    virtual bool resize(size_t numRows, size_t numColumns) const noexcept = 0;
+    virtual bool resize(size_t numRows, size_t numColumns) noexcept = 0;
 
     /// @brief Returns the dimension of the 2D array
     /// @return std::pair<size_t, size_t> First is height (number of rows), second is width (number
