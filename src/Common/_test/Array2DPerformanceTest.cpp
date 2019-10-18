@@ -86,7 +86,7 @@ int32_t main()
     double averageArray2DTime = ComputeAverageTime(array2DTimes);
 
     std::cout << "Average time for std::vector " << averageVectorTime << " microseconds\n";
-    std::cout << "Average time for Matrix " << averageArray2DTime << " microseconds\n ";
+    std::cout << "Average time for Matrix " << averageArray2DTime << " microseconds\n";
 
     return 0;
 }
