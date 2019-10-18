@@ -63,7 +63,7 @@ int32_t main()
     constexpr size_t width{1920};
     constexpr size_t height{1080};
 
-    Matrix<uint32_t> arr(width, height);
+    Matrix<uint32_t> arr(height, width);
 
     vector<vector<uint32_t>> vec;
     vec.resize(height);
