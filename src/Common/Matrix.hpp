@@ -23,7 +23,7 @@ class Matrix : public IArray2D<T>
 
     virtual ~Matrix() { DestructAndFreeCurrentMemory(); }
 
-    virtual bool resize(size_t numRows, size_t numColumns) noexcept override
+    virtual void resize(size_t numRows, size_t numColumns) noexcept override
     {
         // if numRows/numColumns are both less than the current maxRows/maxColumns, just change the
         // dimensions of the data
@@ -32,8 +32,6 @@ class Matrix : public IArray2D<T>
             numRows_ = numRows;
             numColumns_ = numColumns;
             numElements_ = numRows * numColumns;
-
-            return true;
         }
 
         // otherwise need to free the current memory and reallocate
@@ -49,8 +47,6 @@ class Matrix : public IArray2D<T>
             numRows_ = numRows;
             numColumns_ = numColumns;
             numElements_ = maxElements_;
-
-            return true;
         }
     }
 

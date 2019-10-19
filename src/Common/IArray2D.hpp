@@ -10,11 +10,10 @@ class IArray2D
     virtual ~IArray2D() = default;
 
     /// @brief Resizes the array to new dimensions. This may not preserve the old data, however if
-    /// the call fails (returns false), the old data will not be altered.
+    /// the call fails, the old data will not be altered.
     /// @param numRows
     /// @param numColumns
-    /// @return bool Returns true if the method succeeds, otherwise false.
-    virtual bool resize(size_t numRows, size_t numColumns) noexcept = 0;
+    virtual void resize(size_t numRows, size_t numColumns) noexcept = 0;
 
     /// @brief Returns the dimension of the 2D array
     /// @return std::pair<size_t, size_t> First is height (number of rows), second is width (number
