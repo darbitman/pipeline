@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Matrix.hpp"
+#include "Vector2D.hpp"
 
 using std::vector;
 
@@ -29,7 +30,7 @@ int64_t TimeInMicroseconds(vector<vector<uint32_t>>& vec, size_t width, size_t h
     return duration.count();
 }
 
-int64_t TimeInMicroseconds(Matrix<uint32_t>& arr, size_t width, size_t height)
+int64_t TimeInMicroseconds(IArray2D<uint32_t>& arr, size_t width, size_t height)
 {
     auto start = std::chrono::high_resolution_clock::now();
     for (size_t row = 0; row < height; ++row)
@@ -63,7 +64,8 @@ int32_t main()
     constexpr size_t width{1920};
     constexpr size_t height{1080};
 
-    Matrix<uint32_t> arr(height, width);
+    Vector2D<uint32_t> vector2d(height, width);
+    Matrix<uint32_t> matrix(height, width);
 
     vector<vector<uint32_t>> vec;
     vec.resize(height);
@@ -74,19 +76,23 @@ int32_t main()
     }
 
     vector<int64_t> vectorTimes;
-    vector<int64_t> array2DTimes;
+    vector<int64_t> vector2DTimes;
+    vector<int64_t> matrixTimes;
 
     for (size_t n = 0; n < 100; ++n)
     {
         vectorTimes.push_back(TimeInMicroseconds(vec, width, height));
-        array2DTimes.push_back(TimeInMicroseconds(arr, width, height));
+        vector2DTimes.push_back(TimeInMicroseconds(vector2d, width, height));
+        matrixTimes.push_back(TimeInMicroseconds(matrix, width, height));
     }
 
     double averageVectorTime = ComputeAverageTime(vectorTimes);
-    double averageArray2DTime = ComputeAverageTime(array2DTimes);
+    double averageVector2DTime = ComputeAverageTime(vector2DTimes);
+    double averageMatrixTime = ComputeAverageTime(matrixTimes);
 
     std::cout << "Average time for std::vector " << averageVectorTime << " microseconds\n";
-    std::cout << "Average time for Matrix " << averageArray2DTime << " microseconds\n";
+    std::cout << "Average time for Vector2D " << averageVector2DTime << " microseconds\n";
+    std::cout << "Average time for Matrix " << averageMatrixTime << " microseconds\n";
 
     return 0;
 }
