@@ -25,10 +25,20 @@ class Matrix : public IArray2D<T>
 
     virtual void resize(size_t numRows, size_t numColumns) noexcept override
     {
-        // if numRows/numColumns are both less than the current maxRows/maxColumns, just change the
-        // dimensions of the data
-        if (numRows <= maxRows_ && numColumns <= maxColumns_)
+        // Resizing can be fast (ie not require memory deallocation) if numRows is less than
+        // maxRows_ because the array of pointers is limited to maxRows_ and as long as the total
+        // number of elements is less than maxElements_ because the contiguous array which holds the
+        // actual objects is limited to maxElements_
+        if (numRows <= maxRows_ && (numRows * numColumns) <= maxElements_)
         {
+            // update array of pointers to point to new 'rows' in the contiguous array, where each
+            // row has numColumns elements
+            for (size_t row = 1; row < numRows; ++row)
+            {
+                pArray_[row] = pArray_[row - 1] + numColumns_;
+            }
+
+            // set new dimensions
             numRows_ = numRows;
             numColumns_ = numColumns;
             numElements_ = numRows * numColumns;
