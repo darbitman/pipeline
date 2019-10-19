@@ -44,11 +44,11 @@ class Matrix : public IArray2D<T>
         }
 
         // If more rows are needed, but total number of elements doesn't increase, then only the
-        // array of pointers has to change, while keeping the contiguous array which holds the
-        // actual objects
+        // array of pointers has to change, while keeping the contiguous array (which holds the
+        // actual objects) intact
         else if (numRows > maxRows_ && (numRows * numColumns) <= maxElements_)
         {
-            // preserve pointer to contigous array
+            // preserve pointer to contiguous array
             T* pContiguousArray = p2DArray_[0];
 
             // free the memory allocated for storing pointers to the contigous memory
@@ -108,7 +108,7 @@ class Matrix : public IArray2D<T>
             numColumns_ = numColumns;
         }
 
-        // otherwise need to free the current memory and reallocate
+        // otherwise need to free the current memory and reallocate if more rows and more elements
         else
         {
             DestructAndFreeCurrentMemory();
