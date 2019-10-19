@@ -95,6 +95,24 @@ class Matrix : public IArray2D<T>
         return pArray_[row][column];
     }
 
+    template <typename... _ArgTypes>
+    void emplace(size_t row, size_t column, _ArgTypes&&... __args)
+    {
+        if (!VerifyDimensionAccess(row, column))
+        {
+            throw std::out_of_range("");
+        }
+
+        // get pointer to the location at which to emplace
+        T* pObject = &(pArray_[row][column]);
+
+        // an object may exist at the location, so make sure to call its destructor
+        pObject->~T();
+
+        // call placement new to construct the object at that location
+        new (pObject) T(std::forward<_ArgTypes>(__args)...);
+    }
+
     Matrix(const Matrix&) = delete;
     Matrix(Matrix&&) = delete;
     Matrix& operator=(const Matrix&) = delete;
