@@ -12,12 +12,11 @@ class Matrix : public IArray2D<T>
   public:
     Matrix(size_t numRows, size_t numColumns)
         : maxRows_(numRows),
-          maxColumns_(numColumns),
           maxElements_(numRows * numColumns),
           numRows_(numRows),
           numColumns_(numColumns),
           numElements_(numRows * numColumns),
-          pArray_(AllocateMatrix(numRows, numColumns))
+          p2DArray_(AllocateMatrix(numRows, numColumns))
     {
     }
 
@@ -35,7 +34,7 @@ class Matrix : public IArray2D<T>
             // row has numColumns elements
             for (size_t row = 1; row < numRows; ++row)
             {
-                pArray_[row] = pArray_[row - 1] + numColumns_;
+                p2DArray_[row] = p2DArray_[row - 1] + numColumns_;
             }
 
             // set new dimensions
@@ -44,14 +43,78 @@ class Matrix : public IArray2D<T>
             numElements_ = numRows * numColumns;
         }
 
+        // If more rows are needed, but total number of elements doesn't increase, then only the
+        // array of pointers has to change, while keeping the contiguous array which holds the
+        // actual objects
+        else if (numRows > maxRows_ && (numRows * numColumns) <= maxElements_)
+        {
+            // preserve pointer to contigous array
+            T* pContiguousArray = p2DArray_[0];
+
+            // free the memory allocated for storing pointers to the contigous memory
+            ::operator delete(p2DArray_);
+
+            // allocate new memory that will hold pointers to each 'row' in the contiguous
+            // array
+            p2DArray_ = reinterpret_cast<T**>((::operator new(numRows * sizeof(T*))));
+
+            // Set the pointer to the contiguous array
+            p2DArray_[0] = pContiguousArray;
+
+            // update array of pointers to point to new 'rows' in the contiguous array, where each
+            // row has numColumns elements
+            for (size_t row = 1; row < numRows; ++row)
+            {
+                p2DArray_[row] = p2DArray_[row - 1] + numColumns_;
+            }
+
+            // update dimensions
+            maxRows_ = numRows;
+            numRows_ = numRows;
+            numColumns_ = numColumns;
+            numElements_ = numRows * numColumns;
+        }
+
+        // If the number of rows stays the same, but the number of columns changes such that the
+        // total number of elements that can be stored in the contiguous array is larger than
+        // maxElements_, then the array of pointers can be preserved, while the contiguous array
+        // will need to be deleted and reallocated
+        else if (numRows <= maxRows_ && (numRows * numColumns) > maxElements_)
+        {
+            // Delete the objects explicitly by calling the destructor since placement new was used
+            // for elements in the contiguous array
+            for (size_t i = 0; i < maxElements_; ++i)
+            {
+                p2DArray_[0][i].~T();
+            }
+
+            // free the memory allocated for contiguous array
+            ::operator delete(p2DArray_[0]);
+
+            // allocate new contiguous memory for storing objects
+            numElements_ = numRows * numColumns;
+            p2DArray_[0] = reinterpret_cast<T*>(::operator new(numElements_ * sizeof(T)));
+
+            // update array of pointers to point to new 'rows' in the contiguous array, where each
+            // row has numColumns elements
+            for (size_t row = 1; row < numRows; ++row)
+            {
+                p2DArray_[row] = p2DArray_[row - 1] + numColumns_;
+            }
+
+            // update dimensions
+            maxElements_ = numElements_;
+            numRows_ = numRows;
+            numColumns_ = numColumns;
+        }
+
         // otherwise need to free the current memory and reallocate
         else
         {
             DestructAndFreeCurrentMemory();
-            pArray_ = AllocateMatrix(numRows, numColumns);
+            p2DArray_ = AllocateMatrix(numRows, numColumns);
 
             maxRows_ = numRows;
-            maxColumns_ = numColumns;
             maxElements_ = numRows * numColumns;
 
             numRows_ = numRows;
@@ -72,7 +135,7 @@ class Matrix : public IArray2D<T>
             throw std::out_of_range("");
         }
 
-        return pArray_[row][column];
+        return p2DArray_[row][column];
     }
 
     virtual const T& at(size_t row, size_t column) const override
@@ -82,7 +145,7 @@ class Matrix : public IArray2D<T>
             throw std::out_of_range("");
         }
 
-        return pArray_[row][column];
+        return p2DArray_[row][column];
     }
 
     virtual T& operator()(size_t row, size_t column) override
@@ -92,7 +155,7 @@ class Matrix : public IArray2D<T>
             throw std::out_of_range("");
         }
 
-        return pArray_[row][column];
+        return p2DArray_[row][column];
     }
 
     virtual const T& operator()(size_t row, size_t column) const override
@@ -102,7 +165,7 @@ class Matrix : public IArray2D<T>
             throw std::out_of_range("");
         }
 
-        return pArray_[row][column];
+        return p2DArray_[row][column];
     }
 
     template <typename... _ArgTypes>
@@ -114,7 +177,7 @@ class Matrix : public IArray2D<T>
         }
 
         // get pointer to the location at which to emplace
-        T* pObject = &(pArray_[row][column]);
+        T* pObject = &(p2DArray_[row][column]);
 
         // an object may exist at the location, so make sure to call its destructor
         pObject->~T();
@@ -144,16 +207,16 @@ class Matrix : public IArray2D<T>
         // linear array
         for (size_t i = 0; i < maxElements_; ++i)
         {
-            pArray_[0][i].~T();
+            p2DArray_[0][i].~T();
         }
 
         // free the memory allocated for contigious memory (this is where the objects are stored)
-        ::operator delete(pArray_[0]);
+        ::operator delete(p2DArray_[0]);
 
         // free the memory allocated for storing pointers to the contigous memory
-        ::operator delete(pArray_);
+        ::operator delete(p2DArray_);
 
-        pArray_ = nullptr;
+        p2DArray_ = nullptr;
     }
 
     T** AllocateMatrix(size_t numRows, size_t numColumns)
@@ -178,9 +241,8 @@ class Matrix : public IArray2D<T>
         return pArrayOfPointers;
     }
 
-    /// Maximum number of rows & columns in array
+    /// Maximum number of rows in array
     size_t maxRows_;
-    size_t maxColumns_;
 
     /// Maximum number of elements the array can store
     size_t maxElements_;
@@ -195,7 +257,7 @@ class Matrix : public IArray2D<T>
 
     /// Array of pointers to 'rows' in the linear array
     /// This dual dereferencing allows for using double array subscripts (ie [x][y])
-    T** pArray_{nullptr};
+    T** p2DArray_{nullptr};
 };
 
 }  // namespace pipeline
