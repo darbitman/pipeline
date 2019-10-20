@@ -12,12 +12,10 @@ class Vector2D : public IArray2D<T>
 {
   public:
     Vector2D(size_t numRows, size_t numColumns)
-        : maxRows_(numRows),
-          maxColumns_(numColumns),
-
-          maxElements_(numRows * numColumns),
+        : maxElements_(numRows * numColumns),
           numRows_(numRows),
           numColumns_(numColumns),
+          numElements_(maxElements_),
           array_(maxElements_)
     {
     }
