@@ -47,8 +47,6 @@ void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
 
                 // Pixel energy is the sum of gradients
                 outPixelEnergy(row, column) = deltaX + deltaY;
-
-                auto& be16toh = outPixelEnergy(row, column);
             }
             catch (const std::out_of_range& e)
             {
