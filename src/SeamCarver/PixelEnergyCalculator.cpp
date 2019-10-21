@@ -49,8 +49,8 @@ void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
             // Compute gradient in X and Y directions
             try
             {
-                auto deltaX = abs(pixelMatrix(row, column + 1) - pixelMatrix(row, column - 1));
-                auto deltaY = abs(pixelMatrix(row + 1, column) - pixelMatrix(row - 1, column));
+                SeamCarverData::PixelColorType deltaX = abs(pixelMatrix(row, column + 1) - pixelMatrix(row, column - 1));
+                SeamCarverData::PixelColorType deltaY = abs(pixelMatrix(row + 1, column) - pixelMatrix(row - 1, column));
 
                 // Pixel energy is the sum of gradients
                 outPixelEnergy(row, column) = deltaX + deltaY;
