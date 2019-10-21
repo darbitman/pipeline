@@ -10,7 +10,7 @@ struct SeamCarverData
 {
   public:
     using PixelColorType = uint16_t;
-    using PixelEnergyType = uint32_t;
+    using PixelEnergyType = uint16_t;
 
     /// @brief This method will reset all the internal matrices to their clean state
     /// This will do the following:
