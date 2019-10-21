@@ -5,35 +5,42 @@
 namespace seamcarver
 {
 void PixelEnergyCalculator::calculatePixelEnergy(
-    const IArray2D<SeamCarverData::PixelColorType>& matrix,
+    const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
     IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy) const noexcept
 {
-    // compute for odd columns
-    // compute odd columns
-    // calculateEnergyForEveryOtherColumn(matrix, outPixelEnergy, 1);
-    // calculateEnergyForEveryOtherColumn(matrix, outPixelEnergy, 2);
+    // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 1, 1);
+    // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 1, 2);
+    // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 2, 1);
+    // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 2, 2);
 
     std::thread thread1 = std::thread(&PixelEnergyCalculator::calculateEnergyForEveryOtherColumn,
-                                      this, std::ref(matrix), std::ref(outPixelEnergy), 1);
+                                      this, std::ref(pixelMatrix), std::ref(outPixelEnergy), 1, 1);
     std::thread thread2 = std::thread(&PixelEnergyCalculator::calculateEnergyForEveryOtherColumn,
-                                      this, std::ref(matrix), std::ref(outPixelEnergy), 2);
+                                      this, std::ref(pixelMatrix), std::ref(outPixelEnergy), 1, 2);
+    std::thread thread3 = std::thread(&PixelEnergyCalculator::calculateEnergyForEveryOtherColumn,
+                                      this, std::ref(pixelMatrix), std::ref(outPixelEnergy), 2, 1);
+    std::thread thread4 = std::thread(&PixelEnergyCalculator::calculateEnergyForEveryOtherColumn,
+                                      this, std::ref(pixelMatrix), std::ref(outPixelEnergy), 2, 2);
     thread1.join();
     thread2.join();
+    thread3.join();
+    thread4.join();
 }
 
 void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
-    const IArray2D<SeamCarverData::PixelColorType>& matrix,
-    IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy, size_t startingColumn) const noexcept
+    const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
+    IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy, size_t startingRow,
+    size_t startingColumn) const noexcept
 {
     // get dimensions
-    auto dimensions = matrix.size();
+    auto dimensions = pixelMatrix.size();
 
     size_t bottomRow = dimensions.first - 1;
     size_t rightColumn = dimensions.second - 1;
 
     // Ignore row 0 and bottom row since those are set to a constant energy value (ie edge pixel
     // energy)
-    for (size_t row = 1; row < bottomRow; ++row)
+    for (size_t row = startingRow; row < bottomRow; row += 2)
     {
         // Ignore column 0 and right most column since those are set to a constant energy value (ie
         // edge pixel energy)
@@ -42,8 +49,8 @@ void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
             // Compute gradient in X and Y directions
             try
             {
-                auto deltaX = abs(matrix(row, column + 1) - matrix(row, column - 1));
-                auto deltaY = abs(matrix(row + 1, column) - matrix(row - 1, column));
+                auto deltaX = abs(pixelMatrix(row, column + 1) - pixelMatrix(row, column - 1));
+                auto deltaY = abs(pixelMatrix(row + 1, column) - pixelMatrix(row - 1, column));
 
                 // Pixel energy is the sum of gradients
                 outPixelEnergy(row, column) = deltaX + deltaY;
