@@ -15,7 +15,8 @@ class CumulativeEnergyCalculator
     /// @param cumulativeEnergyToPixel Out parameter. 2D array of calculated cumulative energy for
     /// each pixel
     /// @param columnToPixel Out parameter. 2D array of column indices to reach every pixel
-    /// @param markedPixels 2D array of pixels marked while calculating cumulative energy
+    /// @param markedPixels 2D array of pixels that are marked as part of a seam already, so they
+    /// can be ignored
     void calculateCumulativePixelEnergy(
         const IArray2D<SeamCarverData::PixelEnergyType>& pixelEnergy,
         IArray2D<SeamCarverData::PixelEnergyType>& cumulativeEnergyToPixel,
