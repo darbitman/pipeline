@@ -11,6 +11,7 @@ struct SeamCarverData
   public:
     using PixelColorType = uint16_t;
     using PixelEnergyType = uint16_t;
+    using PixelColumnType = int32_t;
 
     /// @brief This method will reset all the internal matrices to their clean state
     /// This will do the following:
@@ -37,7 +38,7 @@ struct SeamCarverData
     /// store the column of the pixel in the previous row that is used to get the curernt pixel
     /// for a pixel at [r,c], there are three possible columns in the previous row that could be
     /// stored (c-1), (c), (c+1)
-    pipeline::Matrix<int32_t> columnToPixel_;
+    pipeline::Matrix<PixelColumnType> columnToPixel_;
 
   private:
     /// Store the energy of a pixel at the edges
