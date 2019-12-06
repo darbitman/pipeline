@@ -2,7 +2,7 @@
 
 namespace seamcarver
 {
-void CumulativeEnergyCalculator::calculatePixelEnergy(
+void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
     const IArray2D<SeamCarverData::PixelEnergyType>& pixelEnergy,
     IArray2D<SeamCarverData::PixelEnergyType>& cumulativeEnergyToPixel,
     IArray2D<SeamCarverData::PixelColumnType>& columnToPixel, IArray2D<bool>& markedPixels) const
