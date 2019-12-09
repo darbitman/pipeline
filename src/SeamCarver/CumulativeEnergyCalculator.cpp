@@ -80,8 +80,8 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
 
             bool badMinParentEnergyColumn = (minParentEnergyColumn == -1);
             cumulativeEnergyToPixel.at(row, column) =
-                ((-static_cast<SignedEnergyType>(badMinParentEnergyColumn) & MAXIMUM_ENERGY) |
-                 (((static_cast<SignedEnergyType>(badMinParentEnergyColumn) - 1) &
+                ((-static_cast<SignedPixelEnergyType>(badMinParentEnergyColumn) & MAXIMUM_ENERGY) |
+                 (((static_cast<SignedPixelEnergyType>(badMinParentEnergyColumn) - 1) &
                    (minCumulativeParentEnergyFound + pixelEnergy.at(row, column)))));
 
             // save the column used to reach the current pixel
@@ -99,8 +99,8 @@ void CumulativeEnergyCalculator::TryUpdateMinimumEnergy(bool flag, PixelEnergyTy
 {
     // if flag is true, update update minEnergy and minEnergyColumn
     // if flag is false, preserve old values
-    minEnergy = ((-static_cast<SignedEnergyType>(flag)) & newEnergy) |
-                ((static_cast<SignedEnergyType>(flag) - 1) & minEnergy);
+    minEnergy = ((-static_cast<SignedPixelEnergyType>(flag)) & newEnergy) |
+                ((static_cast<SignedPixelEnergyType>(flag) - 1) & minEnergy);
 
     minEnergyColumn = ((-static_cast<PixelColumnType>(flag)) & newColumn) |
                       ((static_cast<PixelColumnType>(flag) - 1) & minEnergyColumn);
