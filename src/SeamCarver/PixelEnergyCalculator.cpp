@@ -4,9 +4,9 @@
 
 namespace seamcarver
 {
-void PixelEnergyCalculator::calculatePixelEnergy(
-    const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
-    IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy) const noexcept
+void PixelEnergyCalculator::calculatePixelEnergy(const IArray2D<PixelColorType>& pixelMatrix,
+                                                 IArray2D<PixelEnergyType>& outPixelEnergy) const
+    noexcept
 {
     // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 1, 1);
     // calculateEnergyForEveryOtherColumn(pixelMatrix, outPixelEnergy, 1, 2);
@@ -28,9 +28,8 @@ void PixelEnergyCalculator::calculatePixelEnergy(
 }
 
 void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
-    const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
-    IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy, size_t startingRow,
-    size_t startingColumn) const noexcept
+    const IArray2D<PixelColorType>& pixelMatrix, IArray2D<PixelEnergyType>& outPixelEnergy,
+    size_t startingRow, size_t startingColumn) const noexcept
 {
     // get dimensions
     auto dimensions = pixelMatrix.size();
@@ -49,8 +48,10 @@ void PixelEnergyCalculator::calculateEnergyForEveryOtherColumn(
             // Compute gradient in X and Y directions
             try
             {
-                SeamCarverData::PixelColorType deltaX = abs(pixelMatrix(row, column + 1) - pixelMatrix(row, column - 1));
-                SeamCarverData::PixelColorType deltaY = abs(pixelMatrix(row + 1, column) - pixelMatrix(row - 1, column));
+                PixelColorType deltaX =
+                    abs(pixelMatrix(row, column + 1) - pixelMatrix(row, column - 1));
+                PixelColorType deltaY =
+                    abs(pixelMatrix(row + 1, column) - pixelMatrix(row - 1, column));
 
                 // Pixel energy is the sum of gradients
                 outPixelEnergy(row, column) = deltaX + deltaY;

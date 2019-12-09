@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IArray2D.hpp"
-#include "SeamCarverData.hpp"
+#include "SeamCarverCommon.hpp"
 
 namespace seamcarver
 {
@@ -15,9 +15,8 @@ class PixelEnergyCalculator
     /// maximum value of 255 for each of the RGB color channels)
     /// @param outPixelEnergy Output parameter where the calculated pixel energy will be stored.The
     /// edge pixel energy has already been calculated and initialized to its default value.
-    void calculatePixelEnergy(const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
-                              IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy) const
-        noexcept;
+    void calculatePixelEnergy(const IArray2D<PixelColorType>& pixelMatrix,
+                              IArray2D<PixelEnergyType>& outPixelEnergy) const noexcept;
 
   private:
     /// @brief calculate energy for every row, but starting column can be changed. Recommended to
@@ -29,10 +28,10 @@ class PixelEnergyCalculator
     /// energy for every pixel in pixelMatrix
     /// @param startingRow
     /// @param startingColumn
-    void calculateEnergyForEveryOtherColumn(
-        const IArray2D<SeamCarverData::PixelColorType>& pixelMatrix,
-        IArray2D<SeamCarverData::PixelEnergyType>& outPixelEnergy, size_t startingRow,
-        size_t startingColumn) const noexcept;
+    void calculateEnergyForEveryOtherColumn(const IArray2D<PixelColorType>& pixelMatrix,
+                                            IArray2D<PixelEnergyType>& outPixelEnergy,
+                                            size_t startingRow, size_t startingColumn) const
+        noexcept;
 };
 
 }  // namespace seamcarver
