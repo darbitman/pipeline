@@ -62,22 +62,12 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
                 cumulativeEnergyAboveRight = cumulativeEnergyToPixel.at(row - 1, column + 2);
             }
 
-            // // assign cumulative energy to current pixel
-            // if (minParentEnergyColumn == -1)
-            // {
-            //     // current pixel is unreachable from parent pixels since they are all unreachable
-            //     // themselves
-            //     cumulativeEnergyToPixel.at(row, column) = MAXIMUM_ENERGY;
-            // }
-            // else
-            // {
-            //     // cumulative energy to reach current pixel is equal to the energy of the current
-            //     // pixel plus the minimum cumulative energy to one of the current pixel's parent
-            //     // pixels
-            //     cumulativeEnergyToPixel.at(row, column) =
-            //         minCumulativeParentEnergyFound + pixelEnergy.at(row, column);
-            // }
-
+            // assign cumulative energy to current pixel
+            // first case if the badMinParentEnergyColumn flag is true: current pixel is unreachable
+            // from parent pixels since they are all unreachable themselves
+            // second case if the badMinParentEnergyColumn flag is false: cumulative energy to reach
+            // current pixel is equal the energy of the current pixel plus the minimum cumulative
+            // energy to one of the current pixel's parent pixels
             bool badMinParentEnergyColumn = (minParentEnergyColumn == -1);
             cumulativeEnergyToPixel.at(row, column) =
                 ((-static_cast<SignedPixelEnergyType>(badMinParentEnergyColumn) & MAXIMUM_ENERGY) |
