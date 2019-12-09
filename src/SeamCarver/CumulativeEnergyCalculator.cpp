@@ -8,20 +8,17 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
     IArray2D<SeamCarverData::PixelColumnType>& columnToPixel, IArray2D<bool>& markedPixels) const
     noexcept
 {
-    auto dimensions = pixelEnergy.size();
+    auto [numRows, numColumns] = pixelEnergy.size();
 
-    size_t rightColumn = dimensions.second - 1;
+    size_t rightColumn = numColumns - 1;
 
-    size_t numRows = dimensions.first;
-    size_t numColumns = dimensions.second;
-
-    SeamCarverData::PixelEnergyType maximumEnergy{0xFFFF};
+    EnergyType maximumEnergy{0xFFFF};
 
     for (size_t row = 1; row < numRows; ++row)
     {
-        decltype(maximumEnergy) cumulativeEnergyAboveLeft = maximumEnergy;
-        decltype(maximumEnergy) cumulativeEnergyAbove = cumulativeEnergyToPixel.at(row - 1, 0);
-        decltype(maximumEnergy) cumulativeEnergyAboveRight =
+        EnergyType cumulativeEnergyAboveLeft = maximumEnergy;
+        EnergyType cumulativeEnergyAbove = cumulativeEnergyToPixel.at(row - 1, 0);
+        EnergyType cumulativeEnergyAboveRight =
             numColumns > 1 ? cumulativeEnergyToPixel.at(row - 1, 1) : maximumEnergy;
 
         bool markedAboveLeft = true;
@@ -30,33 +27,29 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
 
         for (size_t column = 0; column < numColumns; ++column)
         {
-            decltype(maximumEnergy) minCumulativeParentEnergyFound = maximumEnergy;
-            SeamCarverData::PixelColumnType minParentEnergyColumn = -1;
+            EnergyType minCumulativeParentEnergyFound = maximumEnergy;
+            ColumnType minParentEnergyColumn = -1;
 
             // ignore current pixel if it has been marked part of a seam already
             if (!markedPixels.at(row, column))
             {
                 // check left/above
-                if (!markedAboveLeft && cumulativeEnergyAboveLeft < minCumulativeParentEnergyFound)
-                {
-                    minCumulativeParentEnergyFound = cumulativeEnergyAboveLeft;
-                    minParentEnergyColumn = column - 1;
-                }
+                TryUpdateMinimumEnergy(
+                    !markedAboveLeft && cumulativeEnergyAboveLeft < minCumulativeParentEnergyFound,
+                    minCumulativeParentEnergyFound, cumulativeEnergyAboveLeft,
+                    minParentEnergyColumn, column - 1);
 
                 // check above
-                if (!markedAbove && cumulativeEnergyAbove < minCumulativeParentEnergyFound)
-                {
-                    minCumulativeParentEnergyFound = cumulativeEnergyAbove;
-                    minParentEnergyColumn = column;
-                }
+                TryUpdateMinimumEnergy(
+                    !markedAboveLeft && cumulativeEnergyAboveLeft < minCumulativeParentEnergyFound,
+                    minCumulativeParentEnergyFound, cumulativeEnergyAboveLeft,
+                    minParentEnergyColumn, column);
 
                 // check right/above
-                if (!markedAboveRight &&
-                    cumulativeEnergyAboveRight < minCumulativeParentEnergyFound)
-                {
-                    minCumulativeParentEnergyFound = cumulativeEnergyAboveRight;
-                    minParentEnergyColumn = column + 1;
-                }
+                TryUpdateMinimumEnergy(
+                    !markedAboveLeft && cumulativeEnergyAboveLeft < minCumulativeParentEnergyFound,
+                    minCumulativeParentEnergyFound, cumulativeEnergyAboveLeft,
+                    minParentEnergyColumn, column - 1);
             }
 
             // shift to the left
@@ -72,21 +65,27 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
                 cumulativeEnergyAboveRight = cumulativeEnergyToPixel.at(row - 1, column + 2);
             }
 
-            // assign cumulative energy to current pixel
-            if (minParentEnergyColumn == -1)
-            {
-                // current pixel is unreachable from parent pixels since they are all unreachable
-                // themselves
-                cumulativeEnergyToPixel.at(row, column) = maximumEnergy;
-            }
-            else
-            {
-                // cumulative energy to reach current pixel is equal to the energy of the current
-                // pixel plus the minimum cumulative energy to one of the current pixel's parent
-                // pixels
-                cumulativeEnergyToPixel.at(row, column) =
-                    minCumulativeParentEnergyFound + pixelEnergy.at(row, column);
-            }
+            // // assign cumulative energy to current pixel
+            // if (minParentEnergyColumn == -1)
+            // {
+            //     // current pixel is unreachable from parent pixels since they are all unreachable
+            //     // themselves
+            //     cumulativeEnergyToPixel.at(row, column) = maximumEnergy;
+            // }
+            // else
+            // {
+            //     // cumulative energy to reach current pixel is equal to the energy of the current
+            //     // pixel plus the minimum cumulative energy to one of the current pixel's parent
+            //     // pixels
+            //     cumulativeEnergyToPixel.at(row, column) =
+            //         minCumulativeParentEnergyFound + pixelEnergy.at(row, column);
+            // }
+
+            bool badMinParentEnergyColumn = (minParentEnergyColumn == -1);
+            cumulativeEnergyToPixel.at(row, column) =
+                ((-static_cast<SignedEnergyType>(badMinParentEnergyColumn) & maximumEnergy) |
+                 (((static_cast<SignedEnergyType>(badMinParentEnergyColumn) - 1) &
+                   (minCumulativeParentEnergyFound + pixelEnergy.at(row, column)))));
 
             // save the column used to reach the current pixel
             // either this is -1 if parent is unreachable, or it's the column of one of the three
@@ -95,5 +94,19 @@ void CumulativeEnergyCalculator::calculateCumulativePixelEnergy(
         }
     }
 }
+
+void CumulativeEnergyCalculator::TryUpdateMinimumEnergy(bool flag, EnergyType& minEnergy,
+                                                        EnergyType newEnergy,
+                                                        ColumnType& minEnergyColumn,
+                                                        ColumnType newColumn) const noexcept
+{
+    // if flag is true, update update minEnergy and minEnergyColumn
+    // if flag is false, preserve old values
+    minEnergy = ((-static_cast<SignedEnergyType>(flag)) & newEnergy) |
+                ((static_cast<SignedEnergyType>(flag) - 1) & minEnergy);
+
+    minEnergyColumn = ((-static_cast<ColumnType>(flag)) & newColumn) |
+                      ((static_cast<ColumnType>(flag) - 1) & minEnergyColumn);
+};
 
 }  // namespace seamcarver
