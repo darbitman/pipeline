@@ -3,16 +3,13 @@
 #include <cstdint>
 
 #include "Matrix.hpp"
+#include "SeamCarverCommon.hpp"
 
 namespace seamcarver
 {
 struct SeamCarverData
 {
   public:
-    using PixelColorType = uint16_t;
-    using PixelEnergyType = uint16_t;
-    using PixelColumnType = int32_t;
-
     /// @brief This method will reset all the internal matrices to their clean state
     /// This will do the following:
     ///  1. Set edge pixel energy in pixelEnergy_;
@@ -35,7 +32,7 @@ struct SeamCarverData
     /// Stores the cumulative energy to get to pixel at [r,c]
     pipeline::Matrix<PixelEnergyType> cumulativeEnergyToPixel_;
 
-    /// store the column of the pixel in the previous row that is used to get the curernt pixel
+    /// store the column of the pixel in the previous row that is used to get the current pixel
     /// for a pixel at [r,c], there are three possible columns in the previous row that could be
     /// stored (c-1), (c), (c+1)
     pipeline::Matrix<PixelColumnType> columnToPixel_;
