@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IArray2D.hpp"
-#include "SeamCarverData.hpp"
+#include "SeamCarverCommon.hpp"
 
 namespace seamcarver
 {
@@ -17,17 +17,12 @@ class CumulativeEnergyCalculator
     /// @param columnToPixel Out parameter. 2D array of column indices to reach every pixel
     /// @param markedPixels 2D array of pixels that are marked as part of a seam already, so they
     /// can be ignored
-    void calculateCumulativePixelEnergy(
-        const IArray2D<SeamCarverData::PixelEnergyType>& pixelEnergy,
-        IArray2D<SeamCarverData::PixelEnergyType>& cumulativeEnergyToPixel,
-        IArray2D<SeamCarverData::PixelColumnType>& columnToPixel,
-        IArray2D<bool>& markedPixels) const noexcept;
+    void calculateCumulativePixelEnergy(const IArray2D<PixelEnergyType>& pixelEnergy,
+                                        IArray2D<PixelEnergyType>& cumulativeEnergyToPixel,
+                                        IArray2D<PixelColumnType>& columnToPixel,
+                                        IArray2D<bool>& markedPixels) const noexcept;
 
   private:
-    typedef SeamCarverData::PixelColumnType ColumnType;
-    typedef SeamCarverData::PixelEnergyType EnergyType;
-    typedef int16_t SignedEnergyType;
-
     /// @brief Update minEnergy and minEnergyColumn to new values without using branches (ie
     /// if/else statements)
     /// @param flag If true, set the minEnergy and minEnergyColumn output parameters to the new
@@ -36,8 +31,9 @@ class CumulativeEnergyCalculator
     /// @param newEnergy The new value for minEnergy
     /// @param minEnergyColumn Output parameter to update
     /// @param newColumn The new value for minEnergyColumn
-    void TryUpdateMinimumEnergy(bool flag, EnergyType& minEnergy, EnergyType newEnergy,
-                                ColumnType& minEnergyColumn, ColumnType newColumn) const noexcept;
+    void TryUpdateMinimumEnergy(bool flag, PixelEnergyType& minEnergy, PixelEnergyType newEnergy,
+                                PixelColumnType& minEnergyColumn, PixelColumnType newColumn) const
+        noexcept;
 };
 
 }  // namespace seamcarver
