@@ -10,45 +10,48 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE RELEASE)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON) 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Generate CMakeLists.txt that will pull the repo
-configure_file(
-    CMakeLists.googletest.txt
-    ${PROJECT_SOURCE_DIR}/googletest-download/CMakeLists.txt
-)
+if(${CMAKE_BUILD_TYPE} STREQUAL RELEASE)
+    add_definitions(-DNDEBUG)
+endif()
 
-# Use the generated CMakeLists.txt file to generate the build files to download googletest
-execute_process(
-    COMMAND
-        ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-    WORKING_DIRECTORY
-        ${PROJECT_SOURCE_DIR}/googletest-download
-)
+# # Generate CMakeLists.txt that will pull the repo
+# configure_file(
+#     CMakeLists.googletest.txt
+#     ${PROJECT_SOURCE_DIR}/googletest-download/CMakeLists.txt
+# )
 
-# Use the generate build files to download googletest
-execute_process(
-    COMMAND
-        ${CMAKE_COMMAND} --build .
-    WORKING_DIRECTORY
-        ${PROJECT_SOURCE_DIR}/googletest-download
-)
+# # Use the generated CMakeLists.txt file to generate the build files to download googletest
+# execute_process(
+#     COMMAND
+#         ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+#     WORKING_DIRECTORY
+#         ${PROJECT_SOURCE_DIR}/googletest-download
+# )
 
-set(gtest_force_shared_crt ON CACHE BOOL "")
-set(INSTALL_GTEST OFF CACHE BOOL "")
-set(BUILD_GMOCK OFF CACHE BOOL "")
+# # Use the generate build files to download googletest
+# execute_process(
+#     COMMAND
+#         ${CMAKE_COMMAND} --build .
+#     WORKING_DIRECTORY
+#         ${PROJECT_SOURCE_DIR}/googletest-download
+# )
 
-add_subdirectory(
-    ${PROJECT_SOURCE_DIR}/googletest-src
-    ${PROJECT_SOURCE_DIR}/googletest-build
-)
+# set(gtest_force_shared_crt ON CACHE BOOL "")
+# set(INSTALL_GTEST OFF CACHE BOOL "")
+# set(BUILD_GMOCK OFF CACHE BOOL "")
+
+# add_subdirectory(
+#     ${PROJECT_SOURCE_DIR}/googletest-src
+#     ${PROJECT_SOURCE_DIR}/googletest-build
+# )
 
 #find_package(OpenCV)
 
 add_subdirectory(src)
 
-option(BUILD_UNIT_TESTS "" ON)

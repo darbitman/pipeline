@@ -35,7 +35,7 @@ int32_t PipelineQueueManager::createNewQueue(uint32_t componentLinkType)
         case ComponentLinkType::QUEUE_TYPE_FIFO:
         {
             // create a thread safe blocking FIFO queue
-            queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<stored_data_type>>(true);
+            queueIdToQueueMap_[currentQueueId_] = make_unique<SharedQueue<stored_data_type>>();
         }
         break;
 

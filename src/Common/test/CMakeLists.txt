@@ -8,16 +8,24 @@ foreach(TestFile ${TestFiles_SRC})
     add_executable(${TestName} ${TestFile})
 
     target_include_directories(
-        ${TestName}
-        PRIVATE
+    ${TestName}
+    PRIVATE
         ${PROJECT_SOURCE_DIR}/src/Common
     )
 
     target_link_libraries(
+    ${TestName}
+    PRIVATE
+        "-Wl,--start-group"
+        gtest
+        gtest_main
+        pthread
+        "-Wl,--end-group"
+    )
+
+    target_link_directories(
         ${TestName}
         PRIVATE
-        "-Xlinker --start-group"
-        gtest_main
-        "-Xlinker --end-group"
-    )
+            /usr/local/lib
+)
 endforeach()
