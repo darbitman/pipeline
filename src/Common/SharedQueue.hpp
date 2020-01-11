@@ -9,20 +9,20 @@
 
 namespace pipeline
 {
-template <typename _Tp>
+template <typename _Tp, bool bIsBlocking = true>
 class SharedQueue : public SharedContainer<_Tp>
 {
   public:
-    explicit SharedQueue(bool isBlocking = true) : isBlocking_(isBlocking) {}
+    SharedQueue() noexcept {}
 
-    virtual ~SharedQueue() = default;
+    virtual ~SharedQueue() noexcept {}
 
-    [[nodiscard]] virtual const _Tp& front() const override
+        [[nodiscard]] virtual const _Tp& front() const override
     {
         std::unique_lock<std::mutex> mlock(mtx_);
 
         // if this is a blocking queue, wait to be notified when when a new object is added
-        if (isBlocking_)
+        if constexpr (bIsBlocking)
         {
             while (queue_.empty())
             {
@@ -38,7 +38,7 @@ class SharedQueue : public SharedContainer<_Tp>
         std::unique_lock<std::mutex> mlock(mtx_);
 
         // if this is a blocking queue, wait to be notified when when a new object is added
-        if (isBlocking_)
+        if constexpr (bIsBlocking)
         {
             while (queue_.empty())
             {
@@ -76,7 +76,7 @@ class SharedQueue : public SharedContainer<_Tp>
             throw std::invalid_argument("Type _Tp can't be copy constructed");
         }
 
-        if (isBlocking_)
+        if constexpr (bIsBlocking)
         {
             if (queue_.size() == 1)
             {
@@ -92,7 +92,7 @@ class SharedQueue : public SharedContainer<_Tp>
 
             queue_.push(std::move(value));
 
-            if (isBlocking_)
+            if constexpr (bIsBlocking)
             {
                 if (queue_.size() == 1)
                 {
@@ -110,7 +110,7 @@ class SharedQueue : public SharedContainer<_Tp>
 
             queue_.emplace(std::forward<_Args>(__args)...);
 
-            if (isBlocking_)
+            if constexpr (bIsBlocking)
             {
                 if (queue_.size() == 1)
                 {
@@ -131,8 +131,6 @@ class SharedQueue : public SharedContainer<_Tp>
     }
 
   private:
-    bool isBlocking_;
-
     mutable std::mutex mtx_;
 
     mutable std::condition_variable cv_;
