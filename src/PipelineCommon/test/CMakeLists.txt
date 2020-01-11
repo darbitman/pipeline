@@ -17,7 +17,9 @@ foreach(TestFile ${TestFiles_SRC})
         ${TestName}
         PRIVATE
         "-Xlinker --start-group"
+        gtest
         gtest_main
+        pthread
         PipelineCommon
         "-Xlinker --end-group"
     )

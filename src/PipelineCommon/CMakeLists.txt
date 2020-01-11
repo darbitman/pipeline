@@ -18,7 +18,4 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/src/Common
 )
 
-if(BUILD_UNIT_TESTS)
-    add_subdirectory(_test)
-    set(AllUnitTests_SRC ${AllUnitTests_SRC} PARENT_SCOPE)
-endif()
+add_subdirectory(test)

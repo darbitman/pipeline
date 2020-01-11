@@ -27,5 +27,5 @@ foreach(TestFile ${TestFiles_SRC})
         ${TestName}
         PRIVATE
             /usr/local/lib
-)
+    )
 endforeach()
