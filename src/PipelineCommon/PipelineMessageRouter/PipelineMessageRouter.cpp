@@ -1,4 +1,4 @@
-#include "PipelineSenderReceiver.hpp"
+#include "PipelineMessageRouter.hpp"
 
 #include <memory>
 #include <mutex>
@@ -17,7 +17,7 @@ using std::unique_ptr;
 
 namespace pipeline
 {
-PipelineSenderReceiver::PipelineSenderReceiver()
+PipelineMessageRouter::PipelineMessageRouter()
     : bInitialized_(false),
       thisComponentId_(ComponentId::MESSAGE_ROUTER),
       bRunReceiverThread_(false),
@@ -26,7 +26,7 @@ PipelineSenderReceiver::PipelineSenderReceiver()
 {
 }
 
-void PipelineSenderReceiver::initialize()
+void PipelineMessageRouter::initialize()
 {
     if (!bInitialized_)
     {
@@ -34,16 +34,15 @@ void PipelineSenderReceiver::initialize()
 
         registerComponent(thisComponentId_, ComponentLinkType::QUEUE_TYPE_FIFO);
 
-        thread(&PipelineSenderReceiver::receiverThread, this).detach();
+        thread(&PipelineMessageRouter::receiverThread, this).detach();
     }
 }
 
-bool PipelineSenderReceiver::isInitialized() const noexcept { return bInitialized_; }
+bool PipelineMessageRouter::isInitialized() const noexcept { return bInitialized_; }
 
-bool PipelineSenderReceiver::isShutdown() const noexcept { return bReceiverThreadShutdown_; }
+bool PipelineMessageRouter::isShutdown() const noexcept { return bReceiverThreadShutdown_; }
 
-void PipelineSenderReceiver::registerComponent(uint32_t stageId,
-                                               uint32_t componentLinkType) noexcept
+void PipelineMessageRouter::registerComponent(uint32_t stageId, uint32_t componentLinkType) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     if (stageIdToQueueIdMap_.count(stageId) == 0)
@@ -55,7 +54,7 @@ void PipelineSenderReceiver::registerComponent(uint32_t stageId,
     }
 }
 
-void PipelineSenderReceiver::unregisterComponent(uint32_t stageId) noexcept
+void PipelineMessageRouter::unregisterComponent(uint32_t stageId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -77,7 +76,7 @@ void PipelineSenderReceiver::unregisterComponent(uint32_t stageId) noexcept
     }
 }
 
-bool PipelineSenderReceiver::isComponentRegistered(uint32_t stageId) const noexcept
+bool PipelineMessageRouter::isComponentRegistered(uint32_t stageId) const noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -91,7 +90,7 @@ bool PipelineSenderReceiver::isComponentRegistered(uint32_t stageId) const noexc
     }
 }
 
-void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>& pMessage) noexcept
+void PipelineMessageRouter::sendMessage(unique_ptr<PipelineMessageBase>& pMessage) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -110,7 +109,7 @@ void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>& pMessa
     }
 }
 
-void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>&& pMessage) noexcept
+void PipelineMessageRouter::sendMessage(unique_ptr<PipelineMessageBase>&& pMessage) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -129,7 +128,7 @@ void PipelineSenderReceiver::sendMessage(unique_ptr<PipelineMessageBase>&& pMess
     }
 }
 
-unique_ptr<PipelineMessageBase> PipelineSenderReceiver::receiveMessage(
+unique_ptr<PipelineMessageBase> PipelineMessageRouter::receiveMessage(
     uint32_t receivingComponentId) noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
@@ -155,7 +154,7 @@ unique_ptr<PipelineMessageBase> PipelineSenderReceiver::receiveMessage(
     }
 }
 
-bool PipelineSenderReceiver::canReceive(uint32_t receivingStageId) const noexcept
+bool PipelineMessageRouter::canReceive(uint32_t receivingStageId) const noexcept
 {
     unique_lock<mutex> mapLock(mapMutex_);
     try
@@ -178,7 +177,7 @@ bool PipelineSenderReceiver::canReceive(uint32_t receivingStageId) const noexcep
     }
 }
 
-void PipelineSenderReceiver::receiverThread()
+void PipelineMessageRouter::receiverThread()
 {
     bRunReceiverThread_ = true;
     bReceiverThreadShutdown_ = false;
@@ -221,7 +220,7 @@ void PipelineSenderReceiver::receiverThread()
     bReceiverThreadShutdown_ = true;
 }
 
-void PipelineSenderReceiver::forwardMessage(unique_ptr<PipelineMessageBase>& pMessage)
+void PipelineMessageRouter::forwardMessage(unique_ptr<PipelineMessageBase>& pMessage)
 {
     auto destinationId = pMessage->getDestination();
 

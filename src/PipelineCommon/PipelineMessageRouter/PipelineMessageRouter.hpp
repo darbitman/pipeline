@@ -12,12 +12,12 @@ namespace pipeline
 {
 class PipelineMessageBase;
 
-class PipelineSenderReceiver : public IMessageRouter
+class PipelineMessageRouter : public IMessageRouter
 {
   public:
-    PipelineSenderReceiver();
+    PipelineMessageRouter();
 
-    ~PipelineSenderReceiver() = default;
+    ~PipelineMessageRouter() = default;
 
     void initialize();
 
@@ -48,10 +48,10 @@ class PipelineSenderReceiver : public IMessageRouter
     virtual bool canReceive(uint32_t receivingComponentId) const noexcept override;
 
     /// Deleted to prevent misuse
-    PipelineSenderReceiver(const PipelineSenderReceiver&) = delete;
-    PipelineSenderReceiver(PipelineSenderReceiver&&) = delete;
-    PipelineSenderReceiver& operator=(const PipelineSenderReceiver&) = delete;
-    PipelineSenderReceiver& operator=(PipelineSenderReceiver&&) = delete;
+    PipelineMessageRouter(const PipelineMessageRouter&) = delete;
+    PipelineMessageRouter(PipelineMessageRouter&&) = delete;
+    PipelineMessageRouter& operator=(const PipelineMessageRouter&) = delete;
+    PipelineMessageRouter& operator=(PipelineMessageRouter&&) = delete;
 
   private:
     bool bInitialized_;
